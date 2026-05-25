@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://www.lalal.ai/api/v1/split/stem_separator/",
+    "headers": {
+      "X-License-Key": "<license-key>",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "source_id": "src_3f5a8b7c2e1d4f9a",
+      "preset": {
+        "stem": "vocals",
+        "splitter": "andromeda",
+        "dereverb_enabled": true,
+        "encoder_format": "wav"
+      }
+    }
+  },
+  "response": {
+    "status": "success",
+    "task_id": "tsk_2a8b6c4d1e9f0a3b"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://www.lalal.ai/api/v1/check/",
+    "headers": {
+      "X-License-Key": "<license-key>",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "task_id": "tsk_2a8b6c4d1e9f0a3b"
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "task_id": "tsk_2a8b6c4d1e9f0a3b",
+      "source_id": "src_3f5a8b7c2e1d4f9a",
+      "name": "song.mp3",
+      "size": 7340032,
+      "duration": 215.42,
+      "stem": "vocals",
+      "splitter": "andromeda",
+      "encoder_format": "wav",
+      "split": {
+        "stem_track": "https://stream.lalal.ai/d/tsk_2a8b6c4d1e9f0a3b/vocals.wav?sig=...",
+        "stem_track_size": 38123456,
+        "back_track": "https://stream.lalal.ai/d/tsk_2a8b6c4d1e9f0a3b/instrumental.wav?sig=...",
+        "back_track_size": 41200000
+      },
+      "task": {
+        "state": "success",
+        "progress": 100
+      }
+    }
+  }
+}

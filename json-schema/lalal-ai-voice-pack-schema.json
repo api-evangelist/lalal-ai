@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/lalal-ai/main/json-schema/lalal-ai-voice-pack-schema.json",
+  "title": "LALAL.AI Voice Pack",
+  "description": "Schema for a single voice pack returned from POST /api/v1/voice_packs/list/. A voice pack can be a legal artist pack (e.g. ALEX_KAYE) or a user-trained clone pack from the LALAL.AI Voice Cloner.",
+  "type": "object",
+  "required": ["pack_id", "name"],
+  "properties": {
+    "pack_id": {
+      "type": "string",
+      "description": "Identifier of the voice pack. Use this value as voice_pack_id on POST /api/v1/change_voice/."
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable pack name."
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp the pack was created."
+    },
+    "ready_to_use": {
+      "type": "boolean",
+      "description": "True when the pack has finished training and is callable from /change_voice/."
+    },
+    "language": {
+      "type": "object",
+      "properties": {
+        "code": {"type": "string", "description": "ISO 639-1 language code, e.g. 'en'."},
+        "full": {"type": "string", "description": "Human-readable language name."}
+      }
+    },
+    "previews": {
+      "type": "array",
+      "description": "Sample previews of the pack.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {"type": "string"},
+          "playlist": {"type": "string", "format": "uri"},
+          "sample": {
+            "type": "object",
+            "properties": {
+              "playlist": {"type": "string", "format": "uri"}
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

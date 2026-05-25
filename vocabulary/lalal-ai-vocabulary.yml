@@ -1,0 +1,110 @@
+vocabulary: 0.1
+provider: LALAL.AI
+provider_id: lalal-ai
+description: Operational and capability vocabulary for the LALAL.AI audio separation and voice technology
+  platform, covering stems, neural splitters, processing modes, and task lifecycle.
+updated: '2026-05-25'
+
+stems:
+  - id: vocals
+    label: Vocals
+    description: All vocal performance separated from the instrumental bed.
+  - id: voice
+    label: Voice
+    description: Spoken-word voice isolated from background music and ambient noise (voice-clean surface).
+  - id: drum
+    label: Drum
+    description: Drum kit and percussion stem.
+  - id: bass
+    label: Bass
+    description: Bass guitar and low-frequency stem.
+  - id: piano
+    label: Piano
+    description: Acoustic and electric piano stem.
+  - id: electric_guitar
+    label: Electric Guitar
+  - id: acoustic_guitar
+    label: Acoustic Guitar
+  - id: synthesizer
+    label: Synthesizer
+    description: Synth stem (Phoenix splitter only).
+  - id: strings
+    label: Strings
+    description: Strings stem (Phoenix splitter only).
+  - id: wind
+    label: Wind
+    description: Wind instruments stem (Phoenix splitter only).
+  - id: music
+    label: Music
+    description: Music component isolated from a mixed source (demuser surface).
+
+splitters:
+  - id: andromeda
+    label: Andromeda
+    description: Sixth-generation neural engine; default for vocal/instrumental and voice/noise separation.
+    released: 2025-11-21
+  - id: perseus
+    label: Perseus
+    description: Transformer-based network supporting Clear Cut and Deep Extraction; covers vocals, drums, bass,
+      acoustic guitar, electric guitar, and piano.
+    released: 2024-09-25
+  - id: orion
+    label: Orion
+  - id: phoenix
+    label: Phoenix
+    description: Only splitter supporting synthesizer, strings, and wind stems.
+  - id: lyra
+    label: Lyra
+    description: Proprietary dereverb and Demuser-stem network.
+    released: 2025-09-30
+  - id: lynx
+    label: Lynx
+  - id: auto
+    label: Auto
+    description: Server selects the latest splitter compatible with the requested stems.
+
+processing_modes:
+  - id: clear_cut
+    label: Clear Cut
+    description: Perseus extraction mode optimised for natural-sounding stems.
+  - id: deep_extraction
+    label: Deep Extraction
+    description: Perseus extraction mode optimised for aggressive isolation.
+
+encoder_formats:
+  - mp3
+  - wav
+  - flac
+  - aac
+  - ogg
+
+task_states:
+  - id: success
+    description: Task complete; stem_track and back_track URLs available.
+  - id: progress
+    description: Task still running; progress 0-100 reported on /check/.
+  - id: error
+    description: Task failed; check the error.code and error.message fields.
+  - id: cancelled
+    description: Task explicitly cancelled by /cancel/ or /cancel/all/.
+
+voice_pack_categories:
+  - id: legal_artist
+    label: Legal Artist Pack
+    description: LALAL.AI-licensed artist Voice Packs (ALEX_KAYE, STASIA_FAYE, NICOLAAS_HAAS, NIK_ZEL,
+      OLIA_CHEBO, YVAR_DE_GROOT, VETRANA).
+  - id: custom_clone
+    label: Custom Clone Pack
+    description: User-trained Voice Pack produced by the LALAL.AI Voice Cloner.
+
+queues:
+  - id: fast
+    label: Fast Queue
+    description: Priority processing queue with monthly minute allocation on paid plans.
+  - id: relaxed
+    label: Relaxed Queue
+    description: Best-effort queue, unlimited minutes on paid plans, free 10 minutes on Starter.
+
+retention:
+  source_files_hours: 24
+  description: Uploaded source files are deleted 24 hours after upload.

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://www.lalal.ai/api/v1/change_voice/",
+    "headers": {
+      "X-License-Key": "<license-key>",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "source_id": "src_3f5a8b7c2e1d4f9a",
+      "preset": {
+        "voice_pack_id": "ALEX_KAYE",
+        "accent": 0.75,
+        "tonality_reference": "source_file",
+        "dereverb_enabled": true,
+        "encoder_format": "wav"
+      }
+    }
+  },
+  "response": {
+    "status": "success",
+    "task_id": "tsk_4b2c8d1e6f7a9c0b"
+  }
+}

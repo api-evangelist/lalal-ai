@@ -1,0 +1,87 @@
+apiCommonsPlans: 0.1
+provider: LALAL.AI
+provider_id: lalal-ai
+homepage: https://www.lalal.ai/pricing/
+currency: USD
+updated: '2026-05-25'
+notes: |
+  Minutes are deducted as: file_length * number_of_selected_stem_separation_types. Fast Queue and Relaxed Queue
+  deliver identical quality; Fast offers priority processing. Unused Fast minutes do not roll over.
+
+plans:
+  - id: starter
+    name: Starter
+    type: free
+    price: 0
+    description: Free tier for evaluation; preview-only with capped processing.
+    features:
+      - 10 minutes in Relaxed Queue (lifetime)
+      - 200 MB max upload per file
+      - No batch processing
+      - No API access
+      - Preview-only stem downloads on free runs
+  - id: lite-monthly
+    name: Lite (Monthly)
+    type: subscription
+    billing_cycle: monthly
+    price: 7.50
+    features:
+      - Unlimited Relaxed Queue minutes
+      - 90 Fast Queue minutes per month
+      - 2 GB max upload per file
+      - Batch processing
+      - No API access
+  - id: lite-annual
+    name: Lite (Annual)
+    type: subscription
+    billing_cycle: annual
+    price: 90.00
+    features:
+      - Same entitlements as Lite Monthly billed annually
+  - id: pro-monthly
+    name: Pro (Monthly)
+    type: subscription
+    billing_cycle: monthly
+    price: 15.00
+    features:
+      - Unlimited Relaxed Queue minutes
+      - 250 Fast Queue minutes per month
+      - 2 GB max upload per file
+      - Batch processing
+      - VST plugin access
+      - REST API access (X-License-Key)
+      - Early access to new features
+  - id: pro-annual
+    name: Pro (Annual)
+    type: subscription
+    billing_cycle: annual
+    price: 180.00
+    features:
+      - Same entitlements as Pro Monthly billed annually
+  - id: topup-master
+    name: Top-Up — Master
+    type: oneTime
+    price: 50.00
+    quota:
+      type: minutes
+      amount: 750
+    description: 750 additional Fast Queue minutes (one-time top-up).
+  - id: topup-premium
+    name: Top-Up — Premium
+    type: oneTime
+    price: 190.00
+    quota:
+      type: minutes
+      amount: 3000
+  - id: topup-enterprise
+    name: Top-Up — Enterprise
+    type: oneTime
+    price: 300.00
+    quota:
+      type: minutes
+      amount: 5000
+  - id: custom-enterprise
+    name: Custom Enterprise
+    type: custom
+    description: Contact support@lalal.ai for volume API pricing, dedicated support, and SLA terms.
+    contact: support@lalal.ai

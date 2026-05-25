@@ -1,0 +1,94 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: LALAL.AI Stem Separation
+  description: 'LALAL.AI Stem Separation. Upload an audio source, start a single-stem split task on the chosen
+    neural splitter (Andromeda, Perseus, Orion, Phoenix), and poll for the signed stem_track and back_track
+    download URLs.'
+  tags:
+  - LALAL.AI
+  - Stem Separation
+  - Audio
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    LALAL_LICENSE_KEY: LALAL_LICENSE_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: lalal-stem-separation
+    baseUri: https://www.lalal.ai
+    description: LALAL.AI single-task stem separation business capability.
+    resources:
+    - name: upload
+      path: /api/v1/upload/
+      operations:
+      - name: uploadSource
+        method: POST
+        description: Upload an audio or video source file and receive a source_id.
+        outputRawFormat: json
+        outputParameters:
+        - name: source_id
+          type: string
+          value: $.id
+        inputParameters:
+        - name: filename
+          in: header
+          type: string
+          required: true
+          headerName: Content-Disposition
+        - name: body
+          in: body
+          type: string
+          description: Binary audio/video payload.
+          required: true
+    - name: split-stem-separator
+      path: /api/v1/split/stem_separator/
+      operations:
+      - name: startStemSeparation
+        method: POST
+        description: Start a single-stem extraction task on the uploaded source.
+        outputRawFormat: json
+        outputParameters:
+        - name: task_id
+          type: string
+          value: $.task_id
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          required: true
+    - name: check
+      path: /api/v1/check/
+      operations:
+      - name: checkTask
+        method: POST
+        description: Poll a task for progress and final stem_track / back_track URLs.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.result
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          required: true
+    authentication:
+      type: apikey
+      key: X-License-Key
+      value: '{{env.LALAL_LICENSE_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: lalal-stem-separation-rest
+    port: 8080
+    description: REST adapter exposing LALAL.AI single-stem separation.
+    resources:
+    - name: stem-separation
+      path: /v1/stem-separation
+      operations:
+      - name: createStemSeparationJob
+        method: POST
+        description: Upload audio and start a single-stem separation in one call.

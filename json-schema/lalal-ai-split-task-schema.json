@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/lalal-ai/main/json-schema/lalal-ai-split-task-schema.json",
+  "title": "LALAL.AI Split Task Result",
+  "description": "Schema for a single source result returned from POST /api/v1/check/ for a LALAL.AI split, multistem, demuser, voice-clean, or change-voice task.",
+  "type": "object",
+  "required": ["status"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["success", "error", "progress", "cancelled"],
+      "description": "Lifecycle state of the split task."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Identifier returned from the original split request."
+    },
+    "source_id": {
+      "type": "string",
+      "description": "Identifier of the uploaded source file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Original uploaded filename."
+    },
+    "size": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Source file size in bytes."
+    },
+    "duration": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Source duration in seconds."
+    },
+    "stem": {
+      "type": "string",
+      "enum": ["vocals", "voice", "drum", "bass", "piano", "electric_guitar", "acoustic_guitar", "synthesizer", "strings", "wind", "music"],
+      "description": "Stem requested for extraction."
+    },
+    "splitter": {
+      "type": "string",
+      "enum": ["andromeda", "perseus", "orion", "phoenix", "lyra", "lynx", "auto"],
+      "description": "Neural network used to process the source."
+    },
+    "encoder_format": {
+      "type": "string",
+      "enum": ["mp3", "wav", "flac", "aac", "ogg"]
+    },
+    "progress": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Progress percentage when status is 'progress'."
+    },
+    "split": {
+      "type": "object",
+      "description": "Signed download URLs and metadata for the produced tracks.",
+      "properties": {
+        "stem_track": {"type": "string", "format": "uri"},
+        "stem_track_size": {"type": "integer", "minimum": 0},
+        "back_track": {"type": "string", "format": "uri"},
+        "back_track_size": {"type": "integer", "minimum": 0}
+      }
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": {"type": "string"},
+        "message": {"type": "string"}
+      }
+    }
+  },
+  "additionalProperties": true
+}

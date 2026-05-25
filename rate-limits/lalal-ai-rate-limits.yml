@@ -1,0 +1,55 @@
+apiCommonsRateLimits: 0.1
+provider: LALAL.AI
+provider_id: lalal-ai
+updated: '2026-05-25'
+authority: https://www.lalal.ai/api/v1/docs/
+notes: |
+  LALAL.AI does not publish explicit per-key request-rate limits in its public API documentation. The enforced
+  ceiling is processing minutes (consumed minutes = file_length * number_of_stems) and per-file upload size. Use
+  POST /api/v1/limits/minutes_left/ to inspect remaining minutes for a license. Contact support@lalal.ai for
+  dedicated quotas or higher concurrency on enterprise contracts.
+
+quotas:
+  - id: processing-minutes-fast-queue-lite
+    plan: lite
+    type: minutes_per_month
+    amount: 90
+    scope: Fast Queue
+  - id: processing-minutes-fast-queue-pro
+    plan: pro
+    type: minutes_per_month
+    amount: 250
+    scope: Fast Queue
+  - id: processing-minutes-relaxed-queue-paid
+    plan: lite-or-pro
+    type: minutes_per_month
+    amount: unlimited
+    scope: Relaxed Queue
+  - id: processing-minutes-starter
+    plan: starter
+    type: minutes_lifetime
+    amount: 10
+    scope: Relaxed Queue (preview only)
+
+upload_limits:
+  - id: upload-size-starter
+    plan: starter
+    max_file_size_bytes: 209715200
+    max_file_size_human: 200 MB
+  - id: upload-size-paid
+    plan: lite-or-pro
+    max_file_size_bytes: 2147483648
+    max_file_size_human: 2 GB
+  - id: upload-size-api-license
+    plan: licensed-api
+    max_file_size_bytes: 10737418240
+    max_file_size_human: 10 GB
+    notes: Multi-part upload required for files above the single-PUT threshold.
+
+retention:
+  source_files_hours: 24
+  description: Uploaded source files are deleted 24 hours after upload.
+
+introspection:
+  endpoint: POST /api/v1/limits/minutes_left/
+  description: Returns remaining processing minutes for the calling license key.

@@ -1,0 +1,72 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: LALAL.AI Voice Cloning & Change
+  description: 'LALAL.AI voice conversion capability. List available Voice Packs (legal artist packs or
+    user-trained custom packs from the Voice Cloner) and apply them to source recordings via /change_voice/ with
+    configurable accent intensity, tonality reference, and dereverb.'
+  tags:
+  - LALAL.AI
+  - Voice Cloning
+  - Voice Change
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    LALAL_LICENSE_KEY: LALAL_LICENSE_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: lalal-voice-cloning
+    baseUri: https://www.lalal.ai
+    description: LALAL.AI voice cloning and voice change business capability.
+    resources:
+    - name: voice-packs-list
+      path: /api/v1/voice_packs/list/
+      operations:
+      - name: listVoicePacks
+        method: POST
+        description: List voice packs available to the authenticated license.
+        outputRawFormat: json
+        outputParameters:
+        - name: packs
+          type: array
+          value: $.packs
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          required: false
+    - name: change-voice
+      path: /api/v1/change_voice/
+      operations:
+      - name: startChangeVoice
+        method: POST
+        description: Convert the voice of a source recording using a chosen Voice Pack.
+        outputRawFormat: json
+        outputParameters:
+        - name: task_id
+          type: string
+          value: $.task_id
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          required: true
+    authentication:
+      type: apikey
+      key: X-License-Key
+      value: '{{env.LALAL_LICENSE_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: lalal-voice-cloning-rest
+    port: 8080
+    description: REST adapter exposing voice pack listing and voice conversion.
+    resources:
+    - name: change-voice
+      path: /v1/change-voice
+      operations:
+      - name: createChangeVoiceJob
+        method: POST
+        description: Create a voice conversion job using a Voice Pack.

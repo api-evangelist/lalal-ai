@@ -1,0 +1,40 @@
+extends:
+  - "spectral:oas"
+rules:
+  lalal-info-title-present:
+    description: API info.title must be present and reference LALAL.AI.
+    severity: error
+    given: $.info.title
+    then:
+      function: truthy
+  lalal-paths-snake-case:
+    description: Path segments use snake_case (lowercase letters, digits, underscores) and trailing slash, e.g. /api/v1/voice_packs/list/.
+    severity: warn
+    given: $.paths[*]~
+    then:
+      function: pattern
+      functionOptions:
+        match: "^/api/v[0-9]+(/[a-z0-9_]+)+/$"
+  lalal-license-header-defined:
+    description: An X-License-Key API key security scheme must be defined.
+    severity: error
+    given: $.components.securitySchemes
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          minProperties: 1
+  lalal-operations-post-only:
+    description: LALAL.AI API v1 endpoints use POST exclusively.
+    severity: warn
+    given: $.paths[*]
+    then:
+      field: get
+      function: falsy
+  lalal-response-status-enum:
+    description: Success responses should expose the canonical status enum (success, error, progress, cancelled).
+    severity: info
+    given: $.components.schemas[?(@.title=='CheckV1Response')]
+    then:
+      function: truthy

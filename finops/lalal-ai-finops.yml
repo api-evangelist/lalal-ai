@@ -1,0 +1,87 @@
+finops: 0.1
+focus_alignment: FinOps Foundation FOCUS 1.0
+provider: LALAL.AI
+provider_id: lalal-ai
+updated: '2026-05-25'
+billing_model: |
+  Subscription + consumable minutes. The license key (X-License-Key) is the FOCUS Resource. Charges accrue from
+  subscription plan fees (monthly / annual) and from one-time top-up purchases that grant Fast Queue minutes.
+  Minutes are consumed as: file_length_seconds * number_of_selected_stems / 60.
+
+dimensions:
+  ServiceCategory: Audio AI / Stem Separation
+  ServiceName: LALAL.AI API
+  SkuFamily:
+    - subscription
+    - top-up
+    - api-access
+  PricingUnit:
+    - per-month (subscription)
+    - per-year (annual subscription)
+    - per-minute-processed (top-up consumption)
+  ChargeCategory:
+    - Usage      # minutes consumed
+    - Purchase   # subscription or top-up purchase
+  ChargeFrequency:
+    - Recurring (subscription)
+    - OneTime (top-up, upgrade)
+  ResourceType: license_key
+  ResourceId: X-License-Key value
+  Region: global (single LALAL.AI endpoint)
+
+cost_drivers:
+  - file_length_seconds — primary multiplier for minute consumption.
+  - number_of_stems — multistem requests multiply minute consumption per stem.
+  - queue_selection — Fast Queue minutes are metered; Relaxed Queue is unlimited on paid plans.
+  - top_up_pack — Master ($50 / 750 min), Premium ($190 / 3000 min), Enterprise ($300 / 5000 min).
+  - voice_cloning — training and inference may consume additional minutes per LALAL.AI pricing.
+
+unit_economics:
+  starter:
+    base_cost_usd: 0
+    included_minutes: 10
+    overage_unit_cost_usd: null
+  lite_monthly:
+    base_cost_usd: 7.50
+    included_fast_minutes: 90
+    included_relaxed_minutes: unlimited
+  lite_annual:
+    base_cost_usd: 90.00
+    included_fast_minutes_per_month: 90
+  pro_monthly:
+    base_cost_usd: 15.00
+    included_fast_minutes: 250
+    api_access: true
+  pro_annual:
+    base_cost_usd: 180.00
+    included_fast_minutes_per_month: 250
+    api_access: true
+  topups:
+    master:
+      cost_usd: 50.00
+      minutes: 750
+      effective_rate_usd_per_minute: 0.0667
+    premium:
+      cost_usd: 190.00
+      minutes: 3000
+      effective_rate_usd_per_minute: 0.0633
+    enterprise:
+      cost_usd: 300.00
+      minutes: 5000
+      effective_rate_usd_per_minute: 0.0600
+
+observability:
+  remaining_minutes_endpoint: POST /api/v1/limits/minutes_left/
+  invoice_history: Available via the LALAL.AI account dashboard.
+  webhooks: Not publicly documented at the API v1 level; jobs are polled via /api/v1/check/.
+  recommended_tags:
+    - cost_center
+    - project
+    - environment
+
+optimization_levers:
+  - Use Relaxed Queue for non-time-sensitive batch jobs to preserve Fast Queue minutes.
+  - Prefer multistem requests over multiple single-stem requests when extracting several stems from one source —
+    same consumption math, fewer round-trips.
+  - Cache stem_track / back_track downloads locally; signed URLs are temporary, but re-running a job re-bills.
+  - Negotiate custom enterprise pricing (support@lalal.ai) for sustained high-volume API usage.

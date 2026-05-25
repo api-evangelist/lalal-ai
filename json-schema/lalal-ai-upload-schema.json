@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/lalal-ai/main/json-schema/lalal-ai-upload-schema.json",
+  "title": "LALAL.AI Upload Response",
+  "description": "Schema for the response of POST /api/v1/upload/, returning the source_id used by subsequent split requests.",
+  "type": "object",
+  "required": ["status"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["success", "error"]
+    },
+    "id": {
+      "type": "string",
+      "description": "Identifier of the uploaded source file."
+    },
+    "source_id": {
+      "type": "string",
+      "description": "Identifier of the uploaded source file (API v1 alias of id)."
+    },
+    "size": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Size of the uploaded file in bytes."
+    },
+    "duration": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Detected media duration in seconds."
+    },
+    "expires": {
+      "type": "integer",
+      "description": "Unix epoch seconds when the upload will be purged (24 hours after upload)."
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": {"type": "string"},
+        "message": {"type": "string"}
+      }
+    }
+  },
+  "additionalProperties": true
+}

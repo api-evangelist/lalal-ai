@@ -1,0 +1,43 @@
+review:
+  provider: LALAL.AI
+  provider_id: lalal-ai
+  reviewer: API Evangelist
+  date: '2026-05-25'
+  tier: 1
+  position: Producing
+  summary: |
+    LALAL.AI ships a polished, production-grade audio AI surface with a properly versioned REST API (v1), an
+    official OpenAPI 3.1 spec served from /api/v1/openapi.json, a Swagger-style explorer at /api/v1/docs/, and a
+    public Python example repository on GitHub. Six proprietary neural networks (Andromeda, Perseus, Orion,
+    Phoenix, Lyra, Lynx) back stem separation, multistem extraction, demuser isolation, voice cleaning, voice
+    cloning, and voice change. Auth is a single license-key header; jobs are asynchronous with a clean upload →
+    split → check → download lifecycle and support both single-source and batch variants.
+
+  strengths:
+    - Versioned API with an official, machine-readable OpenAPI 3.1 spec and live Swagger explorer.
+    - Clear async job model with explicit task lifecycle states (success, progress, error, cancelled).
+    - Single-source AND batch endpoints across stem_separator, demuser, and voice_clean.
+    - Six proprietary splitters covering the full vocal / multi-stem / dereverb spectrum.
+    - Consent-based voice cloning surface with both legal artist packs and user-trained packs callable from /change_voice/.
+    - Explicit minutes-left introspection endpoint (/api/v1/limits/minutes_left/) for in-app budget UX.
+    - Official Python example repo (OmniSaleGmbH/lalalai) with both v0 (deprecated) and v1 code paths.
+    - 24-hour source-file retention is documented; predictable privacy posture.
+
+  gaps:
+    - No publicly documented webhooks — clients must poll /check/.
+    - No request-rate limits are published — only minutes-based quotas and per-file upload caps.
+    - Only Python is offered as an official SDK example; TS, Go, Java, etc. left to the community.
+    - Status / uptime page not surfaced from the marketing site (only support and changelog).
+    - The API portal page is light on free-tier dev onboarding — most credentials gating is hidden inside the Pro plan.
+
+  recommendations:
+    - Publish webhook callbacks for split / change-voice task completion to remove poll loops.
+    - Document explicit per-key RPS / concurrency ceilings alongside the existing minutes quota.
+    - Add first-party SDKs (TypeScript, Go, Python package, Java) to OmniSaleGmbH org.
+    - Expose a public status page (https://status.lalal.ai or similar) for production buyers.
+    - Offer a dedicated free API tier (limited minutes, full v1 surface) for evaluation without a Pro subscription.
+
+  tier_rationale: |
+    Tier 1 — LALAL.AI exhibits the full set of API-Evangelist Tier-1 markers: a versioned REST API, an
+    official OpenAPI spec, public docs, an example GitHub repo, transparent pricing, and a clearly differentiated
+    AI capability. Bumping above Tier 1 would require webhooks, multi-language SDKs, and an exposed status page.
