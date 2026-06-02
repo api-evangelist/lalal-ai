@@ -1,0 +1,21 @@
+{
+  "repo": "lalal-ai",
+  "feeds": [
+    {
+      "source": "https://www.lalal.ai/blog/meet-lalal-ai-api-v1/",
+      "feed_url": "https://www.lalal.ai/blog/rss/",
+      "title": "",
+      "saved": 3,
+      "method": "discovered"
+    },
+    {
+      "source": "https://www.lalal.ai/pricing/",
+      "feed_url": "https://www.lalal.ai/pricing/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 3,
+  "fetched": "2026-06-01T23:35:02Z"
+}
