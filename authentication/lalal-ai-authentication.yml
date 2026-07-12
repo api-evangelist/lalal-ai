@@ -1,0 +1,15 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/lalal-ai-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: ApiKeyHeaderAuth
+  type: apiKey
+  in: header
+  parameter: X-License-Key
+  sources:
+  - openapi/lalal-ai-api-openapi.yml

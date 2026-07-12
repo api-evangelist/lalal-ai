@@ -60,6 +60,10 @@ apis:
       drums, bass, piano, electric guitar, acoustic guitar, synthesizer, strings, and wind, with output in MP3, WAV,
       FLAC, AAC, or OGG.
 common:
+  - type: DomainSecurity
+    url: security/lalal-ai-domain-security.yml
+  - type: Authentication
+    url: authentication/lalal-ai-authentication.yml
   - type: Portal
     url: https://www.lalal.ai
   - type: Documentation
