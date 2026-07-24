@@ -1,0 +1,329 @@
+openapi: 3.1.0
+info:
+  title: LALAL.AI Batch Stem Separation Voice Change API
+  version: 1.1.0
+  description: '
+
+    This is the LALAL.AI API.
+
+
+    To authenticate, provide your license key in the `X-License-Key` header of each request.
+
+
+    Typical usage example:
+
+    1) Upload a file using the ''/upload/'' endpoint to get a ''source_id''.
+
+    2) Start a splitting task using the ''/split/'' endpoint with the obtained ''source_id'' and desired presets.
+
+    3) Check the status of your task using the ''/check/'' endpoint with the returned ''task_id''.
+
+    4) Once the task is complete, download the processed files using urls from the ''/check/'' response.
+
+    5) (If needed), you can delete the source file and all its resulting tracks from our servers, using the ''/delete/'' endpoint with the ''source_id''.
+
+
+    Notes:
+
+
+    You can use the same source_id for concurrent splitting tasks.
+
+
+    You can check multiple task IDs in a single ''/check/'' request by providing a list of ''task_ids''.
+
+
+    '
+servers:
+- url: https://www.lalal.ai
+  description: LALAL.AI API v1 production endpoint
+tags:
+- name: Voice Change
+paths:
+  /api/v1/change_voice/:
+    post:
+      operationId: change_voice_change_voice
+      summary: Changes voice in the audio file using voice pack
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/ApiV1ErrorResponse'
+                - $ref: '#/components/schemas/CommonErrorResponse'
+                title: Response
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonErrorResponse'
+      description: "\n    For 'voice_pack_id' parameter use 'pack_id' from /voice_packs/list/ endpoint or one of legal packs: ['ALEX_KAYE', 'STASIA_FAYE', 'NICOLAAS_HAAS', 'NIK_ZEL', 'OLIA_CHEBO', 'YVAR_DE_GROOT', 'VETRANA']\n\n    Result of /check/ includes 1 track with label 'converted_mix'.\n    {\"label\":\"converted_mix\", \"type\":\"back\", \"url\":\"...\"}\n    "
+      tags:
+      - Voice Change
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceChangeParameters'
+        required: true
+      security:
+      - ApiKeyHeaderAuth: []
+  /api/v1/voice_packs/list/:
+    post:
+      operationId: voice_packs_list_packs
+      summary: Lists voice packs available to the user
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoicePackListResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/ApiV1ErrorResponse'
+                - $ref: '#/components/schemas/CommonErrorResponse'
+                title: Response
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonErrorResponse'
+      description: Helps to find pack_id for /change_voice/ endpoint.
+      tags:
+      - Voice Change
+      security:
+      - ApiKeyHeaderAuth: []
+components:
+  schemas:
+    ApiV1ErrorResponse:
+      properties:
+        detail:
+          description: Error message.
+          example: Idempotency key has already been used.
+          title: Detail
+          type: string
+        code:
+          description: Error code.
+          example: idempotency_key_used
+          title: Code
+          type: string
+      required:
+      - detail
+      - code
+      title: ApiV1ErrorResponse
+      type: object
+    VoicePackListResponse:
+      properties:
+        packs:
+          description: List of voice packs available to the user.
+          items:
+            $ref: '#/components/schemas/VoicePackInfo'
+          title: Packs
+          type: array
+      required:
+      - packs
+      title: VoicePackListResponse
+      type: object
+    EncoderFormat:
+      enum:
+      - mp3
+      - wav
+      - flac
+      - aac
+      - ogg
+      title: EncoderFormat
+      type: string
+    VoicePackInfo:
+      properties:
+        name:
+          description: Name of the voice pack.
+          example: Professional Narrator Voice Pack
+          title: Name
+          type: string
+        pack_id:
+          description: ID of the voice pack.
+          example: f5dc9452-9374-4418-9288-02825bbd0016
+          title: Pack Id
+          type: string
+        created:
+          description: Creation timestamp of the voice pack.
+          example: 1672531199
+          title: Created
+          type: integer
+      required:
+      - name
+      - pack_id
+      - created
+      title: VoicePackInfo
+      type: object
+    VoiceChangeParameters:
+      properties:
+        source_id:
+          description: ID of the source file to be processed.
+          example: 2fe8f214-1771-4900-9e7e-570f823bd359
+          format: uuid4
+          title: Source Id
+          type: string
+        presets:
+          $ref: '#/components/schemas/VoiceChangePresetsV1'
+          description: Presets for converting the source file.
+        idempotency_key:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          default: null
+          description: '
+
+            Unique uuid4 key to ensure idempotent requests.
+
+
+            Prevents duplicate task execution with the same parameters.
+
+
+            Can be reused until the task starts. Once processing begins, reusing this key will return an error.
+
+            '
+          title: Idempotency Key
+      required:
+      - source_id
+      - presets
+      title: VoiceChangeParameters
+      type: object
+    TonalityReference:
+      enum:
+      - source_file
+      - voice_pack
+      title: TonalityReference
+      type: string
+    CommonErrorResponse:
+      properties:
+        detail:
+          anyOf:
+          - type: string
+          - additionalProperties: true
+            type: object
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          description: Error details
+          example:
+            detail:
+            - loc:
+              - body
+              - split_input
+              - source_id
+              msg: Field required
+              type: missing
+            - loc:
+              - body
+              - split_input
+              - presets
+              msg: Field required
+              type: missing
+          title: Detail
+      required:
+      - detail
+      title: CommonErrorResponse
+      type: object
+    VoiceChangePresetsV1:
+      properties:
+        voice_pack_id:
+          description: '
+
+            ID of the voice pack to be used for voice conversion.
+
+
+            Could be one of the legal packs, provided by us.
+
+
+            Could be a custom voice pack from voice cloner, trained by the user(see /voice_packs/list/).
+
+
+            '
+          examples:
+          - <user_private_pack_uuid4>
+          - ALEX_KAYE
+          - STASIA_FAYE
+          - NICOLAAS_HAAS
+          - NIK_ZEL
+          - OLIA_CHEBO
+          - YVAR_DE_GROOT
+          - VETRANA
+          title: Voice Pack Id
+          type: string
+        accent:
+          default: 1.0
+          description: '
+
+            Float value, changing intensity in range from 0.0 to 1.0
+
+
+            0.0 preserves the source file accent and 1.0 applies the voice pack accent.
+
+            '
+          example: 0.33
+          maximum: 1.0
+          minimum: 0.0
+          title: Accent
+          type: number
+        tonality_reference:
+          allOf:
+          - $ref: '#/components/schemas/TonalityReference'
+          default: source_file
+          description: Tonality reference for voice conversion.
+        dereverb_enabled:
+          default: false
+          description: '
+
+            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
+
+
+            Disabling dereverb preserves the natural echo of the recording for authenticity.
+
+            '
+          title: Dereverb Enabled
+          type: boolean
+        encoder_format:
+          anyOf:
+          - $ref: '#/components/schemas/EncoderFormat'
+          - type: 'null'
+          default: null
+          description: Format for output audio. If None - convert to source file format.
+      required:
+      - voice_pack_id
+      title: VoiceChangePresetsV1
+      type: object
+    TaskResponse:
+      properties:
+        task_id:
+          description: ID of the created task.
+          example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
+          title: Task Id
+          type: string
+      required:
+      - task_id
+      title: TaskResponse
+      type: object
+  securitySchemes:
+    ApiKeyHeaderAuth:
+      type: apiKey
+      in: header
+      name: X-License-Key

@@ -1,0 +1,619 @@
+openapi: 3.1.0
+info:
+  title: LALAL.AI Batch Stem Separation API
+  version: 1.1.0
+  description: '
+
+    This is the LALAL.AI API.
+
+
+    To authenticate, provide your license key in the `X-License-Key` header of each request.
+
+
+    Typical usage example:
+
+    1) Upload a file using the ''/upload/'' endpoint to get a ''source_id''.
+
+    2) Start a splitting task using the ''/split/'' endpoint with the obtained ''source_id'' and desired presets.
+
+    3) Check the status of your task using the ''/check/'' endpoint with the returned ''task_id''.
+
+    4) Once the task is complete, download the processed files using urls from the ''/check/'' response.
+
+    5) (If needed), you can delete the source file and all its resulting tracks from our servers, using the ''/delete/'' endpoint with the ''source_id''.
+
+
+    Notes:
+
+
+    You can use the same source_id for concurrent splitting tasks.
+
+
+    You can check multiple task IDs in a single ''/check/'' request by providing a list of ''task_ids''.
+
+
+    '
+servers:
+- url: https://www.lalal.ai
+  description: LALAL.AI API v1 production endpoint
+tags:
+- name: Stem Separation
+paths:
+  /api/v1/split/stem_separator/:
+    post:
+      operationId: split_split_enhanced
+      summary: Split a file into stems using the stem separator presets
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/ApiV1ErrorResponse'
+                - $ref: '#/components/schemas/CommonErrorResponse'
+                title: Response
+      description: "\n    Result of /check/ includes 2 tracks:\n    - stem:{\"type\":\"stem\", \"label\":\"<stem_name>\", \"url\":\"...\"}\n    - without stem:{\"type\":\"back\", \"label\":\"no_<stem_name>\", \"url\":\"...\"}\n\n    LEAD_BACK VOCALS:\n    For 'vocals' stem you can use parameter multivocal=\"lead_back\" and receive both lead and backing vocals as separate stems.\n    Result of /check/ includes 4 tracks. Backing vocals track is optional and could be suppressed if not found in the audio:\n    lead vocals:{\"type\":\"stem\", \"label\":\"vocals@0\", \"url\":\"...\"}\n    backing vocals:{\"type\":\"stem\", \"label\":\"vocals@1\", \"url\":\"...\"}\n    instrumental:{\"type\":\"back\", \"label\":\"no_vocals\", \"url\":\"...\"}\n    instrumental + backing vocals:{\"type\":\"back\", \"label\":\"mix_no_lead\", \"url\":\"...\"}\n    "
+      tags:
+      - Stem Separation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StemSeparatorSplitParameters'
+        required: true
+      security:
+      - ApiKeyHeaderAuth: []
+  /api/v1/split/demuser/:
+    post:
+      operationId: split_split_demuser
+      summary: Clean voice from background music
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/ApiV1ErrorResponse'
+                - $ref: '#/components/schemas/CommonErrorResponse'
+                title: Response
+      description: "\n    Typical usage case - is voice with background music.\n    Demuser will separate voice (stem) and music (back).\n    Result of /check/ includes 2 tracks:\n    - stem:{\"type\":\"stem\", \"label\":\"music\", \"url\":\"...\"}\n    - back:{\"type\":\"back\", \"label\":\"no_music\", \"url\":\"...\"}\n    "
+      tags:
+      - Stem Separation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DemuserSplitParameters'
+        required: true
+      security:
+      - ApiKeyHeaderAuth: []
+  /api/v1/split/voice_clean/:
+    post:
+      operationId: split_split_voice_clean
+      summary: Clean voice from background noise
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/ApiV1ErrorResponse'
+                - $ref: '#/components/schemas/CommonErrorResponse'
+                title: Response
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonErrorResponse'
+      description: "\n    Typical usage case - is voice with background noise.\n    Voice clean will separate clean voice (stem) and noise (back).\n    Result of /check/ includes 2 tracks:\n    - stem:{\"type\":\"stem\", \"label\":\"voice\", \"url\":\"...\"}\n    - back:{\"type\":\"back\", \"label\":\"no_voice\", \"url\":\"...\"}\n    "
+      tags:
+      - Stem Separation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceCleanSplitParameters'
+        required: true
+      security:
+      - ApiKeyHeaderAuth: []
+  /api/v1/split/multistem/:
+    post:
+      operationId: split_split_multistem
+      summary: Split a file into multiple stems in one request (multistem feature)
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/ApiV1ErrorResponse'
+                - $ref: '#/components/schemas/CommonErrorResponse'
+                title: Response
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonErrorResponse'
+      description: "\n    WARNING: The stems are internally extracted one by one, so the processing time is proportional to the number of stems selected.\n\n    You will be charged an equal amount of minutes for each stem.\n    For example, if you have an audio file with a duration of 1 minute,\n    with stem_list=[\"vocals\", \"drum\"], you will be charged 2 minutes (1 minute for \"vocals\", 1 minute for \"drum\").\n    At the /check/ endpoint you will receive <number_of_stems> tracks with 1 additional track which is the source without all selected stems.\n    Example response tracks for stem_list=[\"vocals\", \"drum\"]:\n    - stem:{\"type\":\"stem\", \"label\":\"vocals\", \"url\":\"...\"}\n    - stem:{\"type\":\"stem\", \"label\":\"drum\", \"url\":\"...\"}\n    - rest of source:{\"type\":\"back\", \"label\":\"no_multistem\", \"url\":\"...\"}\n    "
+      tags:
+      - Stem Separation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MultistemSplitParameters'
+        required: true
+      security:
+      - ApiKeyHeaderAuth: []
+components:
+  schemas:
+    FilteringLevel:
+      enum:
+      - 0
+      - 1
+      - 2
+      title: FilteringLevel
+      type: integer
+    MultistemSplitterPresetsV1:
+      properties:
+        splitter:
+          allOf:
+          - $ref: '#/components/schemas/SplitterType'
+          default: auto
+          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
+        dereverb_enabled:
+          default: false
+          description: '
+
+            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
+
+
+            Disabling dereverb preserves the natural echo of the recording for authenticity.
+
+            Only for {''vocals'', ''voice''} stems.'
+          title: Dereverb Enabled
+          type: boolean
+        encoder_format:
+          anyOf:
+          - $ref: '#/components/schemas/EncoderFormat'
+          - type: 'null'
+          default: null
+          description: Format for output audio. If None - convert to source file format.
+        stem_list:
+          description: List of stems to extract. Any subset of supported stems is possible.
+          example:
+          - vocals
+          - drum
+          - piano
+          - bass
+          - electric_guitar
+          - acoustic_guitar
+          items:
+            enum:
+            - vocals
+            - drum
+            - piano
+            - bass
+            - electric_guitar
+            - acoustic_guitar
+            type: string
+          maxItems: 6
+          minItems: 1
+          title: Stem List
+          type: array
+        extraction_level:
+          allOf:
+          - $ref: '#/components/schemas/ExtractionLevel'
+          default: deep_extraction
+          description: '
+
+            Clear Cut: minimizes cross-bleeding between stems, resulting in a cleaner output, but may suppress finer details.
+
+
+            Deep Extraction: captures more intricate details but increases the risk of cross-bleeding, which may lead to some overlap between stems.
+
+
+            Andromeda splitter is not affected by this parameter and has its own fixed extraction behavior.
+
+            '
+      required:
+      - stem_list
+      title: MultistemSplitterPresetsV1
+      type: object
+    ExtractionLevel:
+      enum:
+      - deep_extraction
+      - clear_cut
+      title: ExtractionLevel
+      type: string
+    DemuserSplitterPresetsV1:
+      properties:
+        splitter:
+          allOf:
+          - $ref: '#/components/schemas/SplitterType'
+          default: auto
+          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
+        dereverb_enabled:
+          default: false
+          description: '
+
+            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
+
+
+            Disabling dereverb preserves the natural echo of the recording for authenticity.
+
+            Only for {''vocals'', ''voice''} stems.'
+          title: Dereverb Enabled
+          type: boolean
+        encoder_format:
+          anyOf:
+          - $ref: '#/components/schemas/EncoderFormat'
+          - type: 'null'
+          default: null
+          description: Format for output audio. If None - convert to source file format.
+        stem:
+          const: music
+          description: Stem to extract. Only 'music' stem is supported.
+          example: music
+          title: Stem
+          type: string
+      required:
+      - stem
+      title: DemuserSplitterPresetsV1
+      type: object
+    MultistemSplitParameters:
+      properties:
+        source_id:
+          description: ID of the source file to be processed.
+          example: 2fe8f214-1771-4900-9e7e-570f823bd359
+          format: uuid4
+          title: Source Id
+          type: string
+        presets:
+          $ref: '#/components/schemas/MultistemSplitterPresetsV1'
+        idempotency_key:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          default: null
+          description: '
+
+            Unique uuid4 key to ensure idempotent requests.
+
+
+            Prevents duplicate task execution with the same parameters.
+
+
+            Can be reused until the task starts. Once processing begins, reusing this key will return an error.
+
+            '
+          title: Idempotency Key
+      required:
+      - source_id
+      - presets
+      title: MultistemSplitParameters
+      type: object
+    Task:
+      properties:
+        task_id:
+          description: ID of the created split task.
+          example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
+          title: Task Id
+          type: string
+      required:
+      - task_id
+      title: Task
+      type: object
+    VoiceCleanSplitParameters:
+      properties:
+        source_id:
+          description: ID of the source file to be processed.
+          example: 2fe8f214-1771-4900-9e7e-570f823bd359
+          format: uuid4
+          title: Source Id
+          type: string
+        presets:
+          $ref: '#/components/schemas/VoiceCleanPresetsV1'
+        idempotency_key:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          default: null
+          description: '
+
+            Unique uuid4 key to ensure idempotent requests.
+
+
+            Prevents duplicate task execution with the same parameters.
+
+
+            Can be reused until the task starts. Once processing begins, reusing this key will return an error.
+
+            '
+          title: Idempotency Key
+      required:
+      - source_id
+      - presets
+      title: VoiceCleanSplitParameters
+      type: object
+    CommonErrorResponse:
+      properties:
+        detail:
+          anyOf:
+          - type: string
+          - additionalProperties: true
+            type: object
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          description: Error details
+          example:
+            detail:
+            - loc:
+              - body
+              - split_input
+              - source_id
+              msg: Field required
+              type: missing
+            - loc:
+              - body
+              - split_input
+              - presets
+              msg: Field required
+              type: missing
+          title: Detail
+      required:
+      - detail
+      title: CommonErrorResponse
+      type: object
+    StemSeparatorSplitParameters:
+      properties:
+        source_id:
+          description: ID of the source file to be processed.
+          example: 2fe8f214-1771-4900-9e7e-570f823bd359
+          format: uuid4
+          title: Source Id
+          type: string
+        presets:
+          $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+        idempotency_key:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          default: null
+          description: '
+
+            Unique uuid4 key to ensure idempotent requests.
+
+
+            Prevents duplicate task execution with the same parameters.
+
+
+            Can be reused until the task starts. Once processing begins, reusing this key will return an error.
+
+            '
+          title: Idempotency Key
+      required:
+      - source_id
+      - presets
+      title: StemSeparatorSplitParameters
+      type: object
+    StemSeparatorSplitterPresetsV1:
+      properties:
+        splitter:
+          allOf:
+          - $ref: '#/components/schemas/SplitterType'
+          default: auto
+          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
+        dereverb_enabled:
+          default: false
+          description: '
+
+            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
+
+
+            Disabling dereverb preserves the natural echo of the recording for authenticity.
+
+            Only for {''vocals'', ''voice''} stems.'
+          title: Dereverb Enabled
+          type: boolean
+        encoder_format:
+          anyOf:
+          - $ref: '#/components/schemas/EncoderFormat'
+          - type: 'null'
+          default: null
+          description: Format for output audio. If None - convert to source file format.
+        stem:
+          description: Stem to extract. ['synthesizer', 'strings', 'wind'] are available only phoenix splitter.
+          enum:
+          - vocals
+          - drum
+          - piano
+          - bass
+          - electric_guitar
+          - acoustic_guitar
+          - synthesizer
+          - strings
+          - wind
+          example: vocals
+          title: Stem
+          type: string
+        multivocal:
+          anyOf:
+          - const: lead_back
+            type: string
+          - type: 'null'
+          default: null
+          description: Use parameter 'lead_back' and receive both lead and backing vocals as separate stems vocals@0 and vocals@1
+          title: Multivocal
+        extraction_level:
+          allOf:
+          - $ref: '#/components/schemas/ExtractionLevel'
+          default: deep_extraction
+          description: '
+
+            Clear Cut: minimizes cross-bleeding between stems, resulting in a cleaner output, but may suppress finer details.
+
+
+            Deep Extraction: captures more intricate details but increases the risk of cross-bleeding, which may lead to some overlap between stems.
+
+
+            Andromeda splitter is not affected by this parameter and has its own fixed extraction behavior.
+
+            '
+      required:
+      - stem
+      title: StemSeparatorSplitterPresetsV1
+      type: object
+    SplitterType:
+      enum:
+      - andromeda
+      - perseus
+      - orion
+      - phoenix
+      - lyra
+      - lynx
+      title: SplitterType
+      type: string
+    EncoderFormat:
+      enum:
+      - mp3
+      - wav
+      - flac
+      - aac
+      - ogg
+      title: EncoderFormat
+      type: string
+    VoiceCleanPresetsV1:
+      properties:
+        splitter:
+          allOf:
+          - $ref: '#/components/schemas/SplitterType'
+          default: auto
+          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
+        dereverb_enabled:
+          default: false
+          description: '
+
+            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
+
+
+            Disabling dereverb preserves the natural echo of the recording for authenticity.
+
+            Only for {''vocals'', ''voice''} stems.'
+          title: Dereverb Enabled
+          type: boolean
+        encoder_format:
+          anyOf:
+          - $ref: '#/components/schemas/EncoderFormat'
+          - type: 'null'
+          default: null
+          description: Format for output audio. If None - convert to source file format.
+        stem:
+          const: voice
+          description: Stem to extract. Only 'voice' stem is supported.
+          example: voice
+          title: Stem
+          type: string
+        noise_cancelling_level:
+          allOf:
+          - $ref: '#/components/schemas/FilteringLevel'
+          default: 0
+          description: Level of noise cancelling to apply.
+      required:
+      - stem
+      title: VoiceCleanPresetsV1
+      type: object
+    DemuserSplitParameters:
+      properties:
+        source_id:
+          description: ID of the source file to be processed.
+          example: 2fe8f214-1771-4900-9e7e-570f823bd359
+          format: uuid4
+          title: Source Id
+          type: string
+        presets:
+          $ref: '#/components/schemas/DemuserSplitterPresetsV1'
+        idempotency_key:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          default: null
+          description: '
+
+            Unique uuid4 key to ensure idempotent requests.
+
+
+            Prevents duplicate task execution with the same parameters.
+
+
+            Can be reused until the task starts. Once processing begins, reusing this key will return an error.
+
+            '
+          title: Idempotency Key
+      required:
+      - source_id
+      - presets
+      title: DemuserSplitParameters
+      type: object
+    ApiV1ErrorResponse:
+      properties:
+        detail:
+          description: Error message.
+          example: Idempotency key has already been used.
+          title: Detail
+          type: string
+        code:
+          description: Error code.
+          example: idempotency_key_used
+          title: Code
+          type: string
+      required:
+      - detail
+      - code
+      title: ApiV1ErrorResponse
+      type: object
+  securitySchemes:
+    ApiKeyHeaderAuth:
+      type: apiKey
+      in: header
+      name: X-License-Key
