@@ -1,65 +1,177 @@
 aid: lalal-ai
 url: https://raw.githubusercontent.com/api-evangelist/lalal-ai/refs/heads/main/apis.yml
 apis:
-  - aid: lalal-ai:lalal-ai-api
-    name: LALAL.AI API
-    tags:
-      - AI
-      - Audio
-      - Stem Separation
-      - Voice Cloning
-      - Music
-      - Vocal Removal
-      - Machine Learning
-    humanURL: https://www.lalal.ai/api/
-    baseURL: https://www.lalal.ai
-    properties:
-      - url: https://www.lalal.ai/api/
-        type: Documentation
-      - url: https://www.lalal.ai/api/v1/docs/
-        type: Documentation
-        name: API v1 Reference (Swagger)
-      - url: https://www.lalal.ai/api/v1/openapi.json
-        type: OpenAPISource
-        name: Official OpenAPI v1 JSON
-      - url: https://www.lalal.ai/blog/meet-lalal-ai-api-v1/
-        type: Blog
-        name: Meet LALAL.AI API v1
-      - url: https://github.com/OmniSaleGmbH/lalalai
-        type: GitHubRepository
-        name: Official API Examples
-      - url: openapi/lalal-ai-api-openapi.yml
-        type: OpenAPI
-      - url: json-schema/lalal-ai-split-task-schema.json
-        type: JSONSchema
-      - url: json-schema/lalal-ai-upload-schema.json
-        type: JSONSchema
-      - url: json-schema/lalal-ai-voice-pack-schema.json
-        type: JSONSchema
-      - url: json-ld/lalal-ai-context.jsonld
-        type: JSONLD
-      - url: examples/lalal-ai-upload-example.json
-        type: Examples
-      - url: examples/lalal-ai-split-stem-separator-example.json
-        type: Examples
-      - url: examples/lalal-ai-check-example.json
-        type: Examples
-      - url: examples/lalal-ai-multistem-example.json
-        type: Examples
-      - url: examples/lalal-ai-change-voice-example.json
-        type: Examples
-      - url: rules/lalal-ai-rules.yml
-        type: Spectral
-      - url: vocabulary/lalal-ai-vocabulary.yml
-        type: Vocabulary
-    description: >-
-      LALAL.AI API v1 is a production-grade audio separation, voice cleaning, and voice cloning API powered by
-      proprietary neural networks (Andromeda, Perseus, Orion, Phoenix, Lyra, Lynx). It exposes upload, split,
-      multi-stem, demuser, voice-clean, change-voice, voice-pack listing, task polling, and limits endpoints with both
-      single-task and batch variants. Authentication is via the X-License-Key header. Supported stems include vocals,
-      drums, bass, piano, electric guitar, acoustic guitar, synthesizer, strings, and wind, with output in MP3, WAV,
-      FLAC, AAC, or OGG.
+- aid: lalal-ai:lalal-ai-batch-stem-separation-api
+  name: LALAL.AI Batch Stem Separation API
+  description: The Batch Stem Separation API from LALAL.AI — 3 operation(s) for batch stem separation.
+  humanURL: https://www.lalal.ai/api/
+  baseURL: https://www.lalal.ai
+  tags:
+  - Batch Stem Separation
+  properties:
+  - type: OpenAPI
+    url: openapi/lalal-ai-batch-stem-separation-api-openapi.yml
+  - type: Documentation
+    url: https://www.lalal.ai/api/
+  - type: Documentation
+    url: https://www.lalal.ai/api/v1/docs/
+  - type: OpenAPISource
+    url: https://www.lalal.ai/api/v1/openapi.json
+  - type: Blog
+    url: https://www.lalal.ai/blog/meet-lalal-ai-api-v1/
+  - type: GitHubRepository
+    url: https://github.com/OmniSaleGmbH/lalalai
+  - type: JSONSchema
+    url: json-schema/lalal-ai-split-task-schema.json
+  - type: JSONSchema
+    url: json-schema/lalal-ai-upload-schema.json
+  - type: JSONSchema
+    url: json-schema/lalal-ai-voice-pack-schema.json
+  - type: JSONLD
+    url: json-ld/lalal-ai-context.jsonld
+  - type: Examples
+    url: examples/lalal-ai-upload-example.json
+  - type: Examples
+    url: examples/lalal-ai-split-stem-separator-example.json
+  - type: Examples
+    url: examples/lalal-ai-check-example.json
+  - type: Examples
+    url: examples/lalal-ai-multistem-example.json
+  - type: Examples
+    url: examples/lalal-ai-change-voice-example.json
+  - type: Spectral
+    url: rules/lalal-ai-rules.yml
+  - type: Vocabulary
+    url: vocabulary/lalal-ai-vocabulary.yml
+- aid: lalal-ai:lalal-ai-common-api
+  name: LALAL.AI Common API
+  description: The Common API from LALAL.AI — 6 operation(s) for common.
+  humanURL: https://www.lalal.ai/api/
+  baseURL: https://www.lalal.ai
+  tags:
+  - Common
+  properties:
+  - type: OpenAPI
+    url: openapi/lalal-ai-common-api-openapi.yml
+  - type: Documentation
+    url: https://www.lalal.ai/api/
+  - type: Documentation
+    url: https://www.lalal.ai/api/v1/docs/
+  - type: OpenAPISource
+    url: https://www.lalal.ai/api/v1/openapi.json
+  - type: Blog
+    url: https://www.lalal.ai/blog/meet-lalal-ai-api-v1/
+  - type: GitHubRepository
+    url: https://github.com/OmniSaleGmbH/lalalai
+  - type: JSONSchema
+    url: json-schema/lalal-ai-split-task-schema.json
+  - type: JSONSchema
+    url: json-schema/lalal-ai-upload-schema.json
+  - type: JSONSchema
+    url: json-schema/lalal-ai-voice-pack-schema.json
+  - type: JSONLD
+    url: json-ld/lalal-ai-context.jsonld
+  - type: Examples
+    url: examples/lalal-ai-upload-example.json
+  - type: Examples
+    url: examples/lalal-ai-split-stem-separator-example.json
+  - type: Examples
+    url: examples/lalal-ai-check-example.json
+  - type: Examples
+    url: examples/lalal-ai-multistem-example.json
+  - type: Examples
+    url: examples/lalal-ai-change-voice-example.json
+  - type: Spectral
+    url: rules/lalal-ai-rules.yml
+  - type: Vocabulary
+    url: vocabulary/lalal-ai-vocabulary.yml
+- aid: lalal-ai:lalal-ai-stem-separation-api
+  name: LALAL.AI Stem Separation API
+  description: The Stem Separation API from LALAL.AI — 4 operation(s) for stem separation.
+  humanURL: https://www.lalal.ai/api/
+  baseURL: https://www.lalal.ai
+  tags:
+  - Stem Separation
+  properties:
+  - type: OpenAPI
+    url: openapi/lalal-ai-stem-separation-api-openapi.yml
+  - type: Documentation
+    url: https://www.lalal.ai/api/
+  - type: Documentation
+    url: https://www.lalal.ai/api/v1/docs/
+  - type: OpenAPISource
+    url: https://www.lalal.ai/api/v1/openapi.json
+  - type: Blog
+    url: https://www.lalal.ai/blog/meet-lalal-ai-api-v1/
+  - type: GitHubRepository
+    url: https://github.com/OmniSaleGmbH/lalalai
+  - type: JSONSchema
+    url: json-schema/lalal-ai-split-task-schema.json
+  - type: JSONSchema
+    url: json-schema/lalal-ai-upload-schema.json
+  - type: JSONSchema
+    url: json-schema/lalal-ai-voice-pack-schema.json
+  - type: JSONLD
+    url: json-ld/lalal-ai-context.jsonld
+  - type: Examples
+    url: examples/lalal-ai-upload-example.json
+  - type: Examples
+    url: examples/lalal-ai-split-stem-separator-example.json
+  - type: Examples
+    url: examples/lalal-ai-check-example.json
+  - type: Examples
+    url: examples/lalal-ai-multistem-example.json
+  - type: Examples
+    url: examples/lalal-ai-change-voice-example.json
+  - type: Spectral
+    url: rules/lalal-ai-rules.yml
+  - type: Vocabulary
+    url: vocabulary/lalal-ai-vocabulary.yml
+- aid: lalal-ai:lalal-ai-voice-change-api
+  name: LALAL.AI Voice Change API
+  description: The Voice Change API from LALAL.AI — 2 operation(s) for voice change.
+  humanURL: https://www.lalal.ai/api/
+  baseURL: https://www.lalal.ai
+  tags:
+  - Voice Change
+  properties:
+  - type: OpenAPI
+    url: openapi/lalal-ai-voice-change-api-openapi.yml
+  - type: Documentation
+    url: https://www.lalal.ai/api/
+  - type: Documentation
+    url: https://www.lalal.ai/api/v1/docs/
+  - type: OpenAPISource
+    url: https://www.lalal.ai/api/v1/openapi.json
+  - type: Blog
+    url: https://www.lalal.ai/blog/meet-lalal-ai-api-v1/
+  - type: GitHubRepository
+    url: https://github.com/OmniSaleGmbH/lalalai
+  - type: JSONSchema
+    url: json-schema/lalal-ai-split-task-schema.json
+  - type: JSONSchema
+    url: json-schema/lalal-ai-upload-schema.json
+  - type: JSONSchema
+    url: json-schema/lalal-ai-voice-pack-schema.json
+  - type: JSONLD
+    url: json-ld/lalal-ai-context.jsonld
+  - type: Examples
+    url: examples/lalal-ai-upload-example.json
+  - type: Examples
+    url: examples/lalal-ai-split-stem-separator-example.json
+  - type: Examples
+    url: examples/lalal-ai-check-example.json
+  - type: Examples
+    url: examples/lalal-ai-multistem-example.json
+  - type: Examples
+    url: examples/lalal-ai-change-voice-example.json
+  - type: Spectral
+    url: rules/lalal-ai-rules.yml
+  - type: Vocabulary
+    url: vocabulary/lalal-ai-vocabulary.yml
 common:
+  - type: PostmanWorkspace
+    url: https://www.postman.com/kinlaneapi/lalalai/overview
   - type: AgenticAccess
     url: agentic-access/lalal-ai-agentic-access.yml
   - type: DomainSecurity
@@ -146,6 +258,19 @@ common:
       - https://github.com/OmniSaleGmbH/lalalai
     updated: '2026-05-25'
 name: LALAL.AI
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 created: '2026-05-25T00:00:00.000Z'
 modified: '2026-05-25'
 position: Producing
