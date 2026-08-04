@@ -1,0 +1,503 @@
+{
+  "info": {
+    "_postman_id": "de9bc813-f2e6-4a89-b2e9-3f9ba0bcca33",
+    "name": "LALAL.AI Batch Stem Separation Voice Change API",
+    "description": "\nThis is the LALAL.AI API.\n\nTo authenticate, provide your license key in the `X-License-Key` header of each request.\n\nTypical usage example:\n1) Upload a file using the '/upload/' endpoint to get a 'source_id'.\n2) Start a splitting task using the '/split/' endpoint with the obtained 'source_id' and desired presets.\n3) Check the status of your task using the '/check/' endpoint with the returned 'task_id'.\n4) Once the task is complete, download the processed files using urls from the '/check/' response.\n5) (If needed), you can delete the source file and all its resulting tracks from our servers, using the '/delete/' endpoint with the 'source_id'.\n\nNotes:\n\nYou can use the same source_id for concurrent splitting tasks.\n\nYou can check multiple task IDs in a single '/check/' request by providing a list of 'task_ids'.\n\n",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T02:02:16.000Z",
+    "updatedAt": "2026-07-28T02:02:16.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-de9bc813-f2e6-4a89-b2e9-3f9ba0bcca33"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "change_voice",
+              "item": [
+                {
+                  "name": "Changes voice in the audio file using voice pack",
+                  "id": "60efacaa-8817-4b2c-be4a-0d16cc86434e",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "key",
+                          "value": "X-License-Key",
+                          "type": "string"
+                        },
+                        {
+                          "key": "value",
+                          "value": "{{apiKey}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "in",
+                          "value": "header",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"source_id\": \"<string>\",\n  \"presets\": {\n    \"voice_pack_id\": \"<string>\",\n    \"accent\": 1,\n    \"tonality_reference\": \"source_file\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"mp3\"\n  },\n  \"idempotency_key\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/change_voice/",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "change_voice",
+                        ""
+                      ]
+                    },
+                    "description": "\n    For 'voice_pack_id' parameter use 'pack_id' from /voice_packs/list/ endpoint or one of legal packs: ['ALEX_KAYE', 'STASIA_FAYE', 'NICOLAAS_HAAS', 'NIK_ZEL', 'OLIA_CHEBO', 'YVAR_DE_GROOT', 'VETRANA']\n\n    Result of /check/ includes 1 track with label 'converted_mix'.\n    {\"label\":\"converted_mix\", \"type\":\"back\", \"url\":\"...\"}\n    "
+                  },
+                  "response": [
+                    {
+                      "id": "51d18d48-3b1c-4e09-86fb-88b7df9b955b",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"source_id\": \"<string>\",\n  \"presets\": {\n    \"voice_pack_id\": \"<string>\",\n    \"accent\": 1,\n    \"tonality_reference\": \"source_file\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"mp3\"\n  },\n  \"idempotency_key\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/change_voice/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "change_voice",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"task_id\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:02:17.000Z",
+                      "updatedAt": "2026-07-28T02:02:17.000Z",
+                      "uid": "35240-51d18d48-3b1c-4e09-86fb-88b7df9b955b"
+                    },
+                    {
+                      "id": "2bf4d4e8-a94a-4f3c-8aed-f01446c3d2af",
+                      "name": "Bad Request",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"source_id\": \"<string>\",\n  \"presets\": {\n    \"voice_pack_id\": \"<string>\",\n    \"accent\": 1,\n    \"tonality_reference\": \"source_file\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"mp3\"\n  },\n  \"idempotency_key\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/change_voice/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "change_voice",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:02:17.000Z",
+                      "updatedAt": "2026-07-28T02:02:17.000Z",
+                      "uid": "35240-2bf4d4e8-a94a-4f3c-8aed-f01446c3d2af"
+                    },
+                    {
+                      "id": "131b63b8-754b-403d-831f-44231b47c535",
+                      "name": "Unprocessable Entity",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"source_id\": \"<string>\",\n  \"presets\": {\n    \"voice_pack_id\": \"<string>\",\n    \"accent\": 1,\n    \"tonality_reference\": \"source_file\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"mp3\"\n  },\n  \"idempotency_key\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/change_voice/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "change_voice",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                      "code": 422,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:02:17.000Z",
+                      "updatedAt": "2026-07-28T02:02:17.000Z",
+                      "uid": "35240-131b63b8-754b-403d-831f-44231b47c535"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T02:02:17.000Z",
+                  "updatedAt": "2026-07-28T02:02:17.000Z",
+                  "uid": "35240-60efacaa-8817-4b2c-be4a-0d16cc86434e"
+                }
+              ],
+              "id": "b25bd476-39cd-4d74-81e5-b02b9543bd94",
+              "createdAt": "2026-07-28T02:02:17.000Z",
+              "updatedAt": "2026-07-28T02:02:17.000Z",
+              "uid": "35240-b25bd476-39cd-4d74-81e5-b02b9543bd94"
+            },
+            {
+              "name": "voice_packs",
+              "item": [
+                {
+                  "name": "list",
+                  "item": [
+                    {
+                      "name": "Lists voice packs available to the user",
+                      "id": "e8d37d72-7522-4569-9bc5-8f8ef7d2c668",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "apikey",
+                          "apikey": [
+                            {
+                              "key": "key",
+                              "value": "X-License-Key",
+                              "type": "string"
+                            },
+                            {
+                              "key": "value",
+                              "value": "{{apiKey}}",
+                              "type": "string"
+                            },
+                            {
+                              "key": "in",
+                              "value": "header",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/voice_packs/list/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "voice_packs",
+                            "list",
+                            ""
+                          ]
+                        },
+                        "description": "Helps to find pack_id for /change_voice/ endpoint."
+                      },
+                      "response": [
+                        {
+                          "id": "d7877625-fd8d-42f0-aaae-33a1ad6de960",
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-License-Key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/voice_packs/list/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "voice_packs",
+                                "list",
+                                ""
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"packs\": [\n    {\n      \"name\": \"<string>\",\n      \"pack_id\": \"<string>\",\n      \"created\": \"<integer>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"pack_id\": \"<string>\",\n      \"created\": \"<integer>\"\n    }\n  ]\n}",
+                          "createdAt": "2026-07-28T02:02:17.000Z",
+                          "updatedAt": "2026-07-28T02:02:17.000Z",
+                          "uid": "35240-d7877625-fd8d-42f0-aaae-33a1ad6de960"
+                        },
+                        {
+                          "id": "22fbb981-3e03-441c-a26d-ef3db8d3e343",
+                          "name": "Bad Request",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-License-Key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/voice_packs/list/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "voice_packs",
+                                "list",
+                                ""
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T02:02:17.000Z",
+                          "updatedAt": "2026-07-28T02:02:17.000Z",
+                          "uid": "35240-22fbb981-3e03-441c-a26d-ef3db8d3e343"
+                        },
+                        {
+                          "id": "5a0f07cb-a8dd-4376-9ebf-8fcc8c38034a",
+                          "name": "Unprocessable Entity",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-License-Key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/voice_packs/list/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "voice_packs",
+                                "list",
+                                ""
+                              ]
+                            }
+                          },
+                          "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                          "code": 422,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T02:02:17.000Z",
+                          "updatedAt": "2026-07-28T02:02:17.000Z",
+                          "uid": "35240-5a0f07cb-a8dd-4376-9ebf-8fcc8c38034a"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T02:02:17.000Z",
+                      "updatedAt": "2026-07-28T02:02:17.000Z",
+                      "uid": "35240-e8d37d72-7522-4569-9bc5-8f8ef7d2c668"
+                    }
+                  ],
+                  "id": "70a3077a-c93c-4a66-a1c0-cffe2130a0ca",
+                  "createdAt": "2026-07-28T02:02:17.000Z",
+                  "updatedAt": "2026-07-28T02:02:17.000Z",
+                  "uid": "35240-70a3077a-c93c-4a66-a1c0-cffe2130a0ca"
+                }
+              ],
+              "id": "d7f1f0db-4065-49da-9a5c-49f77e8f1765",
+              "createdAt": "2026-07-28T02:02:17.000Z",
+              "updatedAt": "2026-07-28T02:02:17.000Z",
+              "uid": "35240-d7f1f0db-4065-49da-9a5c-49f77e8f1765"
+            }
+          ],
+          "id": "95768861-ba8e-4085-8efb-697e11fcaa48",
+          "createdAt": "2026-07-28T02:02:17.000Z",
+          "updatedAt": "2026-07-28T02:02:17.000Z",
+          "uid": "35240-95768861-ba8e-4085-8efb-697e11fcaa48"
+        }
+      ],
+      "id": "36985df0-5fb7-44a7-8161-3b145a7b797d",
+      "createdAt": "2026-07-28T02:02:17.000Z",
+      "updatedAt": "2026-07-28T02:02:17.000Z",
+      "uid": "35240-36985df0-5fb7-44a7-8161-3b145a7b797d"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://www.lalal.ai"
+    }
+  ]
+}

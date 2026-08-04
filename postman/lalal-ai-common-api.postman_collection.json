@@ -1,0 +1,1473 @@
+{
+  "info": {
+    "_postman_id": "efc8e528-9f66-4541-9b5e-9004f78141db",
+    "name": "LALAL.AI Batch Stem Separation Common API",
+    "description": "\nThis is the LALAL.AI API.\n\nTo authenticate, provide your license key in the `X-License-Key` header of each request.\n\nTypical usage example:\n1) Upload a file using the '/upload/' endpoint to get a 'source_id'.\n2) Start a splitting task using the '/split/' endpoint with the obtained 'source_id' and desired presets.\n3) Check the status of your task using the '/check/' endpoint with the returned 'task_id'.\n4) Once the task is complete, download the processed files using urls from the '/check/' response.\n5) (If needed), you can delete the source file and all its resulting tracks from our servers, using the '/delete/' endpoint with the 'source_id'.\n\nNotes:\n\nYou can use the same source_id for concurrent splitting tasks.\n\nYou can check multiple task IDs in a single '/check/' request by providing a list of 'task_ids'.\n\n",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T02:01:51.000Z",
+    "updatedAt": "2026-07-28T02:01:51.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-efc8e528-9f66-4541-9b5e-9004f78141db"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "upload",
+              "item": [
+                {
+                  "name": "Upload a file to the server.",
+                  "id": "4c37314d-b51e-4c08-ad9a-642ce0c68086",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "key",
+                          "value": "X-License-Key",
+                          "type": "string"
+                        },
+                        {
+                          "key": "value",
+                          "value": "{{apiKey}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "in",
+                          "value": "header",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "description": "(Required) 'attachment; filename=<filename>' - a name for the file (see RFC 6266).",
+                        "key": "Content-Disposition",
+                        "value": "<string>"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/octet-stream"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "<binary>"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/upload/",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "upload",
+                        ""
+                      ]
+                    },
+                    "description": "\n    The uploaded file in other endpoints is called a \"source file\".\n    You can use the source file ID from the response to create split tasks.\n    The file will be deleted when the expiration time from the response is reached.\n    Upload limit is 10GB per request.\n    "
+                  },
+                  "response": [
+                    {
+                      "id": "34142d4d-c161-40c4-82d1-27ac604eb3fb",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "description": "(Required) 'attachment; filename=<filename>' - a name for the file (see RFC 6266).",
+                            "key": "Content-Disposition",
+                            "value": "<string>"
+                          },
+                          {
+                            "key": "Content-Type",
+                            "value": "application/octet-stream"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "<binary>"
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/upload/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "upload",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"size\": \"<integer>\",\n  \"duration\": \"<integer>\",\n  \"expires\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-34142d4d-c161-40c4-82d1-27ac604eb3fb"
+                    },
+                    {
+                      "id": "2e2bab5b-a7ca-4698-8e31-fc3c0f8bec90",
+                      "name": "Bad Request",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "description": "(Required) 'attachment; filename=<filename>' - a name for the file (see RFC 6266).",
+                            "key": "Content-Disposition",
+                            "value": "<string>"
+                          },
+                          {
+                            "key": "Content-Type",
+                            "value": "application/octet-stream"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "<binary>"
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/upload/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "upload",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-2e2bab5b-a7ca-4698-8e31-fc3c0f8bec90"
+                    },
+                    {
+                      "id": "ffea47ee-d888-4e9b-82e8-d610393b1dec",
+                      "name": "Unprocessable Entity",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "description": "(Required) 'attachment; filename=<filename>' - a name for the file (see RFC 6266).",
+                            "key": "Content-Disposition",
+                            "value": "<string>"
+                          },
+                          {
+                            "key": "Content-Type",
+                            "value": "application/octet-stream"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "<binary>"
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/upload/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "upload",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                      "code": 422,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-ffea47ee-d888-4e9b-82e8-d610393b1dec"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T02:01:52.000Z",
+                  "updatedAt": "2026-07-28T02:01:52.000Z",
+                  "uid": "35240-4c37314d-b51e-4c08-ad9a-642ce0c68086"
+                }
+              ],
+              "id": "0dcaec33-91d0-4a5c-a806-0a2910351bcd",
+              "createdAt": "2026-07-28T02:01:52.000Z",
+              "updatedAt": "2026-07-28T02:01:52.000Z",
+              "uid": "35240-0dcaec33-91d0-4a5c-a806-0a2910351bcd"
+            },
+            {
+              "name": "check",
+              "item": [
+                {
+                  "name": "Check the status of a task by id",
+                  "id": "fe447629-4500-4152-bfc6-d335971f1f13",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "key",
+                          "value": "X-License-Key",
+                          "type": "string"
+                        },
+                        {
+                          "key": "value",
+                          "value": "{{apiKey}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "in",
+                          "value": "header",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/check/",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "check",
+                        ""
+                      ]
+                    },
+                    "description": "\n    This endpoint allows you to check the status of a specific task by its ID.\n    Checking is only possible within 24h after task creation, otherwise an error will be returned.\n    The current rate limit for this endpoint is 30 requests per minute. This limit may be increased in the future.\n    "
+                  },
+                  "response": [
+                    {
+                      "id": "347572ec-0dd2-48e1-8c74-c73ad68a6ee4",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/check/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "check",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"result\": {\n    \"sunt_6\": {\n      \"source_id\": \"<string>\",\n      \"presets\": {\n        \"voice_pack_id\": \"<string>\",\n        \"accent\": 1,\n        \"tonality_reference\": \"source_file\",\n        \"dereverb_enabled\": false,\n        \"encoder_format\": \"aac\"\n      },\n      \"progress\": \"<integer>\",\n      \"status\": \"progress\"\n    }\n  }\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-347572ec-0dd2-48e1-8c74-c73ad68a6ee4"
+                    },
+                    {
+                      "id": "fecdde45-e7bd-4af5-98bb-f64854cd5c69",
+                      "name": "Bad Request",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/check/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "check",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-fecdde45-e7bd-4af5-98bb-f64854cd5c69"
+                    },
+                    {
+                      "id": "a7f48cf5-df35-442e-a061-98b6bc61f508",
+                      "name": "Unprocessable Entity",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/check/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "check",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                      "code": 422,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-a7f48cf5-df35-442e-a061-98b6bc61f508"
+                    },
+                    {
+                      "id": "1ac80ac7-07d5-4d30-8e03-d929f34a454a",
+                      "name": "Too Many Requests",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/check/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "check",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-1ac80ac7-07d5-4d30-8e03-d929f34a454a"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T02:01:52.000Z",
+                  "updatedAt": "2026-07-28T02:01:52.000Z",
+                  "uid": "35240-fe447629-4500-4152-bfc6-d335971f1f13"
+                }
+              ],
+              "id": "ed1ce33d-b26d-4daa-ae99-8e6183631b71",
+              "createdAt": "2026-07-28T02:01:52.000Z",
+              "updatedAt": "2026-07-28T02:01:52.000Z",
+              "uid": "35240-ed1ce33d-b26d-4daa-ae99-8e6183631b71"
+            },
+            {
+              "name": "cancel",
+              "item": [
+                {
+                  "name": "all",
+                  "item": [
+                    {
+                      "name": "Cancel all user tasks in progress state",
+                      "id": "3e3d46a4-66ba-4852-91de-89be0f391500",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "apikey",
+                          "apikey": [
+                            {
+                              "key": "key",
+                              "value": "X-License-Key",
+                              "type": "string"
+                            },
+                            {
+                              "key": "value",
+                              "value": "{{apiKey}}",
+                              "type": "string"
+                            },
+                            {
+                              "key": "in",
+                              "value": "header",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/cancel/all/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "cancel",
+                            "all",
+                            ""
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "2376015d-4f7d-4d59-a5bd-8ac87f7f3c52",
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-License-Key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/cancel/all/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "cancel",
+                                "all",
+                                ""
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"result\": {\n    \"eaab\": {\n      \"status\": \"success\"\n    },\n    \"aliquabd\": {\n      \"status\": \"success\"\n    },\n    \"occaecatc2f\": {\n      \"status\": \"success\"\n    }\n  }\n}",
+                          "createdAt": "2026-07-28T02:01:52.000Z",
+                          "updatedAt": "2026-07-28T02:01:52.000Z",
+                          "uid": "35240-2376015d-4f7d-4d59-a5bd-8ac87f7f3c52"
+                        },
+                        {
+                          "id": "a826e51b-ffa8-4ee5-8d73-d7501745c00e",
+                          "name": "Bad Request",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-License-Key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/cancel/all/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "cancel",
+                                "all",
+                                ""
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T02:01:52.000Z",
+                          "updatedAt": "2026-07-28T02:01:52.000Z",
+                          "uid": "35240-a826e51b-ffa8-4ee5-8d73-d7501745c00e"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-3e3d46a4-66ba-4852-91de-89be0f391500"
+                    }
+                  ],
+                  "id": "135cbab4-e220-4a10-95e1-fbb96adf35af",
+                  "createdAt": "2026-07-28T02:01:52.000Z",
+                  "updatedAt": "2026-07-28T02:01:52.000Z",
+                  "uid": "35240-135cbab4-e220-4a10-95e1-fbb96adf35af"
+                },
+                {
+                  "name": "Cancel tasks by id",
+                  "id": "463b3139-b968-4371-8691-5f56576d5168",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "key",
+                          "value": "X-License-Key",
+                          "type": "string"
+                        },
+                        {
+                          "key": "value",
+                          "value": "{{apiKey}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "in",
+                          "value": "header",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/cancel/",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "cancel",
+                        ""
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "8c5bbc8f-8f19-4f98-80ce-20b6627dc51d",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/cancel/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "cancel",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"result\": {\n    \"eaab\": {\n      \"status\": \"success\"\n    },\n    \"aliquabd\": {\n      \"status\": \"success\"\n    },\n    \"occaecatc2f\": {\n      \"status\": \"success\"\n    }\n  }\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-8c5bbc8f-8f19-4f98-80ce-20b6627dc51d"
+                    },
+                    {
+                      "id": "b577df0c-e4b4-41b7-bd90-02ab4e434c8d",
+                      "name": "Bad Request",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/cancel/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "cancel",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-b577df0c-e4b4-41b7-bd90-02ab4e434c8d"
+                    },
+                    {
+                      "id": "e632bf39-a753-41db-b021-44f42029da41",
+                      "name": "Unprocessable Entity",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"task_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/cancel/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "cancel",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                      "code": 422,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-e632bf39-a753-41db-b021-44f42029da41"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T02:01:52.000Z",
+                  "updatedAt": "2026-07-28T02:01:52.000Z",
+                  "uid": "35240-463b3139-b968-4371-8691-5f56576d5168"
+                }
+              ],
+              "id": "d1647029-71cc-44b7-83f1-dd74201fa799",
+              "createdAt": "2026-07-28T02:01:52.000Z",
+              "updatedAt": "2026-07-28T02:01:52.000Z",
+              "uid": "35240-d1647029-71cc-44b7-83f1-dd74201fa799"
+            },
+            {
+              "name": "delete",
+              "item": [
+                {
+                  "name": "Delete source file and resulting tracks from storage.",
+                  "id": "bbf6eeca-d759-4593-83ce-b64cf4165bc2",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "key",
+                          "value": "X-License-Key",
+                          "type": "string"
+                        },
+                        {
+                          "key": "value",
+                          "value": "{{apiKey}}",
+                          "type": "string"
+                        },
+                        {
+                          "key": "in",
+                          "value": "header",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"source_id\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/v1/delete/",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "delete",
+                        ""
+                      ]
+                    },
+                    "description": "\n    WARNING: All running tasks related to the source file will be cancelled. Do not call delete on source files with processing tasks.\n    This only deletes the media files, not the database records.\n    The files are removed from storage immediately, but download links will remain valid for one hour after deletion due to CDN caching.\n    The /check/ endpoint will still return a valid check result for 24 hours, but the download links will lead to a 404 error after deletion.\n    "
+                  },
+                  "response": [
+                    {
+                      "id": "2b04f230-df0a-4a48-9363-a1992fda1f20",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"source_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/delete/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "delete",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-2b04f230-df0a-4a48-9363-a1992fda1f20"
+                    },
+                    {
+                      "id": "9d9095dc-4453-4897-95d7-b8d47a795f47",
+                      "name": "Bad Request",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"source_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/delete/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "delete",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-9d9095dc-4453-4897-95d7-b8d47a795f47"
+                    },
+                    {
+                      "id": "62619d43-ded6-4cbd-b730-b77f6253564e",
+                      "name": "Unprocessable Entity",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-License-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"source_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/delete/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "delete",
+                            ""
+                          ]
+                        }
+                      },
+                      "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                      "code": 422,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-62619d43-ded6-4cbd-b730-b77f6253564e"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T02:01:52.000Z",
+                  "updatedAt": "2026-07-28T02:01:52.000Z",
+                  "uid": "35240-bbf6eeca-d759-4593-83ce-b64cf4165bc2"
+                }
+              ],
+              "id": "4c1602d4-8062-4dd3-9300-b873bf5d0dab",
+              "createdAt": "2026-07-28T02:01:52.000Z",
+              "updatedAt": "2026-07-28T02:01:52.000Z",
+              "uid": "35240-4c1602d4-8062-4dd3-9300-b873bf5d0dab"
+            },
+            {
+              "name": "limits",
+              "item": [
+                {
+                  "name": "minutes_left",
+                  "item": [
+                    {
+                      "name": "Get number of processing minutes available to consume.",
+                      "id": "3cd58dd2-15f8-40da-8fb7-04b381bc781c",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "apikey",
+                          "apikey": [
+                            {
+                              "key": "key",
+                              "value": "X-License-Key",
+                              "type": "string"
+                            },
+                            {
+                              "key": "value",
+                              "value": "{{apiKey}}",
+                              "type": "string"
+                            },
+                            {
+                              "key": "in",
+                              "value": "header",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/limits/minutes_left/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "limits",
+                            "minutes_left",
+                            ""
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "id": "2b030c39-5207-4930-a232-ba4892c8596b",
+                          "name": "OK",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-License-Key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/limits/minutes_left/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "limits",
+                                "minutes_left",
+                                ""
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"minutes_left\": \"<number>\"\n}",
+                          "createdAt": "2026-07-28T02:01:52.000Z",
+                          "updatedAt": "2026-07-28T02:01:52.000Z",
+                          "uid": "35240-2b030c39-5207-4930-a232-ba4892c8596b"
+                        },
+                        {
+                          "id": "5e9fcd8c-5249-4f0b-9c3f-900ccf1ecfb0",
+                          "name": "Bad Request",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-License-Key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/limits/minutes_left/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "limits",
+                                "minutes_left",
+                                ""
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T02:01:52.000Z",
+                          "updatedAt": "2026-07-28T02:01:52.000Z",
+                          "uid": "35240-5e9fcd8c-5249-4f0b-9c3f-900ccf1ecfb0"
+                        },
+                        {
+                          "id": "3a271228-46cf-4a2d-84a8-ba0b7c6ac77a",
+                          "name": "Unprocessable Entity",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "X-License-Key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/limits/minutes_left/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "limits",
+                                "minutes_left",
+                                ""
+                              ]
+                            }
+                          },
+                          "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                          "code": 422,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T02:01:52.000Z",
+                          "updatedAt": "2026-07-28T02:01:52.000Z",
+                          "uid": "35240-3a271228-46cf-4a2d-84a8-ba0b7c6ac77a"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T02:01:52.000Z",
+                      "updatedAt": "2026-07-28T02:01:52.000Z",
+                      "uid": "35240-3cd58dd2-15f8-40da-8fb7-04b381bc781c"
+                    }
+                  ],
+                  "id": "175b3c57-3ec1-4ea0-b819-e5b80e2b102d",
+                  "createdAt": "2026-07-28T02:01:52.000Z",
+                  "updatedAt": "2026-07-28T02:01:52.000Z",
+                  "uid": "35240-175b3c57-3ec1-4ea0-b819-e5b80e2b102d"
+                }
+              ],
+              "id": "f9d36b96-7758-44a1-b133-77cb854f5daf",
+              "createdAt": "2026-07-28T02:01:52.000Z",
+              "updatedAt": "2026-07-28T02:01:52.000Z",
+              "uid": "35240-f9d36b96-7758-44a1-b133-77cb854f5daf"
+            }
+          ],
+          "id": "e1087426-02c7-4785-8672-d8f0aa04abc1",
+          "createdAt": "2026-07-28T02:01:52.000Z",
+          "updatedAt": "2026-07-28T02:01:52.000Z",
+          "uid": "35240-e1087426-02c7-4785-8672-d8f0aa04abc1"
+        }
+      ],
+      "id": "2c4c9bb0-a9a9-4eb9-8ba5-e77f3f7dfceb",
+      "createdAt": "2026-07-28T02:01:52.000Z",
+      "updatedAt": "2026-07-28T02:01:52.000Z",
+      "uid": "35240-2c4c9bb0-a9a9-4eb9-8ba5-e77f3f7dfceb"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://www.lalal.ai"
+    }
+  ]
+}

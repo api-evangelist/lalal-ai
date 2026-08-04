@@ -1,0 +1,20 @@
+{
+  "provider": "lalal-ai",
+  "sources": [
+    "lalal-ai-batch-stem-separation-api-openapi.yml",
+    "lalal-ai-common-api-openapi.yml",
+    "lalal-ai-stem-separation-api-openapi.yml",
+    "lalal-ai-voice-change-api-openapi.yml"
+  ],
+  "outputs": [
+    "lalal-ai-batch-stem-separation-api-openapi.yml",
+    "lalal-ai-common-api-openapi.yml",
+    "lalal-ai-stem-separation-api-openapi.yml",
+    "lalal-ai-voice-change-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

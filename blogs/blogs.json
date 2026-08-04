@@ -16,13 +16,13 @@
       "method": "none"
     },
     {
-      "source": "https://www.lalal.ai/blog/meet-lalal-ai-api-v1/",
-      "feed_url": "https://www.lalal.ai/blog/rss/",
+      "source": "https://www.lalal.ai/api/v1/openapi.json",
+      "feed_url": "https://www.lalal.ai/api/v1/openapi.json",
       "title": "",
       "saved": 0,
-      "method": "discovered"
+      "method": "none"
     }
   ],
-  "post_count": 15,
-  "fetched": "2026-07-11T11:50:51Z"
+  "post_count": 17,
+  "fetched": "2026-08-01T15:49:00Z"
 }
