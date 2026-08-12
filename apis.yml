@@ -170,6 +170,8 @@ apis:
   - type: Vocabulary
     url: vocabulary/lalal-ai-vocabulary.yml
 common:
+  - type: IssueTracker
+    url: https://github.com/OmniSaleGmbH/lalalai/issues
   - type: PostmanWorkspace
     url: https://www.postman.com/kinlaneapi/lalalai/overview
   - type: AgenticAccess
