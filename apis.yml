@@ -11,6 +11,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/lalal-ai-batch-stem-separation-api-openapi.yml
+  - type: Overlay
+    url: overlays/lalal-ai-batch-stem-separation-api-overlay.yaml
   - type: Documentation
     url: https://www.lalal.ai/api/
   - type: Documentation
@@ -53,6 +55,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/lalal-ai-common-api-openapi.yml
+  - type: Overlay
+    url: overlays/lalal-ai-common-api-overlay.yaml
   - type: Documentation
     url: https://www.lalal.ai/api/
   - type: Documentation
@@ -95,6 +99,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/lalal-ai-stem-separation-api-openapi.yml
+  - type: Overlay
+    url: overlays/lalal-ai-stem-separation-api-overlay.yaml
   - type: Documentation
     url: https://www.lalal.ai/api/
   - type: Documentation
@@ -137,6 +143,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/lalal-ai-voice-change-api-openapi.yml
+  - type: Overlay
+    url: overlays/lalal-ai-voice-change-api-overlay.yaml
   - type: Documentation
     url: https://www.lalal.ai/api/
   - type: Documentation
@@ -187,7 +195,8 @@ common:
   - type: Documentation
     url: https://www.lalal.ai/api/v1/docs/
   - type: GettingStarted
-    url: https://www.lalal.ai/api/help/
+    url: https://www.lalal.ai/api/
+    name: API overview and integration guide
   - type: Pricing
     url: https://www.lalal.ai/pricing/
   - type: Blog
@@ -195,7 +204,7 @@ common:
   - type: ChangeLog
     url: https://www.lalal.ai/changelog/
   - type: Support
-    url: https://www.lalal.ai/support/
+    url: https://www.lalal.ai/help/
   - type: TermsOfService
     url: https://www.lalal.ai/terms-of-service/
   - type: PrivacyPolicy
@@ -216,6 +225,39 @@ common:
     url: rate-limits/lalal-ai-rate-limits.yml
   - type: FinOps
     url: finops/lalal-ai-finops.yml
+  - type: APIReference
+    url: https://www.lalal.ai/api/v1/docs/
+  - type: LLMsTxt
+    url: llms/lalal-ai-llms.txt
+    name: Provider-published llms.txt (verbatim, www.lalal.ai/llms.txt)
+  - type: Packages
+    url: packages/lalal-ai-packages.yml
+  - type: MCPServer
+    url: mcp/lalal-ai-mcp.yml
+    name: API Evangelist candidate — LALAL.AI publishes no MCP server
+  - type: Conventions
+    url: conventions/lalal-ai-conventions.yml
+  - type: Idempotency
+    url: conventions/lalal-ai-conventions.yml
+    name: uuid4 idempotency_key on every mutating split and voice-change operation
+  - type: ErrorCatalog
+    url: errors/lalal-ai-problem-types.yml
+  - type: Lifecycle
+    url: lifecycle/lalal-ai-lifecycle.yml
+  - type: Deprecation
+    url: https://www.lalal.ai/api/help/
+    name: API v0 deprecation notice
+  - type: ChangeLog
+    url: changelog/lalal-ai-changelog.yml
+  - type: Conformance
+    url: conformance/lalal-ai-conformance.yml
+  - type: DataModel
+    url: data-model/lalal-ai-data-model.yml
+  - type: Console
+    url: sandbox/lalal-ai-sandbox.yml
+    name: Scalar interactive API reference at /api/v1/docs/ (live-fire, no test mode)
+  - type: AgentSkill
+    url: skills/_index.yml
   - type: Features
     data:
       - >-
@@ -274,7 +316,7 @@ accessModel:
   generated: '2026-07-22'
   method: derived
 created: '2026-05-25T00:00:00.000Z'
-modified: '2026-05-25'
+modified: '2026-08-13'
 position: Producing
 description: >-
   LALAL.AI is an AI-powered audio separation and voice technology platform operated by OmniSale GmbH. It uses
@@ -303,3 +345,8 @@ maintainers:
     X: apievangelist
     url: https://apievangelist.com
 specificationVersion: '0.16'
+x-enrichment:
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 20
+  pass: local-v1
