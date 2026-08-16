@@ -5,7 +5,7 @@
       "source": "https://www.lalal.ai/blog/rss/",
       "feed_url": "https://www.lalal.ai/blog/rss/",
       "title": "",
-      "saved": 0,
+      "saved": 1,
       "method": "feed"
     },
     {
@@ -13,16 +13,18 @@
       "feed_url": "https://www.lalal.ai/pricing/",
       "title": "",
       "saved": 0,
-      "method": "none"
+      "method": "none",
+      "error": "parse_failed"
     },
     {
       "source": "https://www.lalal.ai/api/v1/openapi.json",
       "feed_url": "https://www.lalal.ai/api/v1/openapi.json",
       "title": "",
       "saved": 0,
-      "method": "none"
+      "method": "none",
+      "error": "parse_failed"
     }
   ],
-  "post_count": 17,
-  "fetched": "2026-08-06T14:08:46Z"
+  "post_count": 18,
+  "fetched": "2026-08-15T12:11:08Z"
 }
