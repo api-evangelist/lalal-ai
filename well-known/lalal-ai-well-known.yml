@@ -1,0 +1,62 @@
+generated: '2026-08-13'
+method: probed
+source: live GET probes of the /.well-known/ surface on the LALAL.AI API + website host
+provider: LALAL.AI
+provider_id: lalal-ai
+host: https://www.lalal.ai
+
+result: none
+note: >-
+  Every /.well-known/ path probed returned HTTP 404 with an HTML body (the site's standard
+  single-page 404 shell), so LALAL.AI serves NO well-known discovery surface at all — no security.txt,
+  no OIDC/OAuth metadata, no api-catalog, no ai-plugin manifest, no agent card. Recorded absence, not a
+  presence: no WellKnown, SecurityTxt or AgentCard pointer is emitted from this file. www.lalal.ai is
+  both the API host (servers[] and every apis[].baseURL) and the website host, so one host covers the
+  whole surface.
+
+documents:
+  - path: /.well-known/security.txt
+    status: 404
+    content_type: text/html
+  - path: /security.txt
+    status: 404
+    content_type: text/html
+  - path: /.well-known/openid-configuration
+    status: 404
+    content_type: text/html
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    content_type: text/html
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    content_type: text/html
+  - path: /.well-known/api-catalog
+    status: 404
+    content_type: text/html
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    content_type: text/html
+  - path: /.well-known/agent-card.json
+    status: 404
+    content_type: text/html
+  - path: /.well-known/agent.json
+    status: 404
+    content_type: text/html
+  - path: /.well-known/mcp.json
+    status: 404
+    content_type: text/html
+
+adjacent_discovery_found:
+  - path: /llms.txt
+    status: 200
+    content_type: text/plain
+    note: >-
+      Not a /.well-known/ path, but LALAL.AI does serve a real, provider-authored llms.txt at the site
+      root — captured verbatim at llms/lalal-ai-llms.txt.
+  - path: /robots.txt
+    status: 200
+    content_type: text/plain
+    note: >-
+      Permissive for all user-agents; disallows only /billing/, /checkout/, /history-splits and
+      /affiliate-form/. Advertises https://www.lalal.ai/sitemap.xml and https://www.lalal.ai/blog/sitemap.xml.
+      No AI-crawler-specific directives.

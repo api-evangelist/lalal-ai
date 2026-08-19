@@ -1,0 +1,172 @@
+generated: '2026-08-13'
+method: derived
+status: candidate
+source: >-
+  Derived from openapi/ operations. No provider MCP server exists — see discovery[] below for what was
+  probed and searched.
+provider: LALAL.AI
+provider_id: lalal-ai
+
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  verified: derived
+  note: >-
+    LALAL.AI ships NO MCP server of any kind — no hosted endpoint, no stdio package, no registry entry.
+    This file is an API Evangelist candidate derived from the provider's own OpenAPI, not a server anyone
+    can call. `auth: api-key` describes what the underlying REST API requires (X-License-Key), not an
+    authenticated MCP surface, because there is no MCP surface.
+
+discovery:
+  probed:
+    - url: https://mcp.lalal.ai/mcp
+      result: DNS does not resolve (curl exit 6, no HTTP response)
+      checked: '2026-08-13'
+    - url: https://www.lalal.ai/mcp
+      status: 404
+      checked: '2026-08-13'
+    - url: https://www.lalal.ai/.well-known/mcp.json
+      status: 404
+      checked: '2026-08-13'
+  searched:
+    - registry: npm
+      query: ['lalal', 'lalalai', 'lalal.ai']
+      result: no first-party MCP package
+    - registry: pypi
+      query: ['lalal', 'lalalai', 'lalal-ai']
+      result: 404 on every candidate
+    - source: https://www.lalal.ai/llms.txt
+      result: >-
+        The provider's own llms.txt maps the entire product surface and its "For Developers (API)" section
+        names only REST + OpenAPI + Python examples. No MCP server is mentioned.
+    - source: web search
+      result: no LALAL.AI MCP server found
+
+server:
+  name: lalal-ai
+  transport: null
+  url: null
+  status: not-published
+
+tools:
+  - name: upload_source_file
+    description: Upload an audio or video file and receive a source_id valid for 24 hours.
+    source_operation: openapi/lalal-ai-common-api-openapi.yml#upload_upload
+    mutating: true
+    idempotent: false
+  - name: split_stem_separator
+    description: >-
+      Start a stem-separation task on an uploaded source, choosing the stem, splitter model, dereverb,
+      extraction level and output format.
+    source_operation: openapi/lalal-ai-stem-separation-api-openapi.yml#split_split_enhanced
+    mutating: true
+    idempotent: true
+    idempotency_field: idempotency_key
+    consumes_quota: true
+  - name: split_demuser
+    description: Start a Demuser task separating music from non-music components.
+    source_operation: openapi/lalal-ai-stem-separation-api-openapi.yml#split_split_demuser
+    mutating: true
+    idempotent: true
+    idempotency_field: idempotency_key
+    consumes_quota: true
+  - name: split_voice_clean
+    description: Start a Voice Clean task removing background music and noise from spoken-word audio.
+    source_operation: openapi/lalal-ai-stem-separation-api-openapi.yml#split_split_voice_clean
+    mutating: true
+    idempotent: true
+    idempotency_field: idempotency_key
+    consumes_quota: true
+  - name: split_multistem
+    description: Start a multistem task extracting up to six stems from one source in a single request.
+    source_operation: openapi/lalal-ai-stem-separation-api-openapi.yml#split_split_multistem
+    mutating: true
+    idempotent: true
+    idempotency_field: idempotency_key
+    consumes_quota: true
+  - name: split_batch_stem_separator
+    description: Start stem-separation tasks over multiple sources in one call.
+    source_operation: openapi/lalal-ai-batch-stem-separation-api-openapi.yml#batch_split_split_batch_enhanced
+    mutating: true
+    idempotent: true
+    idempotency_field: idempotency_key
+    consumes_quota: true
+  - name: split_batch_demuser
+    description: Start Demuser tasks over multiple sources in one call.
+    source_operation: openapi/lalal-ai-batch-stem-separation-api-openapi.yml#batch_split_split_batch_demuser
+    mutating: true
+    idempotent: true
+    idempotency_field: idempotency_key
+    consumes_quota: true
+  - name: split_batch_voice_clean
+    description: Start Voice Clean tasks over multiple sources in one call.
+    source_operation: openapi/lalal-ai-batch-stem-separation-api-openapi.yml#batch_split_split_batch_voice_clean
+    mutating: true
+    idempotent: true
+    idempotency_field: idempotency_key
+    consumes_quota: true
+  - name: change_voice
+    description: >-
+      Start a voice-conversion task applying a licensed or user-trained voice pack, with accent intensity,
+      tonality reference and pitch controls.
+    source_operation: openapi/lalal-ai-voice-change-api-openapi.yml#change_voice_change_voice
+    mutating: true
+    idempotent: true
+    idempotency_field: idempotency_key
+    consumes_quota: true
+    consent_sensitive: true
+    note: >-
+      Voice conversion is the one capability here with a consent dimension. A tool exposing it to an agent
+      should carry an explicit authorisation gate, not just an API key.
+  - name: check_tasks
+    description: >-
+      Poll up to 200 task_ids and return per-task state (success, progress, error, cancelled) and, on
+      success, signed download URLs for each output track.
+    source_operation: openapi/lalal-ai-common-api-openapi.yml#check_check
+    mutating: false
+    idempotent: true
+    note: >-
+      A failed job returns HTTP 200 with state "error". Any tool built on this operation must read the
+      body state, not the status code.
+  - name: cancel_tasks
+    description: Cancel one or more running tasks by task_id.
+    source_operation: openapi/lalal-ai-common-api-openapi.yml#cancel_cancel
+    mutating: true
+    idempotent: false
+  - name: cancel_all_tasks
+    description: Cancel every running task on the license key.
+    source_operation: openapi/lalal-ai-common-api-openapi.yml#cancel_cancel_all
+    mutating: true
+    idempotent: false
+    destructive: true
+    note: Unscoped blast radius — cancels the account's work, not just the caller's.
+  - name: delete_source
+    description: Delete an uploaded source file and all of its resulting tracks from LALAL.AI servers.
+    source_operation: openapi/lalal-ai-common-api-openapi.yml#delete_delete
+    mutating: true
+    idempotent: false
+    destructive: true
+  - name: get_minutes_left
+    description: Return the processing minutes remaining on the calling license key.
+    source_operation: openapi/lalal-ai-common-api-openapi.yml#limits_get_minutes_left
+    mutating: false
+    idempotent: true
+    note: The only budget-introspection operation. Call it before any split to avoid exceeded_duration.
+  - name: list_voice_packs
+    description: List the voice packs available to the license, with ids and creation timestamps.
+    source_operation: openapi/lalal-ai-voice-change-api-openapi.yml#voice_packs_list_packs
+    mutating: false
+    idempotent: true
+
+coverage:
+  rest_operations: 15
+  tools_derived: 15
+  unmapped_operations: 0
+
+cross_references:
+  - agentic-access/lalal-ai-agentic-access.yml
+  - conventions/lalal-ai-conventions.yml
+  - errors/lalal-ai-problem-types.yml

@@ -1,0 +1,113 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  openapi/_original/lalal-ai-api-openapi.yml + live probes of https://www.lalal.ai (2026-08-13), enriched
+  from https://www.lalal.ai/api/v1/docs/ and https://www.lalal.ai/privacy-policy/
+provider: LALAL.AI
+provider_id: lalal-ai
+
+note: >-
+  Derived conformance only. LALAL.AI publishes NO compliance certifications — no SOC 2, ISO 27001, PCI DSS,
+  HIPAA or FedRAMP claim appears on the site, and trust.lalal.ai does not resolve. No Compliance pointer is
+  emitted from this file.
+
+standards:
+  - id: openapi-3.1
+    conforms: true
+    evidence: >-
+      Provider-published OpenAPI 3.1.0 served at https://www.lalal.ai/api/v1/openapi.json (HTTP 200,
+      application/json), info.version 1.1.0, 15 operations, 47 component schemas.
+  - id: rfc6266-content-disposition
+    conforms: true
+    evidence: >-
+      POST /api/v1/upload/ requires a Content-Disposition header and the v0 reference cites RFC 6266
+      explicitly.
+  - id: idempotency
+    conforms: true
+    partial: true
+    evidence: >-
+      Every mutating split/voice-change operation accepts an optional uuid4 `idempotency_key` in the
+      request body, with a dedicated `idempotency_key_used` error code. Partial because it is a body field
+      rather than the conventional Idempotency-Key header, and the key de-duplicates submission only —
+      it does not replay a completed response.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors are application/json with a custom {detail, code} envelope. No application/problem+json media
+      type and no type/title/status/detail/instance members anywhere in the contract.
+  - id: oauth2
+    conforms: false
+    evidence: >-
+      The only securityScheme is ApiKeyHeaderAuth (apiKey in header, X-License-Key). No oauth2 flows are
+      declared and /.well-known/oauth-authorization-server returns 404.
+  - id: oidc
+    conforms: false
+    evidence: /.well-known/openid-configuration returned HTTP 404 on www.lalal.ai on 2026-08-13.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: /.well-known/security.txt and /security.txt both returned HTTP 404 on 2026-08-13.
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: >-
+      API v0 is deprecated by a documentation banner only. No Sunset or Deprecation response header is
+      documented, and no sunset date is published.
+  - id: json-api
+    conforms: false
+    evidence: Responses are plain JSON objects; no data/attributes/relationships envelope.
+  - id: pagination
+    conforms: false
+    not_applicable: true
+    evidence: >-
+      No collection endpoint paginates. /voice_packs/list/ returns a complete array; /check/ takes an
+      explicit task_ids[] bounded at 200 items. There is nothing to page.
+  - id: asyncapi
+    conforms: false
+    not_applicable: true
+    evidence: >-
+      There is no event surface to describe. Job completion is delivered by polling POST /api/v1/check/;
+      no webhook, callback URL or event stream exists in the contract or the documentation.
+  - id: rest-http-semantics
+    conforms: false
+    evidence: >-
+      All 15 operations are POST, including the read-shaped /check/, /limits/minutes_left/ and
+      /voice_packs/list/. Safe/idempotent HTTP method semantics are not used, which is why the explicit
+      idempotency_key exists.
+  - id: llms-txt
+    conforms: true
+    evidence: >-
+      Provider-authored llms.txt served at https://www.lalal.ai/llms.txt (HTTP 200, text/plain), announced
+      in the changelog on 2026-01-16 and self-dated "Last updated: 2026-07-14".
+  - id: gdpr
+    conforms: unknown
+    evidence: >-
+      A privacy policy is published at https://www.lalal.ai/privacy-policy/ (HTTP 200) and the operator,
+      Omnisale GmbH, is Swiss/EU-facing, but no GDPR compliance statement, DPA link or certification page
+      was found. /gdpr/ and /compliance/ both returned 404.
+  - id: soc2
+    conforms: false
+    evidence: No SOC 2 claim on the site; trust.lalal.ai does not resolve.
+  - id: iso-27001
+    conforms: false
+    evidence: No ISO 27001 claim found.
+  - id: pci-dss
+    conforms: false
+    not_applicable: true
+    evidence: >-
+      Card handling is delegated to Stripe and PayPal (per the changelog); LALAL.AI does not expose a
+      payments API of its own.
+
+security_posture:
+  tls: TLSv1.3
+  hsts: false
+  dnssec: false
+  caa: present
+  spf: false
+  dmarc: reject
+  source: security/lalal-ai-domain-security.yml
+
+cross_references:
+  - authentication/lalal-ai-authentication.yml
+  - errors/lalal-ai-problem-types.yml
+  - conventions/lalal-ai-conventions.yml
+  - well-known/lalal-ai-well-known.yml
+  - security/lalal-ai-domain-security.yml

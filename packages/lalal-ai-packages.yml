@@ -1,0 +1,63 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  Registry searches (npm, PyPI, RubyGems, crates.io, Packagist, Maven Central, NuGet, pkg.go.dev) plus
+  https://www.lalal.ai/llms.txt and https://github.com/OmniSaleGmbH/lalalai
+provider: LALAL.AI
+provider_id: lalal-ai
+
+summary:
+  official_registry_packages: 0
+  official_source_distributions: 1
+  note: >-
+    LALAL.AI publishes NO client library to any public package registry. Its own llms.txt states this
+    plainly: "As of this file's last update, there is no official SDK - REST + OpenAPI only." The only
+    first-party client code is a repository of Python example scripts on GitHub, distributed as source
+    (git clone) with no tag, no release and no registry entry — so there is no version a consumer can pin
+    and no published date a consumer can read. That is the finding, not a gap in this probe.
+
+packages:
+  - language: python
+    registry: github
+    name: OmniSaleGmbH/lalalai
+    url: https://github.com/OmniSaleGmbH/lalalai
+    source_url: https://github.com/OmniSaleGmbH/lalalai/tree/main/api-v1/python
+    install: git clone https://github.com/OmniSaleGmbH/lalalai
+    official: true
+    kind: example-client
+    version: null
+    published: null
+    note: >-
+      First-party ("Official examples for LALAL.AI API"), owned by the OmniSaleGmbH account that operates
+      LALAL.AI. Not an installable package: the GitHub Releases API returns zero releases and there are no
+      tags, so `version` and `published` are honestly null — there is nothing to pin. Repository last
+      pushed 2026-04-21. Carries an `api-v1/python` directory for the current API and a retained
+      `api-v0(deprecated)` directory for the superseded v0 surface.
+    last_push: '2026-04-21'
+    stars: 189
+
+registries_checked:
+  - registry: npm
+    query: ['lalal', 'lalalai', 'lalal.ai']
+    result: no first-party package
+  - registry: pypi
+    query: ['lalal', 'lalalai', 'lalal-ai', 'lalalai-api']
+    result: 404 on every candidate
+  - registry: rubygems
+    query: ['lalalai']
+    result: 404
+  - registry: crates.io
+    query: ['lalal']
+    result: no first-party crate
+  - registry: packagist
+    query: ['lalal']
+    result: no first-party package
+  - registry: maven-central
+    query: ['lalal', 'lalalai']
+    result: no first-party artifact
+  - registry: nuget
+    query: ['lalal', 'lalalai']
+    result: no first-party package
+  - registry: pkg.go.dev
+    query: ['lalal.ai', 'lalalai']
+    result: no first-party module

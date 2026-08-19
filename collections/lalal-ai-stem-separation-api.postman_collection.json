@@ -1,0 +1,854 @@
+{
+  "item": [
+    {
+      "id": "9f80a099-f88a-4c38-bc76-423134923c72",
+      "name": "Stem Separation",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5bada336-3d67-4aac-971e-7b0d684b8624",
+          "name": "Split a file into stems using the stem separator presets",
+          "request": {
+            "name": "Split a file into stems using the stem separator presets",
+            "description": {
+              "content": "\n    Result of /check/ includes 2 tracks:\n    - stem:{\"type\":\"stem\", \"label\":\"<stem_name>\", \"url\":\"...\"}\n    - without stem:{\"type\":\"back\", \"label\":\"no_<stem_name>\", \"url\":\"...\"}\n\n    LEAD_BACK VOCALS:\n    For 'vocals' stem you can use parameter multivocal=\"lead_back\" and receive both lead and backing vocals as separate stems.\n    Result of /check/ includes 4 tracks. Backing vocals track is optional and could be suppressed if not found in the audio:\n    lead vocals:{\"type\":\"stem\", \"label\":\"vocals@0\", \"url\":\"...\"}\n    backing vocals:{\"type\":\"stem\", \"label\":\"vocals@1\", \"url\":\"...\"}\n    instrumental:{\"type\":\"back\", \"label\":\"no_vocals\", \"url\":\"...\"}\n    instrumental + backing vocals:{\"type\":\"back\", \"label\":\"mix_no_lead\", \"url\":\"...\"}\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "split",
+                "stem_separator",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-License-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source_id\": \"<uuid4>\",\n  \"presets\": {\n    \"stem\": \"<string>\",\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"<string>\",\n    \"multivocal\": \"<string>\",\n    \"extraction_level\": \"deep_extraction\"\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2d8b3cd3-a6c4-43b2-9894-6f64f811ddf1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "split",
+                    "stem_separator",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-License-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_id\": \"2fe8f214-1771-4900-9e7e-570f823bd359\",\n  \"presets\": {\n    \"stem\": \"vocals\",\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"flac\",\n    \"multivocal\": \"string\",\n    \"extraction_level\": \"deep_extraction\"\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"task_id\": \"e1fc1d8f-502e-4de0-bf3b-b30543d11c77\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "846384f5-ac90-4822-a6d6-ebdffeb2973b",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "split",
+                    "stem_separator",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-License-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_id\": \"2fe8f214-1771-4900-9e7e-570f823bd359\",\n  \"presets\": {\n    \"stem\": \"vocals\",\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"flac\",\n    \"multivocal\": \"string\",\n    \"extraction_level\": \"deep_extraction\"\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Idempotency key has already been used.\",\n  \"code\": \"idempotency_key_used\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0994830d-a50b-4043-afb5-2db115a65a9c",
+          "name": "Clean voice from background music",
+          "request": {
+            "name": "Clean voice from background music",
+            "description": {
+              "content": "\n    Typical usage case - is voice with background music.\n    Demuser will separate voice (stem) and music (back).\n    Result of /check/ includes 2 tracks:\n    - stem:{\"type\":\"stem\", \"label\":\"music\", \"url\":\"...\"}\n    - back:{\"type\":\"back\", \"label\":\"no_music\", \"url\":\"...\"}\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "split",
+                "demuser",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-License-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source_id\": \"<uuid4>\",\n  \"presets\": {\n    \"stem\": \"<string>\",\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"<string>\"\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e15fd397-862e-496e-a9db-ba74e5b646fb",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "split",
+                    "demuser",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-License-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_id\": \"2fe8f214-1771-4900-9e7e-570f823bd359\",\n  \"presets\": {\n    \"stem\": \"music\",\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"mp3\"\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"task_id\": \"e1fc1d8f-502e-4de0-bf3b-b30543d11c77\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd311e1f-ec9f-47cc-afa7-38002e5e523d",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "split",
+                    "demuser",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-License-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_id\": \"2fe8f214-1771-4900-9e7e-570f823bd359\",\n  \"presets\": {\n    \"stem\": \"music\",\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"mp3\"\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Idempotency key has already been used.\",\n  \"code\": \"idempotency_key_used\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "43835b06-72f1-4bdb-a4cf-55c51ac99a19",
+          "name": "Clean voice from background noise",
+          "request": {
+            "name": "Clean voice from background noise",
+            "description": {
+              "content": "\n    Typical usage case - is voice with background noise.\n    Voice clean will separate clean voice (stem) and noise (back).\n    Result of /check/ includes 2 tracks:\n    - stem:{\"type\":\"stem\", \"label\":\"voice\", \"url\":\"...\"}\n    - back:{\"type\":\"back\", \"label\":\"no_voice\", \"url\":\"...\"}\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "split",
+                "voice_clean",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-License-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source_id\": \"<uuid4>\",\n  \"presets\": {\n    \"stem\": \"<string>\",\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"<string>\",\n    \"noise_cancelling_level\": 0\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "135d7a5b-2f77-46e5-b8a8-19bb6d3a7666",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "split",
+                    "voice_clean",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-License-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_id\": \"2fe8f214-1771-4900-9e7e-570f823bd359\",\n  \"presets\": {\n    \"stem\": \"voice\",\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"aac\",\n    \"noise_cancelling_level\": 0\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"task_id\": \"e1fc1d8f-502e-4de0-bf3b-b30543d11c77\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5e728572-6bed-4260-a8d4-27b6b9cebc6e",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "split",
+                    "voice_clean",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-License-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_id\": \"2fe8f214-1771-4900-9e7e-570f823bd359\",\n  \"presets\": {\n    \"stem\": \"voice\",\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"aac\",\n    \"noise_cancelling_level\": 0\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Idempotency key has already been used.\",\n  \"code\": \"idempotency_key_used\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "626c2cc6-f9a9-4b7a-8a19-4178fe958bde",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "split",
+                    "voice_clean",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-License-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_id\": \"2fe8f214-1771-4900-9e7e-570f823bd359\",\n  \"presets\": {\n    \"stem\": \"voice\",\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"aac\",\n    \"noise_cancelling_level\": 0\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3e00707c-164e-4660-8fce-755a3ca164e5",
+          "name": "Split a file into multiple stems in one request (multistem feature)",
+          "request": {
+            "name": "Split a file into multiple stems in one request (multistem feature)",
+            "description": {
+              "content": "\n    WARNING: The stems are internally extracted one by one, so the processing time is proportional to the number of stems selected.\n\n    You will be charged an equal amount of minutes for each stem.\n    For example, if you have an audio file with a duration of 1 minute,\n    with stem_list=[\"vocals\", \"drum\"], you will be charged 2 minutes (1 minute for \"vocals\", 1 minute for \"drum\").\n    At the /check/ endpoint you will receive <number_of_stems> tracks with 1 additional track which is the source without all selected stems.\n    Example response tracks for stem_list=[\"vocals\", \"drum\"]:\n    - stem:{\"type\":\"stem\", \"label\":\"vocals\", \"url\":\"...\"}\n    - stem:{\"type\":\"stem\", \"label\":\"drum\", \"url\":\"...\"}\n    - rest of source:{\"type\":\"back\", \"label\":\"no_multistem\", \"url\":\"...\"}\n    ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "split",
+                "multistem",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-License-Key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source_id\": \"<uuid4>\",\n  \"presets\": {\n    \"stem_list\": [\n      \"<string>\"\n    ],\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"<string>\",\n    \"extraction_level\": \"deep_extraction\"\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "156e5932-be3a-4167-92ff-a77ca1db4ccd",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "split",
+                    "multistem",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-License-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_id\": \"2fe8f214-1771-4900-9e7e-570f823bd359\",\n  \"presets\": {\n    \"stem_list\": [\n      \"vocals\",\n      \"drum\",\n      \"piano\",\n      \"bass\",\n      \"electric_guitar\",\n      \"acoustic_guitar\"\n    ],\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"ogg\",\n    \"extraction_level\": \"deep_extraction\"\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"task_id\": \"e1fc1d8f-502e-4de0-bf3b-b30543d11c77\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "adfdcddf-a570-4491-8c5e-4b3f1fb4b2d8",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "split",
+                    "multistem",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-License-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_id\": \"2fe8f214-1771-4900-9e7e-570f823bd359\",\n  \"presets\": {\n    \"stem_list\": [\n      \"vocals\",\n      \"drum\",\n      \"piano\",\n      \"bass\",\n      \"electric_guitar\",\n      \"acoustic_guitar\"\n    ],\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"ogg\",\n    \"extraction_level\": \"deep_extraction\"\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"Idempotency key has already been used.\",\n  \"code\": \"idempotency_key_used\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cb9a751-c3d4-402f-80c6-bd0f5beb2890",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "split",
+                    "multistem",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-License-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"source_id\": \"2fe8f214-1771-4900-9e7e-570f823bd359\",\n  \"presets\": {\n    \"stem_list\": [\n      \"vocals\",\n      \"drum\",\n      \"piano\",\n      \"bass\",\n      \"electric_guitar\",\n      \"acoustic_guitar\"\n    ],\n    \"splitter\": \"auto\",\n    \"dereverb_enabled\": false,\n    \"encoder_format\": \"ogg\",\n    \"extraction_level\": \"deep_extraction\"\n  },\n  \"idempotency_key\": \"<uuid4>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.lalal.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0edb1346-4f71-49b6-8561-94a187ff36ab",
+    "name": "LALAL.AI Batch Stem Separation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\nThis is the LALAL.AI API.\n\nTo authenticate, provide your license key in the `X-License-Key` header of each request.\n\nTypical usage example:\n1) Upload a file using the '/upload/' endpoint to get a 'source_id'.\n2) Start a splitting task using the '/split/' endpoint with the obtained 'source_id' and desired presets.\n3) Check the status of your task using the '/check/' endpoint with the returned 'task_id'.\n4) Once the task is complete, download the processed files using urls from the '/check/' response.\n5) (If needed), you can delete the source file and all its resulting tracks from our servers, using the '/delete/' endpoint with the 'source_id'.\n\nNotes:\n\nYou can use the same source_id for concurrent splitting tasks.\n\nYou can check multiple task IDs in a single '/check/' request by providing a list of 'task_ids'.\n\n",
+      "type": "text/plain"
+    }
+  }
+}

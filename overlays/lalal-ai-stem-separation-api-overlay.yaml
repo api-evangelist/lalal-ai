@@ -1,0 +1,57 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for LALAL.AI Batch Stem Separation API
+  version: 1.0.0
+extends: openapi/lalal-ai-stem-separation-api-openapi.yml
+x-generated: '2026-08-13'
+x-method: generated
+x-source: Derived from the repo artifacts and live probes of https://www.lalal.ai on 2026-08-13. Does not mutate
+  the harvested spec.
+actions:
+- target: $.info
+  description: Stamp API Evangelist provenance and link the derived artifacts back to the contract.
+  update:
+    x-apievangelist-provider: lalal-ai
+    x-apievangelist-source: https://www.lalal.ai/api/v1/openapi.json
+    x-apievangelist-harvested: '2026-05-25'
+    x-apievangelist-reviewed: '2026-08-13'
+    x-apievangelist-artifacts:
+      authentication: authentication/lalal-ai-authentication.yml
+      conventions: conventions/lalal-ai-conventions.yml
+      errors: errors/lalal-ai-problem-types.yml
+      lifecycle: lifecycle/lalal-ai-lifecycle.yml
+      data_model: data-model/lalal-ai-data-model.yml
+      rate_limits: rate-limits/lalal-ai-rate-limits.yml
+      plans: plans/lalal-ai-plans-pricing.yml
+      skills: skills/_index.yml
+- target: $.info
+  description: Record the runtime semantics observed by probe that the published contract does not state.
+  update:
+    x-request-id-header: x-request-id
+    x-error-envelope:
+      fields:
+      - detail
+      - code
+      rfc9457: false
+    x-missing-credential-status: 403
+    x-async-model: submit-then-poll via POST /api/v1/check/; no webhooks or callbacks
+    x-failed-task-http-status: 200
+- target: $.components.securitySchemes.ApiKeyHeaderAuth
+  description: Document the credential model the spec declares but does not describe.
+  update:
+    description: 'Account license key. Long-lived, unscoped, not rotatable through the API. A missing or invalid
+      key returns HTTP 403 with {"detail": "Provide license key in ''X-License-Key'' header"} and no WWW-Authenticate
+      challenge.'
+    x-credential-scope: account
+    x-test-credential: false
+- target: $.paths.*.post
+  description: Flag that mutating operations accept a caller-supplied uuid4 idempotency_key in the request body
+    (not an Idempotency-Key header), and that reuse after the task starts returns idempotency_key_used.
+  update:
+    x-idempotency:
+      supported: true
+      field: idempotency_key
+      location: body
+      format: uuid4
+      scope: until the task starts processing
+      on_reuse_code: idempotency_key_used

@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LALAL.AI Batch Stem Separation API",
+    "version": "1.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Batch Stem Separation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Split multiple files into stems using the stem separator presets",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/split/batch/stem_separator/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n    Batch version of /split/stem_separator/. Accepts a list of split parameters and returns results for each item.\n    Each item is processed independently - if one fails, others will still be processed.\n    Results are returned in the same order as input items.\n\n    Each result contains either:\n    - success: {\"status\": \"success\", \"task_id\": \"...\", \"source_id\": \"...\"}\n    - error: {\"status\": \"error\", \"error\": \"...\", \"code\": \"...\", \"source_id\": \"...\"}\n    "
+        },
+        {
+          "info": {
+            "name": "Clean voice from background music for multiple files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/split/batch/demuser/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n    Batch version of /split/demuser/. Accepts a list of split parameters and returns results for each item.\n    Each item is processed independently - if one fails, others will still be processed.\n    Results are returned in the same order as input items.\n\n    Each result contains either:\n    - success: {\"status\": \"success\", \"task_id\": \"...\", \"source_id\": \"...\"}\n    - error: {\"status\": \"error\", \"error\": \"...\", \"code\": \"...\", \"source_id\": \"...\"}\n    "
+        },
+        {
+          "info": {
+            "name": "Clean voice from background noise for multiple files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/split/batch/voice_clean/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n    Batch version of /split/voice_clean/. Accepts a list of split parameters and returns results for each item.\n    Each item is processed independently - if one fails, others will still be processed.\n    Results are returned in the same order as input items.\n\n    Each result contains either:\n    - success: {\"status\": \"success\", \"task_id\": \"...\", \"source_id\": \"...\"}\n    - error: {\"status\": \"error\", \"error\": \"...\", \"code\": \"...\", \"source_id\": \"...\"}\n    "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

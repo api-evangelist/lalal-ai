@@ -1,0 +1,178 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  openapi/_original/lalal-ai-api-openapi.yml — components.schemas $ref graph and id-reference fields,
+  verified against https://www.lalal.ai/api/v1/openapi.json
+provider: LALAL.AI
+provider_id: lalal-ai
+
+note: >-
+  A job-processing model, not a CRUD resource model. There are four real entities — Source, Task, Track and
+  VoicePack — and only two of them (Source, VoicePack) are addressable; Task and Track exist only inside a
+  /check/ response. Nothing is fetchable by id with a GET.
+
+identifiers:
+  format: uuid4
+  kinds:
+    - name: source_id
+      entity: Source
+      minted_by: POST /api/v1/upload/ (returned as `id`)
+      example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
+      note: >-
+        The upload response calls it `id`; every downstream request calls it `source_id`. Same value,
+        two names — a rename an agent must carry across the call boundary.
+    - name: task_id
+      entity: Task
+      minted_by: POST /api/v1/split/* and POST /api/v1/change_voice/
+      example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
+    - name: pack_id
+      entity: VoicePack
+      minted_by: the Voice Cloner (out of band); listed by POST /api/v1/voice_packs/list/
+      example: f5dc9452-9374-4418-9288-02825bbd0016
+      note: >-
+        Provider-supplied legal packs use symbolic ids instead of uuid4 — ALEX_KAYE, STASIA_FAYE,
+        NICOLAAS_HAAS, NIK_ZEL, OLIA_CHEBO, YVAR_DE_GROOT, VETRANA.
+  prefixes: none
+  note_on_prefixes: >-
+    Bare uuid4 with no type prefix, so an id is not self-describing — a source_id and a task_id are
+    indistinguishable by inspection, and the two are frequently confused because /upload/ and /split/
+    return the same shape of string.
+
+entities:
+  - name: Source
+    schema: UploadResponse
+    description: An uploaded media file held server-side for processing.
+    fields: [id, name, size, duration, expires]
+    addressable: true
+    created_by: POST /api/v1/upload/
+    deleted_by: POST /api/v1/delete/ (DeleteParameters.source_id)
+    retention: 24 hours (the `expires` field is a Unix epoch UTC timestamp)
+  - name: Task
+    schema: Task / TaskResponse / SuccessfulTaskStart
+    description: An asynchronous processing job over one Source with one preset set.
+    fields: [task_id, source_id, status]
+    addressable: false
+    created_by:
+      - POST /api/v1/split/stem_separator/
+      - POST /api/v1/split/demuser/
+      - POST /api/v1/split/voice_clean/
+      - POST /api/v1/split/multistem/
+      - POST /api/v1/split/batch/stem_separator/
+      - POST /api/v1/split/batch/demuser/
+      - POST /api/v1/split/batch/voice_clean/
+      - POST /api/v1/change_voice/
+    read_by: POST /api/v1/check/ (CheckV1Request.task_ids[], max 200)
+    cancelled_by: POST /api/v1/cancel/ , POST /api/v1/cancel/all/
+    states: [success, progress, error, cancelled]
+    state_schemas:
+      success: CheckV1SuccessResult
+      progress: CheckV1ProgressResult
+      error: CheckV1ErrorResult
+      cancelled: CheckV1CancelledResult
+  - name: Track
+    schema: SplitTrack
+    description: One output audio file produced by a completed Task.
+    fields: [type, label, url, playlist_file, name, size, waveform]
+    addressable: false
+    type_enum: SplitTrackType [stem, back]
+    note: >-
+      `url` is a signed download link returned inside the /check/ response. It is the only way to retrieve
+      output — there is no download operation.
+  - name: TrackSet
+    schema: SplitTracksResult
+    description: The tracks[] + duration wrapper a successful Task result carries.
+    fields: [tracks, duration]
+    addressable: false
+  - name: VoicePack
+    schema: VoicePackInfo
+    description: A trained or licensed voice model usable as the target of a voice change.
+    fields: [name, pack_id, created]
+    addressable: true
+    read_by: POST /api/v1/voice_packs/list/ (VoicePackListResponse.packs[])
+    created_by: the Voice Cloner product surface — NOT the API. There is no training operation in v1.
+  - name: LicenseLimits
+    schema: LimitsResponse
+    description: Remaining processing minutes on the calling license key.
+    fields: [minutes_left]
+    addressable: true
+    read_by: POST /api/v1/limits/minutes_left/
+    note: >-
+      The license key itself is the account entity, but it is never returned — only its remaining balance.
+
+relationships:
+  - from: Task
+    to: Source
+    kind: belongs_to
+    via: source_id
+    evidence: SuccessfulTaskStart.source_id, CheckV1SuccessResult.source_id, *SplitParameters.source_id
+  - from: Source
+    to: Task
+    kind: has_many
+    via: source_id
+    note: >-
+      Explicitly documented — "You can use the same source_id for concurrent splitting tasks." One upload
+      fans out to many tasks, and minutes are billed per task.
+  - from: Task
+    to: TrackSet
+    kind: has_one
+    via: CheckV1SuccessResult.result
+  - from: TrackSet
+    to: Track
+    kind: has_many
+    via: tracks[] ($ref SplitTrack)
+  - from: Task
+    to: SplitterPresets
+    kind: has_one
+    via: presets (discriminated on task_type, then on label)
+  - from: Task
+    to: VoicePack
+    kind: belongs_to
+    via: presets.voice_pack_id
+    applies_to: change_voice_change_voice only
+    optional: false
+  - from: Task
+    to: TaskMetaError
+    kind: has_one
+    via: CheckV1ErrorResult
+    conditional: 'only when state == error'
+  - from: BatchTasksResponse
+    to: Task
+    kind: has_many
+    via: results[] (discriminated on status → SuccessfulTaskStart | FailedTaskStart)
+
+polymorphism:
+  - discriminator: task_type
+    on: CheckV1SuccessResult.presets
+    mapping:
+      split: nested discriminator on `label`
+      voice_convert: VoiceChangePresetsV1
+  - discriminator: label
+    on: split presets
+    mapping:
+      stem_separator: StemSeparatorSplitterPresetsV1
+      demuser: DemuserSplitterPresetsV1
+      voice_clean: VoiceCleanPresetsV1
+      multistem: MultistemSplitterPresetsV1
+  - discriminator: status
+    on: BatchTasksResponse.results[]
+    mapping:
+      success: SuccessfulTaskStart
+      error: FailedTaskStart
+
+enumerations:
+  SplitterType: [andromeda, perseus, orion, phoenix, lyra, lynx]
+  SplitTrackType: [stem, back]
+  EncoderFormat: [mp3, wav, flac, aac, ogg]
+  ExtractionLevel: [deep_extraction, clear_cut]
+  FilteringLevel: [0, 1, 2]
+  TonalityReference: [source_file, voice_pack]
+  TaskStartErrorCodes: [idempotency_key_used, internal_error]
+  LicenseErrorCodes: [exceeded_duration, batch_not_avaliable, max_duration, exceeded_size]
+
+schema_count: 47
+render: null
+
+cross_references:
+  - conventions/lalal-ai-conventions.yml
+  - errors/lalal-ai-problem-types.yml
+  - vocabulary/lalal-ai-vocabulary.yml

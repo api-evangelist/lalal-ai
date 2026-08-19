@@ -1,0 +1,219 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://www.lalal.ai/api/v1/openapi.json (OpenAPI 3.1.0, v1.1.0) + https://www.lalal.ai/api/v1/docs/ +
+  https://www.lalal.ai/api/ + a live unauthenticated POST to https://www.lalal.ai/api/v1/check/ (HTTP 403)
+docs: https://www.lalal.ai/api/v1/docs/
+provider: LALAL.AI
+provider_id: lalal-ai
+
+summary: >-
+  A single-host, POST-only, asynchronous job API. Every operation is POST to https://www.lalal.ai/api/v1/*,
+  authenticated with a license key in the X-License-Key header. Work is submitted as a task, a task_id comes
+  back, and the caller polls /api/v1/check/ until the task state is success, error or cancelled. There is no
+  callback, webhook or event stream — polling is the only completion signal. Mutating split and voice-change
+  operations accept a caller-supplied uuid4 idempotency_key.
+
+authentication:
+  style: api-key
+  scheme: ApiKeyHeaderAuth
+  location: header
+  parameter: X-License-Key
+  applied: 'all 15 operations declare security [{ApiKeyHeaderAuth: []}]'
+  oauth: false
+  scopes: none
+  observed_denial:
+    status: 403
+    body: '{"detail": "Provide license key in ''X-License-Key'' header"}'
+    url: https://www.lalal.ai/api/v1/check/
+    note: >-
+      Note the mismatch worth knowing before you write a retry rule: a missing credential answers 403,
+      not 401, and carries no WWW-Authenticate challenge.
+  cross_reference: authentication/lalal-ai-authentication.yml
+
+idempotency:
+  supported: true
+  mechanism: request-body field
+  field: idempotency_key
+  format: uuid4
+  required: false
+  default: null
+  applies_to:
+    - split_split_enhanced
+    - split_split_demuser
+    - split_split_voice_clean
+    - split_split_multistem
+    - batch_split_split_batch_enhanced
+    - batch_split_split_batch_demuser
+    - batch_split_split_batch_voice_clean
+    - change_voice_change_voice
+  schemas:
+    - StemSeparatorSplitParameters
+    - DemuserSplitParameters
+    - VoiceCleanSplitParameters
+    - MultistemSplitParameters
+    - BatchStemSeparatorSplitParameters
+    - BatchDemuserSplitParameters
+    - BatchVoiceCleanSplitParameters
+    - VoiceChangeParameters
+  semantics: >-
+    Verbatim from the spec: "Unique uuid4 key to ensure idempotent requests. Prevents duplicate task
+    execution with the same parameters. Can be reused until the task starts. Once processing begins,
+    reusing this key will return an error."
+  retention: >-
+    Until the task begins processing. This is a narrower window than a Stripe-style replay cache — the key
+    de-duplicates submission, it does NOT replay a completed result. After processing starts the same key
+    is rejected rather than returning the original response.
+  on_reuse:
+    code: idempotency_key_used
+    message: Idempotency key has already been used.
+    http_status: 400
+    enum: TaskStartErrorCodes
+  header_form: false
+  note: >-
+    Carried in the JSON request body, not as an Idempotency-Key header, so a header-shaped contract check
+    will not see it. It is nonetheless real, documented in the contract, and enumerated as an error code.
+  cross_reference: errors/lalal-ai-problem-types.yml
+
+pagination:
+  supported: false
+  note: >-
+    No collection endpoint paginates. /api/v1/voice_packs/list/ returns the complete packs[] array;
+    /api/v1/check/ takes an explicit task_ids[] array bounded by maxItems 200 and returns a result per id.
+    There is no cursor, page, offset, limit or has_more anywhere in the contract.
+  batching:
+    style: explicit-id-array
+    check_max_task_ids: 200
+    batch_split_endpoints:
+      - /api/v1/split/batch/stem_separator/
+      - /api/v1/split/batch/demuser/
+      - /api/v1/split/batch/voice_clean/
+    batch_response: >-
+      BatchTasksResponse.results[] is ordered to match the input parameters and is a discriminated union on
+      `status` — each element is independently SuccessfulTaskStart or FailedTaskStart, so a batch partially
+      succeeds. Do not treat HTTP 200 on a batch call as "all tasks started".
+
+field_expansion:
+  supported: false
+sparse_fields:
+  supported: false
+metadata:
+  supported: false
+  note: No user-defined metadata field on any resource.
+
+request_tracing:
+  supported: true
+  response_header: x-request-id
+  format: 32-char lowercase hex
+  observed: 'x-request-id: 290a2a3fec5392ce1292b414f12be70f'
+  observed_on: POST https://www.lalal.ai/api/v1/check/ (403)
+  request_echo: false
+  note: >-
+    The server emits x-request-id on every response including error responses. Not documented in the API
+    reference — established by live probe on 2026-08-13. Log it; it is the only correlation handle for a
+    support ticket to support@lalal.ai.
+
+versioning:
+  scheme: uri-path
+  current: v1
+  path_prefix: /api/v1/
+  spec_version: 1.1.0
+  openapi_version: 3.1.0
+  previous: v0
+  previous_status: deprecated
+  previous_rule: >-
+    Verbatim from https://www.lalal.ai/api/help/ — "Any endpoint without /v1/ in its URL belongs to API v0
+    and is considered deprecated."
+  cross_reference: lifecycle/lalal-ai-lifecycle.yml
+
+error_envelope:
+  format: custom-json
+  rfc9457: false
+  content_type: application/json
+  shapes:
+    - name: ApiV1ErrorResponse
+      fields: [detail, code]
+      required: [detail, code]
+      used_on: '400'
+      note: The v1 machine-readable envelope — a human string plus a stable enum code.
+    - name: CommonErrorResponse
+      fields: [detail]
+      required: [detail]
+      used_on: ['400', '422', '429']
+      note: >-
+        FastAPI/Pydantic validation shape. `detail` is polymorphic — string, object, or an array of
+        {loc, msg, type} validation items. An agent must type-check `detail` before reading it.
+    - name: FailedTaskStart
+      fields: [status, error, code, source_id]
+      used_on: 'inline inside a 200 BatchTasksResponse'
+      note: >-
+        Per-item failure inside a successful batch response. HTTP status is 200; the failure is in the body.
+  code_enums:
+    - TaskStartErrorCodes
+    - LicenseErrorCodes
+  cross_reference: errors/lalal-ai-problem-types.yml
+
+rate_limit_signaling:
+  documented_limits: false
+  exhaustion_status: 429
+  exhaustion_schema: CommonErrorResponse
+  declared_on:
+    - POST /api/v1/check/
+  response_headers: none
+  note: >-
+    429 Too Many Requests is declared in the contract on /api/v1/check/ only, and no RateLimit-*,
+    X-RateLimit-* or Retry-After header is documented or was observed. There is no runtime budget signal —
+    an agent must back off blind. The real enforced ceiling is processing minutes and upload size, not
+    request rate.
+  cross_reference: rate-limits/lalal-ai-rate-limits.yml
+
+async_model:
+  style: submit-then-poll
+  submit: 'POST /api/v1/split/* or /api/v1/change_voice/ → {task_id}'
+  poll: 'POST /api/v1/check/ with {task_ids: [...]} (max 200)'
+  states: [success, progress, error, cancelled]
+  progress_field: progress (0..100)
+  result_delivery: >-
+    On success the check response carries tracks[] with a signed download `url` per SplitTrack (type stem
+    or back), plus optional playlist_file, size and waveform.
+  cancel: 'POST /api/v1/cancel/ (task_ids[]) or POST /api/v1/cancel/all/'
+  callbacks: none
+  webhooks: none
+  event_stream: none
+
+resource_lifecycle:
+  source_file_retention_hours: 24
+  explicit_delete: 'POST /api/v1/delete/ with {source_id}'
+  identifier_format: uuid4
+  identifier_kinds: [source_id, task_id, pack_id]
+  note: Uploaded source files are deleted 24 hours after upload whether or not /delete/ is called.
+
+http_conventions:
+  methods_used: [POST]
+  get_operations: 0
+  note: >-
+    Every operation in v1 is POST, including the read-shaped ones (/check/, /limits/minutes_left/,
+    /voice_packs/list/). Nothing is cacheable and nothing is safely retryable by HTTP semantics alone,
+    which is exactly why the idempotency_key matters.
+  content_types:
+    request: application/json (except /api/v1/upload/, which takes the raw file body)
+    response: application/json
+  upload:
+    endpoint: POST /api/v1/upload/
+    required_header: 'Content-Disposition: attachment; filename=<filename> (RFC 6266)'
+    body: raw binary file
+  cors:
+    access_control_allow_origin: '*'
+    access_control_allow_methods: POST,GET,OPTIONS
+    access_control_allow_headers: Authorization,Content-Disposition,Content-Type,Cache-Control,Keep-Alive,Origin
+    observed: '2026-08-13'
+    note: >-
+      Wildcard CORS with Authorization in the allowed headers means the license key can be sent from a
+      browser. Do not — it is a long-lived account credential, not a scoped token.
+
+cross_references:
+  - authentication/lalal-ai-authentication.yml
+  - errors/lalal-ai-problem-types.yml
+  - lifecycle/lalal-ai-lifecycle.yml
+  - rate-limits/lalal-ai-rate-limits.yml
+  - data-model/lalal-ai-data-model.yml

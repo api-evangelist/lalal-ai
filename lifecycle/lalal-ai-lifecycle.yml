@@ -1,0 +1,105 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://www.lalal.ai/api/help/ (v0 deprecation notice), https://www.lalal.ai/api/v1/docs/,
+  https://www.lalal.ai/api/v1/openapi.json, https://www.lalal.ai/changelog/,
+  https://github.com/OmniSaleGmbH/lalalai
+provider: LALAL.AI
+provider_id: lalal-ai
+
+versioning:
+  scheme: uri-path
+  current: v1
+  path_prefix: /api/v1/
+  spec_version: 1.1.0
+  openapi_version: 3.1.0
+  docs: https://www.lalal.ai/api/v1/docs/
+  spec: https://www.lalal.ai/api/v1/openapi.json
+  released: '2025-12-22'
+  release_evidence: >-
+    Changelog 2025-12-22 — "Release of API v1. Human-readable documentation:
+    https://www.lalal.ai/api/v1/docs/ OpenApi specification: https://www.lalal.ai/api/v1/openapi.json"
+
+deprecation:
+  policy_url: https://www.lalal.ai/api/help/
+  policy_published: true
+  formal_policy_document: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    LALAL.AI publishes an explicit, in-band deprecation NOTICE for the previous API generation but no
+    general deprecation POLICY — no stated notice period, no sunset date, and no RFC 8594
+    Sunset/Deprecation response headers. What exists is a banner at the top of the v0 documentation and a
+    retained-but-labelled v0 directory in the official examples repo.
+  deprecated_versions:
+    - version: v0
+      status: deprecated
+      announced: '2025-12-29'
+      notice_url: https://www.lalal.ai/api/help/
+      sunset_date: null
+      rule: >-
+        Verbatim — "Any endpoint without /v1/ in its URL belongs to API v0 and is considered deprecated."
+      notice_text: >-
+        "NOTICE: This documentation is for API v0, which is deprecated and provided for backward
+        compatibility only. ... We strongly recommend migrating to API v1."
+      migration_target: https://www.lalal.ai/api/v1/docs/
+      still_serving: true
+      evidence:
+        - changelog 2025-12-29 — "Added a deprecation notice for the legacy API in the help response."
+        - changelog 2026-01-16 — "Updated the deprecation notice for the old API (v0) with links to the
+          new Developer API documentation."
+        - https://github.com/OmniSaleGmbH/lalalai retains an "api-v0(deprecated)" directory alongside
+          "api-v1".
+      surface_delta: >-
+        v0 and v1 are not the same contract. v0 authenticated with `Authorization: license <key>`; v1 uses
+        the X-License-Key header. v0 had no idempotency key and no structured error codes. Migration is a
+        rewrite of auth and error handling, not a path change.
+
+deprecated_operations: []
+deprecated_operations_note: >-
+  No operation in any openapi/ file carries `deprecated: true`. Deprecation at LALAL.AI is expressed at
+  the whole-version level (v0 vs v1), not per operation.
+
+sla:
+  url: null
+  uptime_target: null
+  published: false
+  note: >-
+    No public SLA. https://www.lalal.ai/business-solutions/ offers "dedicated support" for high-volume
+    customers and directs enterprise terms to a quote request at
+    https://www.lalal.ai/business-solutions-request/; no uptime commitment is published anywhere.
+
+status_page: null
+status_page_published: false
+status_page_evidence:
+  - url: https://status.lalal.ai/
+    result: DNS does not resolve (curl exit 6, no HTTP response)
+    checked: '2026-08-13'
+  - url: https://www.lalal.ai/api/v1/docs/
+    result: 200 — no status/uptime link present
+    checked: '2026-08-13'
+status_page_note: >-
+  No status page exists. status.lalal.ai does not resolve and no incident/uptime page is linked from the
+  site, the API reference or the llms.txt site map. An agent has no way to distinguish a LALAL.AI outage
+  from its own failure. No StatusPage pointer is emitted.
+
+change_communication:
+  changelog: https://www.lalal.ai/changelog/
+  changelog_dated: true
+  api_entries_present: true
+  artifact: changelog/lalal-ai-changelog.yml
+  release_notes: null
+  breaking_change_notice: >-
+    Not a separate channel — API changes appear in the same product changelog as pricing and UI changes,
+    unlabelled as to whether they are breaking.
+
+support:
+  email: support@lalal.ai
+  help_center: https://www.lalal.ai/help/
+  issue_tracker: https://github.com/OmniSaleGmbH/lalalai/issues
+  enterprise_contact: https://www.lalal.ai/business-solutions-request/
+
+cross_references:
+  - changelog/lalal-ai-changelog.yml
+  - conventions/lalal-ai-conventions.yml

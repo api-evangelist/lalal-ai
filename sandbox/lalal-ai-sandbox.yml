@@ -1,0 +1,106 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://www.lalal.ai/api/v1/docs/ (HTTP 200), https://www.lalal.ai/pricing/,
+  https://www.lalal.ai/business-solutions/, https://www.lalal.ai/llms.txt
+provider: LALAL.AI
+provider_id: lalal-ai
+
+summary: >-
+  LALAL.AI ships an interactive API CONSOLE but NO sandbox. There is no test mode, no test/live key
+  separation, no magic test identifiers, no fixture or trigger tooling and no time simulation. Every call
+  made from the console is a real call against production that consumes real processing minutes from the
+  license key you paste in. What stands in for a sandbox is the free tier and the enterprise trial —
+  real minutes, not fake ones.
+
+console:
+  present: true
+  url: https://www.lalal.ai/api/v1/docs/
+  http_status: 200
+  title: LALAL.AI Public API v1
+  engine: Scalar API Reference
+  engine_evidence: >-
+    The page loads https://s.lalal.ai/less/pages/scalar/scalar.css and declares
+    <link rel="alternate" type="application/json" href="/api/v1/openapi.json" title="OpenAPI JSON">.
+  spec_source: https://www.lalal.ai/api/v1/openapi.json
+  interactive: true
+  sends_live_requests: true
+  credentials_required: true
+  credential: X-License-Key (a real license key from a Pro plan or a minute top-up)
+  note: >-
+    Rendered client-side from the OpenAPI document, so the console and the machine-readable contract can
+    never drift apart. But it is a live-fire console: there is no test key that would let you exercise an
+    operation without spending minutes.
+
+test_vs_live:
+  separated: false
+  key_prefixes: none
+  modes: none
+  note: >-
+    One credential type exists — the account license key in the X-License-Key header. It is not prefixed,
+    not scoped, not rotatable through the API, and there is no test counterpart. The same key that runs a
+    console experiment runs production.
+
+magic_test_values:
+  present: false
+  note: >-
+    No test file ids, no reserved source_ids, no simulated failure triggers. The only way to exercise an
+    error path is to cause it for real — e.g. reuse a spent idempotency_key to observe
+    `idempotency_key_used`, or exhaust minutes to observe `exceeded_duration`.
+
+time_simulation:
+  present: false
+  note: >-
+    No test clocks. The two time-dependent behaviours — the 24-hour source-file retention and the monthly
+    Fast-minute renewal — can only be observed in real time.
+
+fixtures_and_triggers:
+  present: false
+
+free_evaluation:
+  - id: no-registration-preview
+    name: Unregistered web preview
+    url: https://www.lalal.ai/
+    api_access: false
+    description: >-
+      Verbatim from the provider's llms.txt — "Most tools can be tried right away, no registration
+      required: upload a file, get a free preview of the result, and listen to it online before signing up
+      or paying." Web product only; it does not issue an API license key.
+  - id: starter
+    name: Starter (free plan)
+    url: https://www.lalal.ai/pricing/
+    api_access: false
+    quota: 10 Relaxed-queue minutes, lifetime
+    restriction: Online listening only — no downloads, no batch, no API.
+    description: >-
+      The free plan cannot be used to evaluate the API. API access requires a Pro plan or a minute top-up
+      pack.
+  - id: enterprise-trial
+    name: Business Solutions free trial
+    url: https://www.lalal.ai/business-solutions/
+    request_url: https://www.lalal.ai/business-solutions-request/
+    api_access: true
+    quota: 30 minutes
+    gated: sales-form
+    description: >-
+      The only route to unpaid API minutes: a free 30-minute trial offered on the Business Solutions page,
+      obtained by submitting the enterprise quote/trial form. Not self-serve.
+  - id: paid-entry
+    name: Minute top-up (no subscription)
+    url: https://www.lalal.ai/upgrade/
+    api_access: true
+    description: >-
+      The self-serve route to API access without a subscription — buy a top-up pack (750 / 3,000 / 5,000
+      Fast minutes). Minutes never expire.
+
+minute_consumption:
+  formula: file_length x number_of_selected_stems
+  note: >-
+    Worth knowing before running console experiments: a multistem call selecting six stems bills six times
+    the file duration. There is no dry-run that returns the cost without doing the work. Call
+    POST /api/v1/limits/minutes_left/ before and after to measure it.
+
+cross_references:
+  - plans/lalal-ai-plans-pricing.yml
+  - rate-limits/lalal-ai-rate-limits.yml
+  - authentication/lalal-ai-authentication.yml

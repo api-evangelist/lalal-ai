@@ -1,0 +1,42 @@
+generated: '2026-08-13'
+method: generated
+source: >-
+  Authored by API Evangelist from openapi/ (operationIds verified against
+  https://www.lalal.ai/api/v1/openapi.json), conventions/lalal-ai-conventions.yml and
+  errors/lalal-ai-problem-types.yml. LALAL.AI publishes no AGENTS.md or first-party skill files —
+  https://www.lalal.ai/llms.txt maps the product surface but ships no operating instructions.
+provider: LALAL.AI
+provider_id: lalal-ai
+
+skills:
+  - file: lalal-ai-separate-stems.md
+    name: Separate a track into stems with LALAL.AI
+    api: openapi/lalal-ai-stem-separation-api-openapi.yml
+    operations: [upload_upload, split_split_enhanced, check_check, delete_delete]
+  - file: lalal-ai-batch-separate.md
+    name: Batch-separate many tracks with LALAL.AI
+    api: openapi/lalal-ai-batch-stem-separation-api-openapi.yml
+    operations:
+      - upload_upload
+      - batch_split_split_batch_enhanced
+      - batch_split_split_batch_demuser
+      - batch_split_split_batch_voice_clean
+      - check_check
+      - limits_get_minutes_left
+  - file: lalal-ai-clean-voice-recording.md
+    name: Clean a voice recording with LALAL.AI
+    api: openapi/lalal-ai-stem-separation-api-openapi.yml
+    operations: [upload_upload, split_split_voice_clean, split_split_demuser, check_check, delete_delete]
+  - file: lalal-ai-change-voice.md
+    name: Apply a voice pack with LALAL.AI Voice Changer
+    api: openapi/lalal-ai-voice-change-api-openapi.yml
+    operations: [voice_packs_list_packs, upload_upload, change_voice_change_voice, check_check, delete_delete]
+
+operations_not_covered:
+  - split_split_multistem
+  - cancel_cancel_all
+note: >-
+  Every operationId above was grepped from the repo's openapi/ files before the skill was written. Four of
+  the fifteen v1 operations are referenced across multiple skills; split_split_multistem is a variant of
+  the stem-separation flow (stem_list of up to six stems) and cancel_cancel_all is a destructive
+  account-wide stop deliberately kept out of a happy-path skill.

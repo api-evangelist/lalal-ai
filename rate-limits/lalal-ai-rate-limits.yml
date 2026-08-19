@@ -1,4 +1,8 @@
 apiCommonsRateLimits: 0.1
+generated: '2026-08-13'
+method: searched
+source: https://www.lalal.ai/api/v1/docs/
+limit_count: 0
 provider: LALAL.AI
 provider_id: lalal-ai
 updated: '2026-05-25'
@@ -53,3 +57,37 @@ retention:
 introspection:
   endpoint: POST /api/v1/limits/minutes_left/
   description: Returns remaining processing minutes for the calling license key.
+
+runtime_signal:
+  generated: '2026-08-13'
+  method: probed
+  source: >-
+    https://www.lalal.ai/api/v1/openapi.json (declared responses) + a live unauthenticated POST to
+    https://www.lalal.ai/api/v1/check/ on 2026-08-13
+  request_rate_limits_published: 0
+  exhaustion_status: 429
+  exhaustion_declared_on:
+    - POST /api/v1/check/
+  exhaustion_schema: CommonErrorResponse
+  response_headers:
+    ratelimit_standard: absent
+    x_ratelimit: absent
+    retry_after: absent
+  observed_response_headers:
+    - x-request-id
+    - vary
+    - cache-control
+    - access-control-allow-origin
+    - access-control-allow-methods
+    - access-control-allow-headers
+  note: >-
+    429 Too Many Requests is declared in the contract on the polling endpoint only, and no RateLimit-*,
+    X-RateLimit-* or Retry-After header is documented or was observed on a live response. There is no
+    runtime budget signal an agent can read — a client must back off exponentially with no server hint.
+    The only introspectable ceiling is the minute balance from POST /api/v1/limits/minutes_left/, which
+    reports remaining quota but not remaining request rate.
+  quota_introspection:
+    endpoint: POST /api/v1/limits/minutes_left/
+    operation_id: limits_get_minutes_left
+    field: minutes_left
+    type: number

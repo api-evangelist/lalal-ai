@@ -1,0 +1,120 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.lalal.ai/changelog/
+provider: LALAL.AI
+provider_id: lalal-ai
+url: https://www.lalal.ai/changelog/
+
+scheme:
+  style: date-based
+  format: YYYY-MM-DD
+  semver: false
+  categories: [New Features, Improvements, Fixes]
+  scope: >-
+    Product-wide. Web app, pricing, payments, mobile apps, neural-network releases and the Developer API
+    all share one stream; API changes are not separately tagged or filterable.
+  breaking_change_labelling: false
+
+current:
+  api_version: v1
+  api_spec_version: 1.1.0
+  latest_entry: '2026-05-28'
+  total_dated_entries: 131
+  earliest_dated_entry: '2024-08-01'
+  captured: '2026-08-13'
+  note: >-
+    131 dated entries were present on the page when captured. The window below is the API- and
+    engine-relevant subset — the rest is billing, payments, localisation and UI work.
+
+entries:
+  - date: '2026-05-07'
+    type: new
+    highlights:
+      - Added the new Lynx neural network to Voice Cleaner.
+  - date: '2026-03-24'
+    type: new
+    highlights:
+      - Added drum and bass stem support for the Andromeda splitter.
+  - date: '2026-03-17'
+    type: improvement
+    highlights:
+      - Removed legacy license-key sign-in for profile access; account login is now required.
+      - Moved the Developer API documentation link to the site header so it is easier to find.
+  - date: '2026-02-17'
+    type: new
+    breaking: false
+    api: true
+    highlights:
+      - Added clear, structured error responses to the Developer API.
+    note: >-
+      This is the entry behind the {detail, code} envelope and the TaskStartErrorCodes /
+      LicenseErrorCodes enums captured in errors/lalal-ai-problem-types.yml.
+  - date: '2026-01-21'
+    type: new
+    api: true
+    highlights:
+      - Launched the new Developer API with interactive documentation.
+  - date: '2026-01-16'
+    type: new
+    api: true
+    highlights:
+      - Published a machine-readable OpenAPI spec and an llms.txt file for the Developer API.
+      - Updated the deprecation notice for the old API (v0) with links to the new Developer API documentation.
+    note: >-
+      LALAL.AI publishing its own llms.txt is a provider decision, not an inference — this entry dates it.
+  - date: '2025-12-29'
+    type: improvement
+    api: true
+    highlights:
+      - Added a deprecation notice for the legacy API in the help response.
+      - Fixed type conversion for task progress calculation.
+  - date: '2025-12-22'
+    type: new
+    api: true
+    breaking: false
+    highlights:
+      - Release of API v1.
+      - 'Human-readable documentation: https://www.lalal.ai/api/v1/docs/'
+      - 'OpenAPI specification: https://www.lalal.ai/api/v1/openapi.json'
+  - date: '2025-11-21'
+    type: new
+    highlights:
+      - Added Andromeda network support for Vocal and Instrumental and Voice and Noise stems.
+  - date: '2025-11-17'
+    type: new
+    highlights:
+      - Added the new Andromeda neural network for better vocal isolation, faster processing, cleaner stems.
+  - date: '2025-09-30'
+    type: new
+    highlights:
+      - Introduced a new Perseus-based separator for lead and backing vocals.
+      - Added an enhanced dereverberation algorithm using the proprietary Lyra technology.
+      - Added a new supported stem, Demuser — a Lyra-based model separating music from non-music components.
+    note: The origin of the /api/v1/split/demuser/ and /api/v1/split/batch/demuser/ operations.
+  - date: '2025-02-28'
+    type: new
+    api: true
+    highlights:
+      - Added Voice Cloner API to the Public API.
+    note: The origin of /api/v1/change_voice/ and /api/v1/voice_packs/list/.
+  - date: '2025-02-04'
+    type: new
+    highlights:
+      - Added Electric Guitar and Piano stems via Perseus with Clear Cut and Deep Extraction settings.
+      - Voice conversion can estimate and optionally apply echo and room tone from the original voice.
+  - date: '2024-12-17'
+    type: new
+    highlights:
+      - Added Acoustic Guitar stem separation on Perseus with Clear Cut and Deep Extraction modes.
+  - date: '2024-11-22'
+    type: new
+    highlights:
+      - Drums and Bass stems supported by the Perseus neural network.
+      - Lead & Back Vocal Splitter now returns four tracks.
+  - date: '2024-09-25'
+    type: new
+    highlights:
+      - Released the Perseus transformer neural network for Vocal/Instrumental and Voice/Noise stems.
+
+cross_references:
+  - lifecycle/lalal-ai-lifecycle.yml

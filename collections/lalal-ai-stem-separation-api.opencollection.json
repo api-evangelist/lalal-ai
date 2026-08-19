@@ -1,0 +1,102 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LALAL.AI Batch Stem Separation API",
+    "version": "1.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Stem Separation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Split a file into stems using the stem separator presets",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/split/stem_separator/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n    Result of /check/ includes 2 tracks:\n    - stem:{\"type\":\"stem\", \"label\":\"<stem_name>\", \"url\":\"...\"}\n    - without stem:{\"type\":\"back\", \"label\":\"no_<stem_name>\", \"url\":\"...\"}\n\n    LEAD_BACK VOCALS:\n    For 'vocals' stem you can use parameter multivocal=\"lead_back\" and receive both lead and backing vocals as separate stems.\n    Result of /check/ includes 4 tracks. Backing vocals track is optional and could be suppressed if not found in the audio:\n    lead vocals:{\"type\":\"stem\", \"label\":\"vocal"
+        },
+        {
+          "info": {
+            "name": "Clean voice from background music",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/split/demuser/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n    Typical usage case - is voice with background music.\n    Demuser will separate voice (stem) and music (back).\n    Result of /check/ includes 2 tracks:\n    - stem:{\"type\":\"stem\", \"label\":\"music\", \"url\":\"...\"}\n    - back:{\"type\":\"back\", \"label\":\"no_music\", \"url\":\"...\"}\n    "
+        },
+        {
+          "info": {
+            "name": "Clean voice from background noise",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/split/voice_clean/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n    Typical usage case - is voice with background noise.\n    Voice clean will separate clean voice (stem) and noise (back).\n    Result of /check/ includes 2 tracks:\n    - stem:{\"type\":\"stem\", \"label\":\"voice\", \"url\":\"...\"}\n    - back:{\"type\":\"back\", \"label\":\"no_voice\", \"url\":\"...\"}\n    "
+        },
+        {
+          "info": {
+            "name": "Split a file into multiple stems in one request (multistem feature)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/split/multistem/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n    WARNING: The stems are internally extracted one by one, so the processing time is proportional to the number of stems selected.\n\n    You will be charged an equal amount of minutes for each stem.\n    For example, if you have an audio file with a duration of 1 minute,\n    with stem_list=[\"vocals\", \"drum\"], you will be charged 2 minutes (1 minute for \"vocals\", 1 minute for \"drum\").\n    At the /check/ endpoint you will receive <number_of_stems> tracks with 1 additional track which is the source"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

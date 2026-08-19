@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LALAL.AI Batch Stem Separation Voice Change API",
+    "version": "1.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Voice Change",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Changes voice in the audio file using voice pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/change_voice/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n    For 'voice_pack_id' parameter use 'pack_id' from /voice_packs/list/ endpoint or one of legal packs: ['ALEX_KAYE', 'STASIA_FAYE', 'NICOLAAS_HAAS', 'NIK_ZEL', 'OLIA_CHEBO', 'YVAR_DE_GROOT', 'VETRANA']\n\n    Result of /check/ includes 1 track with label 'converted_mix'.\n    {\"label\":\"converted_mix\", \"type\":\"back\", \"url\":\"...\"}\n    "
+        },
+        {
+          "info": {
+            "name": "Lists voice packs available to the user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/voice_packs/list/",
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Helps to find pack_id for /change_voice/ endpoint."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

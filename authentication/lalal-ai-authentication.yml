@@ -1,15 +1,85 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/lalal-ai-api-openapi.yml
+generated: '2026-08-13'
+method: searched
+source: openapi/_original/lalal-ai-api-openapi.yml
+docs: https://www.lalal.ai/api/v1/docs/
+provider: LALAL.AI
+provider_id: lalal-ai
+
 summary:
   types:
   - apiKey
   api_key_in:
   - header
+  oauth2_flows: []
+  scopes: 0
+
 schemes:
 - name: ApiKeyHeaderAuth
   type: apiKey
   in: header
   parameter: X-License-Key
+  applied_to: 'all 15 v1 operations (security [{ApiKeyHeaderAuth: []}] on every operation)'
   sources:
-  - openapi/lalal-ai-api-openapi.yml
+  - openapi/lalal-ai-common-api-openapi.yml
+  - openapi/lalal-ai-stem-separation-api-openapi.yml
+  - openapi/lalal-ai-batch-stem-separation-api-openapi.yml
+  - openapi/lalal-ai-voice-change-api-openapi.yml
+  - openapi/_original/lalal-ai-api-openapi.yml
+
+credential:
+  kind: account license key
+  name: license key
+  obtained_from: https://www.lalal.ai/pricing/
+  entitlement: >-
+    API access requires a Pro plan or a minute top-up pack. Per the provider's llms.txt — "API access is
+    available with the Pro plan or any minute top-up pack - no subscription required". The free Starter
+    plan does not grant API access.
+  scoped: false
+  rotatable_via_api: false
+  expiring: false
+  prefix: none
+  test_counterpart: none
+  note: >-
+    One long-lived, unscoped credential per account, carrying the full surface — including the destructive
+    cancel_cancel_all and delete_delete operations and the billable split operations. There is no
+    read-only key, no per-integration key and no programmatic rotation. Treat it as a root credential:
+    server-side only, one per integration boundary you can afford to revoke by hand.
+
+observed_behavior:
+  probed: '2026-08-13'
+  url: https://www.lalal.ai/api/v1/check/
+  missing_credential_status: 403
+  missing_credential_body: '{"detail": "Provide license key in ''X-License-Key'' header"}'
+  www_authenticate: absent
+  note: >-
+    A missing credential answers 403, not 401, and returns no WWW-Authenticate challenge. Client code that
+    branches on 401 to trigger a re-auth path will never fire.
+  cors:
+    access_control_allow_origin: '*'
+    access_control_allow_headers: Authorization,Content-Disposition,Content-Type,Cache-Control,Keep-Alive,Origin
+    warning: >-
+      Wildcard CORS permits the license key to be sent from a browser. Do not ship it to a client — it is
+      an account credential with billing and delete authority.
+
+oauth2:
+  supported: false
+  evidence:
+    - no oauth2 securityScheme in the OpenAPI document
+    - https://www.lalal.ai/.well-known/oauth-authorization-server returned HTTP 404 on 2026-08-13
+    - https://www.lalal.ai/.well-known/openid-configuration returned HTTP 404 on 2026-08-13
+  note: >-
+    No OAuth and no OIDC, so there is no scopes/ artifact for this provider — nothing to enumerate.
+
+superseded_scheme:
+  version: v0
+  header: 'Authorization: license <key>'
+  status: deprecated
+  docs: https://www.lalal.ai/api/help/
+  note: >-
+    API v0 used a different header entirely. Migrating from v0 to v1 is an authentication change, not just
+    a path change.
+
+cross_references:
+  - conventions/lalal-ai-conventions.yml
+  - errors/lalal-ai-problem-types.yml
+  - sandbox/lalal-ai-sandbox.yml

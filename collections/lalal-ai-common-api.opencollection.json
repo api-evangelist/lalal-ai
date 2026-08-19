@@ -1,0 +1,138 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LALAL.AI Batch Stem Separation Common API",
+    "version": "1.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Common",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload a file to the server.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/upload/",
+            "headers": [
+              {
+                "name": "Content-Disposition",
+                "value": "attachment; filename=song.mp3"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n    The uploaded file in other endpoints is called a \"source file\".\n    You can use the source file ID from the response to create split tasks.\n    The file will be deleted when the expiration time from the response is reached.\n    Upload limit is 10GB per request.\n    "
+        },
+        {
+          "info": {
+            "name": "Check the status of a task by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/check/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n    This endpoint allows you to check the status of a specific task by its ID.\n    Checking is only possible within 24h after task creation, otherwise an error will be returned.\n    The current rate limit for this endpoint is 30 requests per minute. This limit may be increased in the future.\n    "
+        },
+        {
+          "info": {
+            "name": "Cancel tasks by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/cancel/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Cancel tasks by id"
+        },
+        {
+          "info": {
+            "name": "Cancel all user tasks in progress state",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/cancel/all/",
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Cancel all user tasks in progress state"
+        },
+        {
+          "info": {
+            "name": "Delete source file and resulting tracks from storage.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/delete/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n    WARNING: All running tasks related to the source file will be cancelled. Do not call delete on source files with processing tasks.\n    This only deletes the media files, not the database records.\n    The files are removed from storage immediately, but download links will remain valid for one hour after deletion due to CDN caching.\n    The /check/ endpoint will still return a valid check result for 24 hours, but the download links will lead to a 404 error after deletion.\n    "
+        },
+        {
+          "info": {
+            "name": "Get number of processing minutes available to consume.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.lalal.ai/api/v1/limits/minutes_left/",
+            "auth": {
+              "type": "apikey",
+              "key": "X-License-Key",
+              "value": "{{X-License-Key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get number of processing minutes available to consume."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

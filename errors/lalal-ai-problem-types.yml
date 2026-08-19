@@ -1,0 +1,188 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  openapi/_original/lalal-ai-api-openapi.yml (4xx responses + components.schemas), verified against the
+  live https://www.lalal.ai/api/v1/openapi.json, and enriched from https://www.lalal.ai/api/v1/docs/
+docs: https://www.lalal.ai/api/v1/docs/
+provider: LALAL.AI
+provider_id: lalal-ai
+
+format: custom-json
+rfc9457: false
+content_type: application/json
+note: >-
+  LALAL.AI does not use RFC 9457 application/problem+json. The v1 envelope is its own two-field shape —
+  {detail, code} — plus a FastAPI/Pydantic validation shape reusing the same `detail` key with a different
+  type. `code` is the stable machine-readable handle; `detail` is prose and must not be matched on.
+  The changelog dates this: "Added clear, structured error responses to the Developer API" (2026-02-17).
+
+envelopes:
+  - name: ApiV1ErrorResponse
+    fields:
+      detail: {type: string, required: true, description: Error message.}
+      code: {type: string, required: true, description: Error code.}
+    example: {detail: Idempotency key has already been used., code: idempotency_key_used}
+  - name: CommonErrorResponse
+    fields:
+      detail:
+        type: string | object | array<object>
+        required: true
+        description: >-
+          Polymorphic. On a validation failure it is an array of {loc, msg, type} items, e.g.
+          [{loc: [body, split_input, source_id], msg: Field required, type: missing}].
+  - name: FailedTaskStart
+    fields:
+      status: {type: string, const: error}
+      error: {type: string, required: true}
+      code: {type: string, required: true, enum_of: [TaskStartErrorCodes, LicenseErrorCodes]}
+      source_id: {type: string, required: true}
+    note: >-
+      Returned INSIDE a 200 OK BatchTasksResponse.results[], discriminated on `status`. A batch call can
+      report per-item failure with no non-2xx HTTP status anywhere.
+  - name: ErrorResult
+    fields:
+      status: {type: string, const: server_error}
+      error: {type: string, required: true}
+    examples: [Permission denied, Task is not in progress state, Failed to extract information about task]
+    note: Cancellation-path failure, also delivered inside a 200 response.
+  - name: TaskMetaError
+    fields:
+      detail: {type: string, required: true}
+      code: {type: string, nullable: true}
+      id: {type: string, nullable: true}
+    note: Per-task error surfaced by /api/v1/check/ as CheckV1ErrorResult.
+
+problems:
+  - status: 400
+    title: Bad Request
+    schema: ApiV1ErrorResponse | CommonErrorResponse
+    description: >-
+      Request rejected before a task was created — bad license state, quota exhaustion, an already-used
+      idempotency key, or a malformed body.
+    source_operations:
+      - openapi/lalal-ai-common-api-openapi.yml#upload_upload
+      - openapi/lalal-ai-common-api-openapi.yml#check_check
+      - openapi/lalal-ai-common-api-openapi.yml#cancel_cancel
+      - openapi/lalal-ai-common-api-openapi.yml#cancel_cancel_all
+      - openapi/lalal-ai-common-api-openapi.yml#delete_delete
+      - openapi/lalal-ai-common-api-openapi.yml#limits_get_minutes_left
+      - openapi/lalal-ai-stem-separation-api-openapi.yml#split_split_enhanced
+      - openapi/lalal-ai-stem-separation-api-openapi.yml#split_split_demuser
+      - openapi/lalal-ai-stem-separation-api-openapi.yml#split_split_voice_clean
+      - openapi/lalal-ai-stem-separation-api-openapi.yml#split_split_multistem
+      - openapi/lalal-ai-batch-stem-separation-api-openapi.yml#batch_split_split_batch_enhanced
+      - openapi/lalal-ai-batch-stem-separation-api-openapi.yml#batch_split_split_batch_demuser
+      - openapi/lalal-ai-batch-stem-separation-api-openapi.yml#batch_split_split_batch_voice_clean
+      - openapi/lalal-ai-voice-change-api-openapi.yml#change_voice_change_voice
+      - openapi/lalal-ai-voice-change-api-openapi.yml#voice_packs_list_packs
+    remediation: >-
+      Read `code`, not `detail`. Retry only on internal_error; every other code is terminal for that
+      request.
+  - status: 403
+    title: Forbidden — missing or invalid license key
+    schema: '{detail: string}'
+    observed: true
+    observed_body: '{"detail": "Provide license key in ''X-License-Key'' header"}'
+    observed_url: https://www.lalal.ai/api/v1/check/
+    observed_date: '2026-08-13'
+    description: >-
+      Not declared in the OpenAPI document, but this is what the API actually returns when the
+      X-License-Key header is absent. Captured by live unauthenticated probe.
+    remediation: Send the X-License-Key header. No WWW-Authenticate challenge is returned.
+    method: probed
+  - status: 422
+    title: Unprocessable Entity
+    schema: CommonErrorResponse
+    description: >-
+      Pydantic request-body validation failure. `detail` is an array of {loc, msg, type} pointing at the
+      offending field path.
+    source_operations:
+      - openapi/lalal-ai-common-api-openapi.yml#upload_upload
+      - openapi/lalal-ai-common-api-openapi.yml#check_check
+      - openapi/lalal-ai-common-api-openapi.yml#cancel_cancel
+      - openapi/lalal-ai-common-api-openapi.yml#delete_delete
+      - openapi/lalal-ai-common-api-openapi.yml#limits_get_minutes_left
+      - openapi/lalal-ai-stem-separation-api-openapi.yml#split_split_voice_clean
+      - openapi/lalal-ai-stem-separation-api-openapi.yml#split_split_multistem
+      - openapi/lalal-ai-batch-stem-separation-api-openapi.yml#batch_split_split_batch_enhanced
+      - openapi/lalal-ai-batch-stem-separation-api-openapi.yml#batch_split_split_batch_demuser
+      - openapi/lalal-ai-batch-stem-separation-api-openapi.yml#batch_split_split_batch_voice_clean
+      - openapi/lalal-ai-voice-change-api-openapi.yml#change_voice_change_voice
+      - openapi/lalal-ai-voice-change-api-openapi.yml#voice_packs_list_packs
+    remediation: Fix the field named in detail[].loc. Never retry unchanged.
+  - status: 429
+    title: Too Many Requests
+    schema: CommonErrorResponse
+    source_operations:
+      - openapi/lalal-ai-common-api-openapi.yml#check_check
+    description: >-
+      Declared on the polling endpoint only. No Retry-After or RateLimit-* header is documented or was
+      observed, so back off exponentially — there is no published budget to read.
+    remediation: Exponential backoff on the /check/ poll loop; widen the poll interval.
+
+error_codes:
+  - code: idempotency_key_used
+    enum: TaskStartErrorCodes
+    message: Idempotency key has already been used.
+    meaning: >-
+      The uuid4 idempotency_key was already consumed by a task that has begun processing. The key
+      de-duplicates submission only; it does not replay the original response.
+    action: >-
+      Terminal. Poll /api/v1/check/ for the task the original submission created rather than resubmitting
+      with a new key — a new key will start a second job and consume minutes twice.
+    retryable: false
+  - code: internal_error
+    enum: TaskStartErrorCodes
+    meaning: Server-side failure starting the task.
+    action: Retry with the SAME idempotency_key.
+    retryable: true
+  - code: exceeded_duration
+    enum: LicenseErrorCodes
+    meaning: The license has no processing minutes left for this job.
+    action: >-
+      Terminal. Check POST /api/v1/limits/minutes_left/ and top up. Minutes are consumed as
+      file_length x number_of_selected_stems.
+    retryable: false
+  - code: exceeded_size
+    enum: LicenseErrorCodes
+    meaning: The uploaded file exceeds the size ceiling for this license.
+    action: Terminal. Reduce the file or use a license with a higher upload ceiling.
+    retryable: false
+  - code: max_duration
+    enum: LicenseErrorCodes
+    meaning: The media file is longer than this license permits.
+    action: Terminal. Split the source file or upgrade the license.
+    retryable: false
+  - code: batch_not_avaliable
+    enum: LicenseErrorCodes
+    meaning: >-
+      Batch processing is not available on this license. (The typo is the provider's — the enum value is
+      literally "batch_not_avaliable" and must be matched verbatim.)
+    action: >-
+      Terminal. Fall back to the single-file /api/v1/split/* endpoints, or move to a plan that includes
+      batch processing.
+    retryable: false
+
+task_states:
+  source: CheckV1Response result union
+  states:
+    - state: success
+      schema: CheckV1SuccessResult
+      note: Carries SplitTracksResult.tracks[] with signed download URLs.
+    - state: progress
+      schema: CheckV1ProgressResult
+      note: progress is an integer 0..100.
+    - state: error
+      schema: CheckV1ErrorResult
+      note: Carries a TaskMetaError. This is where an async failure surfaces — the HTTP status is 200.
+    - state: cancelled
+      schema: CheckV1CancelledResult
+  note: >-
+    The most important error-handling fact about this API — a job that FAILS returns HTTP 200 from
+    /api/v1/check/ with state "error" in the body. Status-code-only error handling will treat every failed
+    separation as a success.
+
+cross_references:
+  - conventions/lalal-ai-conventions.yml
+  - authentication/lalal-ai-authentication.yml
+  - rate-limits/lalal-ai-rate-limits.yml
