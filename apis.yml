@@ -232,8 +232,9 @@ common:
     name: Provider-published llms.txt (verbatim, www.lalal.ai/llms.txt)
   - type: Packages
     url: packages/lalal-ai-packages.yml
-  - type: MCPServer
+  - type: X-MCPServerCandidate
     url: mcp/lalal-ai-mcp.yml
+    note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
     name: API Evangelist candidate — LALAL.AI publishes no MCP server
   - type: Conventions
     url: conventions/lalal-ai-conventions.yml
@@ -326,7 +327,10 @@ accessModel:
   source:
   - plans
   - authentication
-  generated: '2026-07-22'
+  - rate-limits
+  - security
+  - sandbox
+  generated: '2026-09-03'
   method: derived
 created: '2026-05-25T00:00:00.000Z'
 modified: '2026-08-13'
