@@ -1,38 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: LALAL.AI Batch Stem Separation Common API
+  title: LALAL.AI Common API
   version: 1.1.0
-  description: '
-
-    This is the LALAL.AI API.
-
-
-    To authenticate, provide your license key in the `X-License-Key` header of each request.
-
-
-    Typical usage example:
-
-    1) Upload a file using the ''/upload/'' endpoint to get a ''source_id''.
-
-    2) Start a splitting task using the ''/split/'' endpoint with the obtained ''source_id'' and desired presets.
-
-    3) Check the status of your task using the ''/check/'' endpoint with the returned ''task_id''.
-
-    4) Once the task is complete, download the processed files using urls from the ''/check/'' response.
-
-    5) (If needed), you can delete the source file and all its resulting tracks from our servers, using the ''/delete/'' endpoint with the ''source_id''.
-
-
-    Notes:
-
-
-    You can use the same source_id for concurrent splitting tasks.
-
-
-    You can check multiple task IDs in a single ''/check/'' request by providing a list of ''task_ids''.
-
-
-    '
+  description: This is the LALAL.AI API.
 servers:
 - url: https://www.lalal.ai
   description: LALAL.AI API v1 production endpoint
@@ -42,7 +12,7 @@ paths:
   /api/v1/upload/:
     post:
       operationId: upload_upload
-      summary: Upload a file to the server.
+      summary: Upload a file to the server
       parameters:
       - name: Content-Disposition
         in: header
@@ -73,7 +43,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommonErrorResponse'
-      description: "\n    The uploaded file in other endpoints is called a \"source file\".\n    You can use the source file ID from the response to create split tasks.\n    The file will be deleted when the expiration time from the response is reached.\n    Upload limit is 10GB per request.\n    "
+      description: 'The uploaded file in other endpoints is called a "source file".
+
+        You can use the source file ID from the response to create split tasks.
+
+        The file will be deleted when the expiration time from the response is reached.
+
+        Upload limit is 10GB per request.'
       tags:
       - Common
       security:
@@ -120,7 +96,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommonErrorResponse'
-      description: "\n    This endpoint allows you to check the status of a specific task by its ID.\n    Checking is only possible within 24h after task creation, otherwise an error will be returned.\n    The current rate limit for this endpoint is 30 requests per minute. This limit may be increased in the future.\n    "
+      description: 'This endpoint allows you to check the status of a specific task by its ID.
+
+        Checking is only possible within 24h after task creation, otherwise an error will be returned.
+
+        The current rate limit for this endpoint is 30 requests per minute. This limit may be increased in the future.'
       tags:
       - Common
       requestBody:
@@ -196,7 +176,7 @@ paths:
   /api/v1/delete/:
     post:
       operationId: delete_delete
-      summary: Delete source file and resulting tracks from storage.
+      summary: Delete source file and resulting tracks from storage
       parameters: []
       responses:
         '200':
@@ -220,7 +200,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommonErrorResponse'
-      description: "\n    WARNING: All running tasks related to the source file will be cancelled. Do not call delete on source files with processing tasks.\n    This only deletes the media files, not the database records.\n    The files are removed from storage immediately, but download links will remain valid for one hour after deletion due to CDN caching.\n    The /check/ endpoint will still return a valid check result for 24 hours, but the download links will lead to a 404 error after deletion.\n    "
+      description: 'WARNING: All running tasks related to the source file will be cancelled. Do not call delete on source files with processing tasks.
+
+        This only deletes the media files, not the database records.
+
+        The files are removed from storage immediately, but download links will remain valid for one hour after deletion due to CDN caching.
+
+        The /check/ endpoint will still return a valid check result for 24 hours, but the download links will lead to a 404 error after deletion.'
       tags:
       - Common
       requestBody:
@@ -234,7 +220,7 @@ paths:
   /api/v1/limits/minutes_left/:
     post:
       operationId: limits_get_minutes_left
-      summary: Get number of processing minutes available to consume.
+      summary: Get number of processing minutes available to consume
       parameters: []
       responses:
         '200':
@@ -264,199 +250,6 @@ paths:
       - ApiKeyHeaderAuth: []
 components:
   schemas:
-    FilteringLevel:
-      enum:
-      - 0
-      - 1
-      - 2
-      title: FilteringLevel
-      type: integer
-    CheckV1ProgressResult:
-      properties:
-        source_id:
-          description: ID of the source file associated with the task
-          examples:
-          - ecb6c2c5-6263-48b9-80c9-f54248e30892
-          title: Source Id
-          type: string
-        presets:
-          discriminator:
-            mapping:
-              split:
-                discriminator:
-                  mapping:
-                    demuser: '#/components/schemas/DemuserSplitterPresetsV1'
-                    multistem: '#/components/schemas/MultistemSplitterPresetsV1'
-                    stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                    voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
-                  propertyName: label
-                oneOf:
-                - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
-                - $ref: '#/components/schemas/VoiceCleanPresetsV1'
-                - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
-              voice_convert: '#/components/schemas/VoiceChangePresetsV1'
-            propertyName: task_type
-          oneOf:
-          - $ref: '#/components/schemas/VoiceChangePresetsV1'
-          - discriminator:
-              mapping:
-                demuser: '#/components/schemas/DemuserSplitterPresetsV1'
-                multistem: '#/components/schemas/MultistemSplitterPresetsV1'
-                stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
-              propertyName: label
-            oneOf:
-            - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
-            - $ref: '#/components/schemas/VoiceCleanPresetsV1'
-            - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-            - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
-          title: Presets
-        status:
-          const: progress
-          default: progress
-          title: Status
-          type: string
-        progress:
-          description: Progress percentage of the task, integer number. Zero progress means task is in queue.
-          examples:
-          - 42
-          maximum: 100
-          minimum: 0
-          title: Progress
-          type: integer
-      required:
-      - source_id
-      - presets
-      - progress
-      title: CheckV1ProgressResult
-      type: object
-    CheckV1CancelledResult:
-      properties:
-        source_id:
-          description: ID of the source file associated with the task
-          examples:
-          - ecb6c2c5-6263-48b9-80c9-f54248e30892
-          title: Source Id
-          type: string
-        presets:
-          discriminator:
-            mapping:
-              split:
-                discriminator:
-                  mapping:
-                    demuser: '#/components/schemas/DemuserSplitterPresetsV1'
-                    multistem: '#/components/schemas/MultistemSplitterPresetsV1'
-                    stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                    voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
-                  propertyName: label
-                oneOf:
-                - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
-                - $ref: '#/components/schemas/VoiceCleanPresetsV1'
-                - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
-              voice_convert: '#/components/schemas/VoiceChangePresetsV1'
-            propertyName: task_type
-          oneOf:
-          - $ref: '#/components/schemas/VoiceChangePresetsV1'
-          - discriminator:
-              mapping:
-                demuser: '#/components/schemas/DemuserSplitterPresetsV1'
-                multistem: '#/components/schemas/MultistemSplitterPresetsV1'
-                stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
-              propertyName: label
-            oneOf:
-            - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
-            - $ref: '#/components/schemas/VoiceCleanPresetsV1'
-            - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-            - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
-          title: Presets
-        status:
-          const: cancelled
-          default: cancelled
-          title: Status
-          type: string
-      required:
-      - source_id
-      - presets
-      title: CheckV1CancelledResult
-      type: object
-    CancelResponse:
-      properties:
-        result:
-          additionalProperties:
-            discriminator:
-              mapping:
-                server_error: '#/components/schemas/ErrorResult'
-                success: '#/components/schemas/CancelSuccess'
-              propertyName: status
-            oneOf:
-            - $ref: '#/components/schemas/CancelSuccess'
-            - $ref: '#/components/schemas/ErrorResult'
-          examples:
-          - 550e8400-e29b-41d4-a716-446655440000:
-              status: success
-            6ba7b810-9dad-11d1-80b4-00c04fd430c8:
-              error: Task is not in progress state
-              status: server_error
-          title: Result
-          type: object
-      required:
-      - result
-      title: CancelResponse
-      type: object
-    CheckV1Request:
-      properties:
-        task_ids:
-          examples:
-          - - 2fe8f214-1771-4900-9e7e-570f823bd359
-            - 8cad7e3d-a5a3-4e79-9463-59cd4da16977
-            - cb443802-e5be-44c2-bdd8-cb1d343c7d25
-            - f4978ff5-8e0b-4fdc-913a-e350eeb16d31
-          items:
-            format: uuid4
-            type: string
-          maxItems: 200
-          title: Task Ids
-          type: array
-      required:
-      - task_ids
-      title: CheckV1Request
-      type: object
-    DeleteParameters:
-      properties:
-        source_id:
-          description: ID of the source file.
-          example: 550e8400-e29b-41d4-a716-446655440000
-          format: uuid4
-          title: Source Id
-          type: string
-      required:
-      - source_id
-      title: DeleteParameters
-      type: object
-    SplitTrackType:
-      enum:
-      - stem
-      - back
-      title: SplitTrackType
-      type: string
-    SplitTracksResult:
-      properties:
-        tracks:
-          items:
-            $ref: '#/components/schemas/SplitTrack'
-          title: Tracks
-          type: array
-        duration:
-          title: Duration
-          type: integer
-      required:
-      - tracks
-      - duration
-      title: SplitTracksResult
-      type: object
     ExtractionLevel:
       enum:
       - deep_extraction
@@ -499,34 +292,6 @@ components:
       - url
       title: SplitTrack
       type: object
-    TaskMetaError:
-      properties:
-        detail:
-          title: Detail
-          type: string
-        code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Code
-        id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Id
-      required:
-      - detail
-      title: TaskMetaError
-      type: object
-    CancelSuccess:
-      properties:
-        status:
-          const: success
-          default: success
-          title: Status
-          type: string
-      title: CancelSuccess
-      type: object
     LimitsResponse:
       properties:
         minutes_left:
@@ -538,41 +303,29 @@ components:
       - minutes_left
       title: LimitsResponse
       type: object
-    ApiV1ErrorResponse:
+    CancelResponse:
       properties:
-        detail:
-          description: Error message.
-          example: Idempotency key has already been used.
-          title: Detail
-          type: string
-        code:
-          description: Error code.
-          example: idempotency_key_used
-          title: Code
-          type: string
-      required:
-      - detail
-      - code
-      title: ApiV1ErrorResponse
-      type: object
-    ErrorResult:
-      properties:
-        status:
-          const: server_error
-          default: server_error
-          title: Status
-          type: string
-        error:
-          description: Error message describing why the cancellation failed
+        result:
+          additionalProperties:
+            discriminator:
+              mapping:
+                server_error: '#/components/schemas/ErrorResult'
+                success: '#/components/schemas/CancelSuccess'
+              propertyName: status
+            oneOf:
+            - $ref: '#/components/schemas/CancelSuccess'
+            - $ref: '#/components/schemas/ErrorResult'
           examples:
-          - Permission denied
-          - Task is not in progress state
-          - Failed to extract information about task
-          title: Error
-          type: string
+          - 550e8400-e29b-41d4-a716-446655440000:
+              status: success
+            6ba7b810-9dad-11d1-80b4-00c04fd430c8:
+              error: Task is not in progress state
+              status: server_error
+          title: Result
+          type: object
       required:
-      - error
-      title: ErrorResult
+      - result
+      title: CancelResponse
       type: object
     MultistemSplitterPresetsV1:
       properties:
@@ -640,312 +393,6 @@ components:
       - stem_list
       title: MultistemSplitterPresetsV1
       type: object
-    UploadResponse:
-      properties:
-        id:
-          description: ID of the uploaded file.
-          example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
-          title: Id
-          type: string
-        name:
-          description: Name of the uploaded file.
-          example: my_audio.mp3
-          title: Name
-          type: string
-        size:
-          description: Size of the uploaded file in bytes.
-          example: 12345678
-          title: Size
-          type: integer
-        duration:
-          description: Duration of the uploaded media file in seconds.
-          example: 180
-          title: Duration
-          type: integer
-        expires:
-          description: File expiration time in Unix epoch format with UTC timezone.
-          example: '1761217415'
-          title: Expires
-          type: integer
-      required:
-      - id
-      - name
-      - size
-      - duration
-      - expires
-      title: UploadResponse
-      type: object
-    CancelRequest:
-      properties:
-        task_ids:
-          examples:
-          - - 550e8400-e29b-41d4-a716-446655440000
-            - 6ba7b810-9dad-11d1-80b4-00c04fd430c8
-          items:
-            format: uuid4
-            type: string
-          title: Task Ids
-          type: array
-      required:
-      - task_ids
-      title: CancelRequest
-      type: object
-    SuccessResponse:
-      properties: {}
-      title: SuccessResponse
-      type: object
-    TonalityReference:
-      enum:
-      - source_file
-      - voice_pack
-      title: TonalityReference
-      type: string
-    CommonErrorResponse:
-      properties:
-        detail:
-          anyOf:
-          - type: string
-          - additionalProperties: true
-            type: object
-          - items:
-              additionalProperties: true
-              type: object
-            type: array
-          description: Error details
-          example:
-            detail:
-            - loc:
-              - body
-              - split_input
-              - source_id
-              msg: Field required
-              type: missing
-            - loc:
-              - body
-              - split_input
-              - presets
-              msg: Field required
-              type: missing
-          title: Detail
-      required:
-      - detail
-      title: CommonErrorResponse
-      type: object
-    StemSeparatorSplitterPresetsV1:
-      properties:
-        splitter:
-          allOf:
-          - $ref: '#/components/schemas/SplitterType'
-          default: auto
-          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
-        dereverb_enabled:
-          default: false
-          description: '
-
-            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
-
-
-            Disabling dereverb preserves the natural echo of the recording for authenticity.
-
-            Only for {''vocals'', ''voice''} stems.'
-          title: Dereverb Enabled
-          type: boolean
-        encoder_format:
-          anyOf:
-          - $ref: '#/components/schemas/EncoderFormat'
-          - type: 'null'
-          default: null
-          description: Format for output audio. If None - convert to source file format.
-        stem:
-          description: Stem to extract. ['synthesizer', 'strings', 'wind'] are available only phoenix splitter.
-          enum:
-          - vocals
-          - drum
-          - piano
-          - bass
-          - electric_guitar
-          - acoustic_guitar
-          - synthesizer
-          - strings
-          - wind
-          example: vocals
-          title: Stem
-          type: string
-        multivocal:
-          anyOf:
-          - const: lead_back
-            type: string
-          - type: 'null'
-          default: null
-          description: Use parameter 'lead_back' and receive both lead and backing vocals as separate stems vocals@0 and vocals@1
-          title: Multivocal
-        extraction_level:
-          allOf:
-          - $ref: '#/components/schemas/ExtractionLevel'
-          default: deep_extraction
-          description: '
-
-            Clear Cut: minimizes cross-bleeding between stems, resulting in a cleaner output, but may suppress finer details.
-
-
-            Deep Extraction: captures more intricate details but increases the risk of cross-bleeding, which may lead to some overlap between stems.
-
-
-            Andromeda splitter is not affected by this parameter and has its own fixed extraction behavior.
-
-            '
-      required:
-      - stem
-      title: StemSeparatorSplitterPresetsV1
-      type: object
-    DemuserSplitterPresetsV1:
-      properties:
-        splitter:
-          allOf:
-          - $ref: '#/components/schemas/SplitterType'
-          default: auto
-          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
-        dereverb_enabled:
-          default: false
-          description: '
-
-            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
-
-
-            Disabling dereverb preserves the natural echo of the recording for authenticity.
-
-            Only for {''vocals'', ''voice''} stems.'
-          title: Dereverb Enabled
-          type: boolean
-        encoder_format:
-          anyOf:
-          - $ref: '#/components/schemas/EncoderFormat'
-          - type: 'null'
-          default: null
-          description: Format for output audio. If None - convert to source file format.
-        stem:
-          const: music
-          description: Stem to extract. Only 'music' stem is supported.
-          example: music
-          title: Stem
-          type: string
-      required:
-      - stem
-      title: DemuserSplitterPresetsV1
-      type: object
-    VoiceCleanPresetsV1:
-      properties:
-        splitter:
-          allOf:
-          - $ref: '#/components/schemas/SplitterType'
-          default: auto
-          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
-        dereverb_enabled:
-          default: false
-          description: '
-
-            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
-
-
-            Disabling dereverb preserves the natural echo of the recording for authenticity.
-
-            Only for {''vocals'', ''voice''} stems.'
-          title: Dereverb Enabled
-          type: boolean
-        encoder_format:
-          anyOf:
-          - $ref: '#/components/schemas/EncoderFormat'
-          - type: 'null'
-          default: null
-          description: Format for output audio. If None - convert to source file format.
-        stem:
-          const: voice
-          description: Stem to extract. Only 'voice' stem is supported.
-          example: voice
-          title: Stem
-          type: string
-        noise_cancelling_level:
-          allOf:
-          - $ref: '#/components/schemas/FilteringLevel'
-          default: 0
-          description: Level of noise cancelling to apply.
-      required:
-      - stem
-      title: VoiceCleanPresetsV1
-      type: object
-    CheckV1ErrorResult:
-      properties:
-        source_id:
-          description: ID of the source file associated with the task
-          examples:
-          - ecb6c2c5-6263-48b9-80c9-f54248e30892
-          title: Source Id
-          type: string
-        presets:
-          discriminator:
-            mapping:
-              split:
-                discriminator:
-                  mapping:
-                    demuser: '#/components/schemas/DemuserSplitterPresetsV1'
-                    multistem: '#/components/schemas/MultistemSplitterPresetsV1'
-                    stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                    voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
-                  propertyName: label
-                oneOf:
-                - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
-                - $ref: '#/components/schemas/VoiceCleanPresetsV1'
-                - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
-              voice_convert: '#/components/schemas/VoiceChangePresetsV1'
-            propertyName: task_type
-          oneOf:
-          - $ref: '#/components/schemas/VoiceChangePresetsV1'
-          - discriminator:
-              mapping:
-                demuser: '#/components/schemas/DemuserSplitterPresetsV1'
-                multistem: '#/components/schemas/MultistemSplitterPresetsV1'
-                stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
-              propertyName: label
-            oneOf:
-            - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
-            - $ref: '#/components/schemas/VoiceCleanPresetsV1'
-            - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-            - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
-          title: Presets
-        status:
-          const: error
-          default: error
-          title: Status
-          type: string
-        error:
-          $ref: '#/components/schemas/TaskMetaError'
-      required:
-      - source_id
-      - presets
-      - error
-      title: CheckV1ErrorResult
-      type: object
-    SplitterType:
-      enum:
-      - andromeda
-      - perseus
-      - orion
-      - phoenix
-      - lyra
-      - lynx
-      title: SplitterType
-      type: string
-    EncoderFormat:
-      enum:
-      - mp3
-      - wav
-      - flac
-      - aac
-      - ogg
-      title: EncoderFormat
-      type: string
     CheckV1Response:
       properties:
         result:
@@ -1025,60 +472,6 @@ components:
       - result
       title: CheckV1Response
       type: object
-    CheckV1SuccessResult:
-      properties:
-        source_id:
-          description: ID of the source file associated with the task
-          examples:
-          - ecb6c2c5-6263-48b9-80c9-f54248e30892
-          title: Source Id
-          type: string
-        presets:
-          discriminator:
-            mapping:
-              split:
-                discriminator:
-                  mapping:
-                    demuser: '#/components/schemas/DemuserSplitterPresetsV1'
-                    multistem: '#/components/schemas/MultistemSplitterPresetsV1'
-                    stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                    voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
-                  propertyName: label
-                oneOf:
-                - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
-                - $ref: '#/components/schemas/VoiceCleanPresetsV1'
-                - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
-              voice_convert: '#/components/schemas/VoiceChangePresetsV1'
-            propertyName: task_type
-          oneOf:
-          - $ref: '#/components/schemas/VoiceChangePresetsV1'
-          - discriminator:
-              mapping:
-                demuser: '#/components/schemas/DemuserSplitterPresetsV1'
-                multistem: '#/components/schemas/MultistemSplitterPresetsV1'
-                stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-                voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
-              propertyName: label
-            oneOf:
-            - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
-            - $ref: '#/components/schemas/VoiceCleanPresetsV1'
-            - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
-            - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
-          title: Presets
-        status:
-          const: success
-          default: success
-          title: Status
-          type: string
-        result:
-          $ref: '#/components/schemas/SplitTracksResult'
-      required:
-      - source_id
-      - presets
-      - result
-      title: CheckV1SuccessResult
-      type: object
     VoiceChangePresetsV1:
       properties:
         voice_pack_id:
@@ -1146,6 +539,599 @@ components:
       required:
       - voice_pack_id
       title: VoiceChangePresetsV1
+      type: object
+    TonalityReference:
+      enum:
+      - source_file
+      - voice_pack
+      title: TonalityReference
+      type: string
+    CheckV1Request:
+      properties:
+        task_ids:
+          examples:
+          - - 2fe8f214-1771-4900-9e7e-570f823bd359
+            - 8cad7e3d-a5a3-4e79-9463-59cd4da16977
+            - cb443802-e5be-44c2-bdd8-cb1d343c7d25
+            - f4978ff5-8e0b-4fdc-913a-e350eeb16d31
+          items:
+            format: uuid4
+            type: string
+          maxItems: 200
+          title: Task Ids
+          type: array
+      required:
+      - task_ids
+      title: CheckV1Request
+      type: object
+    CheckV1CancelledResult:
+      properties:
+        source_id:
+          description: ID of the source file associated with the task
+          examples:
+          - ecb6c2c5-6263-48b9-80c9-f54248e30892
+          title: Source Id
+          type: string
+        presets:
+          discriminator:
+            mapping:
+              split:
+                discriminator:
+                  mapping:
+                    demuser: '#/components/schemas/DemuserSplitterPresetsV1'
+                    multistem: '#/components/schemas/MultistemSplitterPresetsV1'
+                    stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                    voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
+                  propertyName: label
+                oneOf:
+                - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
+                - $ref: '#/components/schemas/VoiceCleanPresetsV1'
+                - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
+              voice_convert: '#/components/schemas/VoiceChangePresetsV1'
+            propertyName: task_type
+          oneOf:
+          - $ref: '#/components/schemas/VoiceChangePresetsV1'
+          - discriminator:
+              mapping:
+                demuser: '#/components/schemas/DemuserSplitterPresetsV1'
+                multistem: '#/components/schemas/MultistemSplitterPresetsV1'
+                stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
+              propertyName: label
+            oneOf:
+            - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
+            - $ref: '#/components/schemas/VoiceCleanPresetsV1'
+            - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+            - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
+          title: Presets
+        status:
+          const: cancelled
+          default: cancelled
+          title: Status
+          type: string
+      required:
+      - source_id
+      - presets
+      title: CheckV1CancelledResult
+      type: object
+    SplitTrackType:
+      enum:
+      - stem
+      - back
+      title: SplitTrackType
+      type: string
+    SuccessResponse:
+      properties: {}
+      title: SuccessResponse
+      type: object
+    DemuserSplitterPresetsV1:
+      properties:
+        splitter:
+          allOf:
+          - $ref: '#/components/schemas/SplitterType'
+          default: auto
+          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
+        dereverb_enabled:
+          default: false
+          description: '
+
+            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
+
+
+            Disabling dereverb preserves the natural echo of the recording for authenticity.
+
+            Only for {''vocals'', ''voice''} stems.'
+          title: Dereverb Enabled
+          type: boolean
+        encoder_format:
+          anyOf:
+          - $ref: '#/components/schemas/EncoderFormat'
+          - type: 'null'
+          default: null
+          description: Format for output audio. If None - convert to source file format.
+        stem:
+          const: music
+          description: Stem to extract. Only 'music' stem is supported.
+          example: music
+          title: Stem
+          type: string
+      required:
+      - stem
+      title: DemuserSplitterPresetsV1
+      type: object
+    TaskMetaError:
+      properties:
+        detail:
+          title: Detail
+          type: string
+        code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Code
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+      required:
+      - detail
+      title: TaskMetaError
+      type: object
+    UploadResponse:
+      properties:
+        id:
+          description: ID of the uploaded file.
+          example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
+          title: Id
+          type: string
+        name:
+          description: Name of the uploaded file.
+          example: my_audio.mp3
+          title: Name
+          type: string
+        size:
+          description: Size of the uploaded file in bytes.
+          example: 12345678
+          title: Size
+          type: integer
+        duration:
+          description: Duration of the uploaded media file in seconds.
+          example: 180
+          title: Duration
+          type: integer
+        expires:
+          description: File expiration time in Unix epoch format with UTC timezone.
+          example: '1761217415'
+          title: Expires
+          type: integer
+      required:
+      - id
+      - name
+      - size
+      - duration
+      - expires
+      title: UploadResponse
+      type: object
+    CancelRequest:
+      properties:
+        task_ids:
+          examples:
+          - - 550e8400-e29b-41d4-a716-446655440000
+            - 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+          items:
+            format: uuid4
+            type: string
+          title: Task Ids
+          type: array
+      required:
+      - task_ids
+      title: CancelRequest
+      type: object
+    ErrorResult:
+      properties:
+        status:
+          const: server_error
+          default: server_error
+          title: Status
+          type: string
+        error:
+          description: Error message describing why the cancellation failed
+          examples:
+          - Permission denied
+          - Task is not in progress state
+          - Failed to extract information about task
+          title: Error
+          type: string
+      required:
+      - error
+      title: ErrorResult
+      type: object
+    CommonErrorResponse:
+      properties:
+        detail:
+          anyOf:
+          - type: string
+          - additionalProperties: true
+            type: object
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          description: Error details
+          example:
+            detail:
+            - loc:
+              - body
+              - split_input
+              - source_id
+              msg: Field required
+              type: missing
+            - loc:
+              - body
+              - split_input
+              - presets
+              msg: Field required
+              type: missing
+          title: Detail
+      required:
+      - detail
+      title: CommonErrorResponse
+      type: object
+    VoiceCleanPresetsV1:
+      properties:
+        splitter:
+          allOf:
+          - $ref: '#/components/schemas/SplitterType'
+          default: auto
+          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
+        dereverb_enabled:
+          default: false
+          description: '
+
+            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
+
+
+            Disabling dereverb preserves the natural echo of the recording for authenticity.
+
+            Only for {''vocals'', ''voice''} stems.'
+          title: Dereverb Enabled
+          type: boolean
+        encoder_format:
+          anyOf:
+          - $ref: '#/components/schemas/EncoderFormat'
+          - type: 'null'
+          default: null
+          description: Format for output audio. If None - convert to source file format.
+        stem:
+          const: voice
+          description: Stem to extract. Only 'voice' stem is supported.
+          example: voice
+          title: Stem
+          type: string
+        noise_cancelling_level:
+          allOf:
+          - $ref: '#/components/schemas/FilteringLevel'
+          default: 0
+          description: Level of noise cancelling to apply.
+      required:
+      - stem
+      title: VoiceCleanPresetsV1
+      type: object
+    StemSeparatorSplitterPresetsV1:
+      properties:
+        splitter:
+          allOf:
+          - $ref: '#/components/schemas/SplitterType'
+          default: auto
+          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
+        dereverb_enabled:
+          default: false
+          description: '
+
+            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
+
+
+            Disabling dereverb preserves the natural echo of the recording for authenticity.
+
+            Only for {''vocals'', ''voice''} stems.'
+          title: Dereverb Enabled
+          type: boolean
+        encoder_format:
+          anyOf:
+          - $ref: '#/components/schemas/EncoderFormat'
+          - type: 'null'
+          default: null
+          description: Format for output audio. If None - convert to source file format.
+        stem:
+          description: Stem to extract. ['synthesizer', 'strings', 'wind'] are available only phoenix splitter.
+          enum:
+          - vocals
+          - drum
+          - piano
+          - bass
+          - electric_guitar
+          - acoustic_guitar
+          - synthesizer
+          - strings
+          - wind
+          example: vocals
+          title: Stem
+          type: string
+        multivocal:
+          anyOf:
+          - const: lead_back
+            type: string
+          - type: 'null'
+          default: null
+          description: Use parameter 'lead_back' and receive both lead and backing vocals as separate stems vocals@0 and vocals@1
+          title: Multivocal
+        extraction_level:
+          allOf:
+          - $ref: '#/components/schemas/ExtractionLevel'
+          default: deep_extraction
+          description: '
+
+            Clear Cut: minimizes cross-bleeding between stems, resulting in a cleaner output, but may suppress finer details.
+
+
+            Deep Extraction: captures more intricate details but increases the risk of cross-bleeding, which may lead to some overlap between stems.
+
+
+            Andromeda splitter is not affected by this parameter and has its own fixed extraction behavior.
+
+            '
+      required:
+      - stem
+      title: StemSeparatorSplitterPresetsV1
+      type: object
+    SplitterType:
+      enum:
+      - andromeda
+      - perseus
+      - orion
+      - phoenix
+      - lyra
+      - lynx
+      title: SplitterType
+      type: string
+    CheckV1ProgressResult:
+      properties:
+        source_id:
+          description: ID of the source file associated with the task
+          examples:
+          - ecb6c2c5-6263-48b9-80c9-f54248e30892
+          title: Source Id
+          type: string
+        presets:
+          discriminator:
+            mapping:
+              split:
+                discriminator:
+                  mapping:
+                    demuser: '#/components/schemas/DemuserSplitterPresetsV1'
+                    multistem: '#/components/schemas/MultistemSplitterPresetsV1'
+                    stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                    voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
+                  propertyName: label
+                oneOf:
+                - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
+                - $ref: '#/components/schemas/VoiceCleanPresetsV1'
+                - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
+              voice_convert: '#/components/schemas/VoiceChangePresetsV1'
+            propertyName: task_type
+          oneOf:
+          - $ref: '#/components/schemas/VoiceChangePresetsV1'
+          - discriminator:
+              mapping:
+                demuser: '#/components/schemas/DemuserSplitterPresetsV1'
+                multistem: '#/components/schemas/MultistemSplitterPresetsV1'
+                stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
+              propertyName: label
+            oneOf:
+            - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
+            - $ref: '#/components/schemas/VoiceCleanPresetsV1'
+            - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+            - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
+          title: Presets
+        status:
+          const: progress
+          default: progress
+          title: Status
+          type: string
+        progress:
+          description: Progress percentage of the task, integer number. Zero progress means task is in queue.
+          examples:
+          - 42
+          maximum: 100
+          minimum: 0
+          title: Progress
+          type: integer
+      required:
+      - source_id
+      - presets
+      - progress
+      title: CheckV1ProgressResult
+      type: object
+    EncoderFormat:
+      enum:
+      - mp3
+      - wav
+      - flac
+      - aac
+      - ogg
+      title: EncoderFormat
+      type: string
+    DeleteParameters:
+      properties:
+        source_id:
+          description: ID of the source file.
+          example: 550e8400-e29b-41d4-a716-446655440000
+          format: uuid4
+          title: Source Id
+          type: string
+      required:
+      - source_id
+      title: DeleteParameters
+      type: object
+    SplitTracksResult:
+      properties:
+        tracks:
+          items:
+            $ref: '#/components/schemas/SplitTrack'
+          title: Tracks
+          type: array
+        duration:
+          title: Duration
+          type: integer
+      required:
+      - tracks
+      - duration
+      title: SplitTracksResult
+      type: object
+    CheckV1ErrorResult:
+      properties:
+        source_id:
+          description: ID of the source file associated with the task
+          examples:
+          - ecb6c2c5-6263-48b9-80c9-f54248e30892
+          title: Source Id
+          type: string
+        presets:
+          discriminator:
+            mapping:
+              split:
+                discriminator:
+                  mapping:
+                    demuser: '#/components/schemas/DemuserSplitterPresetsV1'
+                    multistem: '#/components/schemas/MultistemSplitterPresetsV1'
+                    stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                    voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
+                  propertyName: label
+                oneOf:
+                - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
+                - $ref: '#/components/schemas/VoiceCleanPresetsV1'
+                - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
+              voice_convert: '#/components/schemas/VoiceChangePresetsV1'
+            propertyName: task_type
+          oneOf:
+          - $ref: '#/components/schemas/VoiceChangePresetsV1'
+          - discriminator:
+              mapping:
+                demuser: '#/components/schemas/DemuserSplitterPresetsV1'
+                multistem: '#/components/schemas/MultistemSplitterPresetsV1'
+                stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
+              propertyName: label
+            oneOf:
+            - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
+            - $ref: '#/components/schemas/VoiceCleanPresetsV1'
+            - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+            - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
+          title: Presets
+        status:
+          const: error
+          default: error
+          title: Status
+          type: string
+        error:
+          $ref: '#/components/schemas/TaskMetaError'
+      required:
+      - source_id
+      - presets
+      - error
+      title: CheckV1ErrorResult
+      type: object
+    FilteringLevel:
+      enum:
+      - 0
+      - 1
+      - 2
+      title: FilteringLevel
+      type: integer
+    CancelSuccess:
+      properties:
+        status:
+          const: success
+          default: success
+          title: Status
+          type: string
+      title: CancelSuccess
+      type: object
+    ApiV1ErrorResponse:
+      properties:
+        detail:
+          description: Error message.
+          example: Idempotency key has already been used.
+          title: Detail
+          type: string
+        code:
+          description: Error code.
+          example: idempotency_key_used
+          title: Code
+          type: string
+      required:
+      - detail
+      - code
+      title: ApiV1ErrorResponse
+      type: object
+    CheckV1SuccessResult:
+      properties:
+        source_id:
+          description: ID of the source file associated with the task
+          examples:
+          - ecb6c2c5-6263-48b9-80c9-f54248e30892
+          title: Source Id
+          type: string
+        presets:
+          discriminator:
+            mapping:
+              split:
+                discriminator:
+                  mapping:
+                    demuser: '#/components/schemas/DemuserSplitterPresetsV1'
+                    multistem: '#/components/schemas/MultistemSplitterPresetsV1'
+                    stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                    voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
+                  propertyName: label
+                oneOf:
+                - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
+                - $ref: '#/components/schemas/VoiceCleanPresetsV1'
+                - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
+              voice_convert: '#/components/schemas/VoiceChangePresetsV1'
+            propertyName: task_type
+          oneOf:
+          - $ref: '#/components/schemas/VoiceChangePresetsV1'
+          - discriminator:
+              mapping:
+                demuser: '#/components/schemas/DemuserSplitterPresetsV1'
+                multistem: '#/components/schemas/MultistemSplitterPresetsV1'
+                stem_separator: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+                voice_clean: '#/components/schemas/VoiceCleanPresetsV1'
+              propertyName: label
+            oneOf:
+            - $ref: '#/components/schemas/DemuserSplitterPresetsV1'
+            - $ref: '#/components/schemas/VoiceCleanPresetsV1'
+            - $ref: '#/components/schemas/StemSeparatorSplitterPresetsV1'
+            - $ref: '#/components/schemas/MultistemSplitterPresetsV1'
+          title: Presets
+        status:
+          const: success
+          default: success
+          title: Status
+          type: string
+        result:
+          $ref: '#/components/schemas/SplitTracksResult'
+      required:
+      - source_id
+      - presets
+      - result
+      title: CheckV1SuccessResult
       type: object
   securitySchemes:
     ApiKeyHeaderAuth:

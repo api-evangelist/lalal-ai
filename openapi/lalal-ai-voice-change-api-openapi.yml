@@ -1,38 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: LALAL.AI Batch Stem Separation Voice Change API
+  title: LALAL.AI Voice Change API
   version: 1.1.0
-  description: '
-
-    This is the LALAL.AI API.
-
-
-    To authenticate, provide your license key in the `X-License-Key` header of each request.
-
-
-    Typical usage example:
-
-    1) Upload a file using the ''/upload/'' endpoint to get a ''source_id''.
-
-    2) Start a splitting task using the ''/split/'' endpoint with the obtained ''source_id'' and desired presets.
-
-    3) Check the status of your task using the ''/check/'' endpoint with the returned ''task_id''.
-
-    4) Once the task is complete, download the processed files using urls from the ''/check/'' response.
-
-    5) (If needed), you can delete the source file and all its resulting tracks from our servers, using the ''/delete/'' endpoint with the ''source_id''.
-
-
-    Notes:
-
-
-    You can use the same source_id for concurrent splitting tasks.
-
-
-    You can check multiple task IDs in a single ''/check/'' request by providing a list of ''task_ids''.
-
-
-    '
+  description: This is the LALAL.AI API.
 servers:
 - url: https://www.lalal.ai
   description: LALAL.AI API v1 production endpoint
@@ -66,7 +36,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommonErrorResponse'
-      description: "\n    For 'voice_pack_id' parameter use 'pack_id' from /voice_packs/list/ endpoint or one of legal packs: ['ALEX_KAYE', 'STASIA_FAYE', 'NICOLAAS_HAAS', 'NIK_ZEL', 'OLIA_CHEBO', 'YVAR_DE_GROOT', 'VETRANA']\n\n    Result of /check/ includes 1 track with label 'converted_mix'.\n    {\"label\":\"converted_mix\", \"type\":\"back\", \"url\":\"...\"}\n    "
+      description: 'For ''voice_pack_id'' parameter use ''pack_id'' from /voice_packs/list/ endpoint or one of legal packs: [''ALEX_KAYE'', ''STASIA_FAYE'', ''NICOLAAS_HAAS'', ''NIK_ZEL'', ''OLIA_CHEBO'', ''YVAR_DE_GROOT'', ''VETRANA'']
+
+
+        Result of /check/ includes 1 track with label ''converted_mix''.
+
+        {"label":"converted_mix", "type":"back", "url":"..."}'
       tags:
       - Voice Change
       requestBody:
@@ -111,67 +86,6 @@ paths:
       - ApiKeyHeaderAuth: []
 components:
   schemas:
-    ApiV1ErrorResponse:
-      properties:
-        detail:
-          description: Error message.
-          example: Idempotency key has already been used.
-          title: Detail
-          type: string
-        code:
-          description: Error code.
-          example: idempotency_key_used
-          title: Code
-          type: string
-      required:
-      - detail
-      - code
-      title: ApiV1ErrorResponse
-      type: object
-    VoicePackListResponse:
-      properties:
-        packs:
-          description: List of voice packs available to the user.
-          items:
-            $ref: '#/components/schemas/VoicePackInfo'
-          title: Packs
-          type: array
-      required:
-      - packs
-      title: VoicePackListResponse
-      type: object
-    EncoderFormat:
-      enum:
-      - mp3
-      - wav
-      - flac
-      - aac
-      - ogg
-      title: EncoderFormat
-      type: string
-    VoicePackInfo:
-      properties:
-        name:
-          description: Name of the voice pack.
-          example: Professional Narrator Voice Pack
-          title: Name
-          type: string
-        pack_id:
-          description: ID of the voice pack.
-          example: f5dc9452-9374-4418-9288-02825bbd0016
-          title: Pack Id
-          type: string
-        created:
-          description: Creation timestamp of the voice pack.
-          example: 1672531199
-          title: Created
-          type: integer
-      required:
-      - name
-      - pack_id
-      - created
-      title: VoicePackInfo
-      type: object
     VoiceChangeParameters:
       properties:
         source_id:
@@ -206,12 +120,40 @@ components:
       - presets
       title: VoiceChangeParameters
       type: object
-    TonalityReference:
-      enum:
-      - source_file
-      - voice_pack
-      title: TonalityReference
-      type: string
+    TaskResponse:
+      properties:
+        task_id:
+          description: ID of the created task.
+          example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
+          title: Task Id
+          type: string
+      required:
+      - task_id
+      title: TaskResponse
+      type: object
+    VoicePackInfo:
+      properties:
+        name:
+          description: Name of the voice pack.
+          example: Professional Narrator Voice Pack
+          title: Name
+          type: string
+        pack_id:
+          description: ID of the voice pack.
+          example: f5dc9452-9374-4418-9288-02825bbd0016
+          title: Pack Id
+          type: string
+        created:
+          description: Creation timestamp of the voice pack.
+          example: 1672531199
+          title: Created
+          type: integer
+      required:
+      - name
+      - pack_id
+      - created
+      title: VoicePackInfo
+      type: object
     CommonErrorResponse:
       properties:
         detail:
@@ -242,6 +184,18 @@ components:
       required:
       - detail
       title: CommonErrorResponse
+      type: object
+    VoicePackListResponse:
+      properties:
+        packs:
+          description: List of voice packs available to the user.
+          items:
+            $ref: '#/components/schemas/VoicePackInfo'
+          title: Packs
+          type: array
+      required:
+      - packs
+      title: VoicePackListResponse
       type: object
     VoiceChangePresetsV1:
       properties:
@@ -311,17 +265,38 @@ components:
       - voice_pack_id
       title: VoiceChangePresetsV1
       type: object
-    TaskResponse:
+    ApiV1ErrorResponse:
       properties:
-        task_id:
-          description: ID of the created task.
-          example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
-          title: Task Id
+        detail:
+          description: Error message.
+          example: Idempotency key has already been used.
+          title: Detail
+          type: string
+        code:
+          description: Error code.
+          example: idempotency_key_used
+          title: Code
           type: string
       required:
-      - task_id
-      title: TaskResponse
+      - detail
+      - code
+      title: ApiV1ErrorResponse
       type: object
+    EncoderFormat:
+      enum:
+      - mp3
+      - wav
+      - flac
+      - aac
+      - ogg
+      title: EncoderFormat
+      type: string
+    TonalityReference:
+      enum:
+      - source_file
+      - voice_pack
+      title: TonalityReference
+      type: string
   securitySchemes:
     ApiKeyHeaderAuth:
       type: apiKey
