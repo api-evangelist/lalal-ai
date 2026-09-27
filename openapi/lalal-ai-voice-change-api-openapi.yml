@@ -120,40 +120,29 @@ components:
       - presets
       title: VoiceChangeParameters
       type: object
-    TaskResponse:
+    ApiV1ErrorResponse:
       properties:
-        task_id:
-          description: ID of the created task.
-          example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
-          title: Task Id
+        detail:
+          description: Error message.
+          example: Idempotency key has already been used.
+          title: Detail
+          type: string
+        code:
+          description: Error code.
+          example: idempotency_key_used
+          title: Code
           type: string
       required:
-      - task_id
-      title: TaskResponse
+      - detail
+      - code
+      title: ApiV1ErrorResponse
       type: object
-    VoicePackInfo:
-      properties:
-        name:
-          description: Name of the voice pack.
-          example: Professional Narrator Voice Pack
-          title: Name
-          type: string
-        pack_id:
-          description: ID of the voice pack.
-          example: f5dc9452-9374-4418-9288-02825bbd0016
-          title: Pack Id
-          type: string
-        created:
-          description: Creation timestamp of the voice pack.
-          example: 1672531199
-          title: Created
-          type: integer
-      required:
-      - name
-      - pack_id
-      - created
-      title: VoicePackInfo
-      type: object
+    TonalityReference:
+      enum:
+      - source_file
+      - voice_pack
+      title: TonalityReference
+      type: string
     CommonErrorResponse:
       properties:
         detail:
@@ -184,18 +173,6 @@ components:
       required:
       - detail
       title: CommonErrorResponse
-      type: object
-    VoicePackListResponse:
-      properties:
-        packs:
-          description: List of voice packs available to the user.
-          items:
-            $ref: '#/components/schemas/VoicePackInfo'
-          title: Packs
-          type: array
-      required:
-      - packs
-      title: VoicePackListResponse
       type: object
     VoiceChangePresetsV1:
       properties:
@@ -265,22 +242,51 @@ components:
       - voice_pack_id
       title: VoiceChangePresetsV1
       type: object
-    ApiV1ErrorResponse:
+    TaskResponse:
       properties:
-        detail:
-          description: Error message.
-          example: Idempotency key has already been used.
-          title: Detail
-          type: string
-        code:
-          description: Error code.
-          example: idempotency_key_used
-          title: Code
+        task_id:
+          description: ID of the created task.
+          example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
+          title: Task Id
           type: string
       required:
-      - detail
-      - code
-      title: ApiV1ErrorResponse
+      - task_id
+      title: TaskResponse
+      type: object
+    VoicePackListResponse:
+      properties:
+        packs:
+          description: List of voice packs available to the user.
+          items:
+            $ref: '#/components/schemas/VoicePackInfo'
+          title: Packs
+          type: array
+      required:
+      - packs
+      title: VoicePackListResponse
+      type: object
+    VoicePackInfo:
+      properties:
+        name:
+          description: Name of the voice pack.
+          example: Professional Narrator Voice Pack
+          title: Name
+          type: string
+        pack_id:
+          description: ID of the voice pack.
+          example: f5dc9452-9374-4418-9288-02825bbd0016
+          title: Pack Id
+          type: string
+        created:
+          description: Creation timestamp of the voice pack.
+          example: 1672531199
+          title: Created
+          type: integer
+      required:
+      - name
+      - pack_id
+      - created
+      title: VoicePackInfo
       type: object
     EncoderFormat:
       enum:
@@ -290,12 +296,6 @@ components:
       - aac
       - ogg
       title: EncoderFormat
-      type: string
-    TonalityReference:
-      enum:
-      - source_file
-      - voice_pack
-      title: TonalityReference
       type: string
   securitySchemes:
     ApiKeyHeaderAuth:

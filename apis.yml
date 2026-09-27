@@ -5,7 +5,6 @@ apis:
   name: LALAL.AI Batch Stem Separation API
   description: The Batch Stem Separation API from LALAL.AI — 3 operation(s) for batch stem separation.
   humanURL: https://www.lalal.ai/api/
-  baseURL: https://www.lalal.ai
   tags:
   - Batch Stem Separation
   properties:
@@ -49,7 +48,6 @@ apis:
   name: LALAL.AI Common API
   description: The Common API from LALAL.AI — 6 operation(s) for common.
   humanURL: https://www.lalal.ai/api/
-  baseURL: https://www.lalal.ai
   tags:
   - Common
   properties:
@@ -93,7 +91,6 @@ apis:
   name: LALAL.AI Stem Separation API
   description: The Stem Separation API from LALAL.AI — 4 operation(s) for stem separation.
   humanURL: https://www.lalal.ai/api/
-  baseURL: https://www.lalal.ai
   tags:
   - Stem Separation
   properties:
@@ -137,7 +134,6 @@ apis:
   name: LALAL.AI Voice Change API
   description: The Voice Change API from LALAL.AI — 2 operation(s) for voice change.
   humanURL: https://www.lalal.ai/api/
-  baseURL: https://www.lalal.ai
   tags:
   - Voice Change
   properties:
@@ -307,6 +303,10 @@ common:
 name: LALAL.AI
 deliveryModel:
   model: unknown
+  license_evidence:
+    repo: omnisalegmbh/lalalai
+    spdx: none
+    stars: 196
   open_source: unknown
   commercial: true
   callable_host: true
@@ -316,7 +316,7 @@ deliveryModel:
   - openapi
   - pricing
   - repository-unlicensed
-  generated: '2026-08-28'
+  generated: '2026-09-25'
   method: derived
 accessModel:
   pricing: freemium
@@ -355,7 +355,7 @@ tags:
   - Voice Cloning
   - Voice Changer
   - Music
-  - Machine-Learning
+  - Machine Learning
   - DSP
 tags_raw:
   - AI
@@ -370,6 +370,7 @@ tags_raw:
   - Music
   - Machine Learning
   - DSP
+  - Machine-Learning
 maintainers:
   - FN: Kin Lane
     email: info@apievangelist.com

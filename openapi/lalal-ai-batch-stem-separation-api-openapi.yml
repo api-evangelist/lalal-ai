@@ -149,12 +149,6 @@ paths:
       - ApiKeyHeaderAuth: []
 components:
   schemas:
-    ExtractionLevel:
-      enum:
-      - deep_extraction
-      - clear_cut
-      title: ExtractionLevel
-      type: string
     StemSeparatorSplitParameters:
       properties:
         source_id:
@@ -187,53 +181,6 @@ components:
       - source_id
       - presets
       title: StemSeparatorSplitParameters
-      type: object
-    BatchDemuserSplitParameters:
-      properties:
-        items:
-          description: List of split parameters to process.
-          items:
-            $ref: '#/components/schemas/DemuserSplitParameters'
-          maxItems: 100
-          minItems: 1
-          title: Items
-          type: array
-      required:
-      - items
-      title: BatchDemuserSplitParameters
-      type: object
-    BatchTasksResponse:
-      properties:
-        results:
-          description: List of task start results in the same order as input parameters.
-          items:
-            discriminator:
-              mapping:
-                error: '#/components/schemas/FailedTaskStart'
-                success: '#/components/schemas/SuccessfulTaskStart'
-              propertyName: status
-            oneOf:
-            - $ref: '#/components/schemas/SuccessfulTaskStart'
-            - $ref: '#/components/schemas/FailedTaskStart'
-          title: Results
-          type: array
-      required:
-      - results
-      title: BatchTasksResponse
-      type: object
-    BatchVoiceCleanSplitParameters:
-      properties:
-        items:
-          description: List of split parameters to process.
-          items:
-            $ref: '#/components/schemas/VoiceCleanSplitParameters'
-          maxItems: 100
-          minItems: 1
-          title: Items
-          type: array
-      required:
-      - items
-      title: BatchVoiceCleanSplitParameters
       type: object
     DemuserSplitterPresetsV1:
       properties:
@@ -270,42 +217,93 @@ components:
       - stem
       title: DemuserSplitterPresetsV1
       type: object
-    BatchStemSeparatorSplitParameters:
+    BatchDemuserSplitParameters:
       properties:
         items:
           description: List of split parameters to process.
           items:
-            $ref: '#/components/schemas/StemSeparatorSplitParameters'
+            $ref: '#/components/schemas/DemuserSplitParameters'
           maxItems: 100
           minItems: 1
           title: Items
           type: array
       required:
       - items
-      title: BatchStemSeparatorSplitParameters
+      title: BatchDemuserSplitParameters
       type: object
-    SuccessfulTaskStart:
+    DemuserSplitParameters:
+      properties:
+        source_id:
+          description: ID of the source file to be processed.
+          example: 2fe8f214-1771-4900-9e7e-570f823bd359
+          format: uuid4
+          title: Source Id
+          type: string
+        presets:
+          $ref: '#/components/schemas/DemuserSplitterPresetsV1'
+        idempotency_key:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          default: null
+          description: '
+
+            Unique uuid4 key to ensure idempotent requests.
+
+
+            Prevents duplicate task execution with the same parameters.
+
+
+            Can be reused until the task starts. Once processing begins, reusing this key will return an error.
+
+            '
+          title: Idempotency Key
+      required:
+      - source_id
+      - presets
+      title: DemuserSplitParameters
+      type: object
+    FailedTaskStart:
       properties:
         status:
-          const: success
-          default: success
+          const: error
+          default: error
           title: Status
           type: string
-        task_id:
-          description: ID of the created split task.
-          example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
-          title: Task Id
+        error:
+          description: Error message describing why the task failed to start.
+          example: Idempotency key has already been used.
+          title: Error
           type: string
+        code:
+          anyOf:
+          - $ref: '#/components/schemas/TaskStartErrorCodes'
+          - $ref: '#/components/schemas/LicenseErrorCodes'
+          description: Error code.
+          example: idempotency_key_used
+          title: Code
         source_id:
           description: Source file ID.
           example: a1b2c3d4-5e6f-7g8h-9i0j-k1l2m3n4o5p6
           title: Source Id
           type: string
       required:
-      - task_id
+      - error
+      - code
       - source_id
-      title: SuccessfulTaskStart
+      title: FailedTaskStart
       type: object
+    SplitterType:
+      enum:
+      - andromeda
+      - perseus
+      - orion
+      - phoenix
+      - lyra
+      - lynx
+      title: SplitterType
+      type: string
     LicenseErrorCodes:
       enum:
       - exceeded_duration
@@ -313,6 +311,42 @@ components:
       - max_duration
       - exceeded_size
       title: LicenseErrorCodes
+      type: string
+    EncoderFormat:
+      enum:
+      - mp3
+      - wav
+      - flac
+      - aac
+      - ogg
+      title: EncoderFormat
+      type: string
+    FilteringLevel:
+      enum:
+      - 0
+      - 1
+      - 2
+      title: FilteringLevel
+      type: integer
+    BatchVoiceCleanSplitParameters:
+      properties:
+        items:
+          description: List of split parameters to process.
+          items:
+            $ref: '#/components/schemas/VoiceCleanSplitParameters'
+          maxItems: 100
+          minItems: 1
+          title: Items
+          type: array
+      required:
+      - items
+      title: BatchVoiceCleanSplitParameters
+      type: object
+    ExtractionLevel:
+      enum:
+      - deep_extraction
+      - clear_cut
+      title: ExtractionLevel
       type: string
     VoiceCleanSplitParameters:
       properties:
@@ -347,6 +381,25 @@ components:
       - presets
       title: VoiceCleanSplitParameters
       type: object
+    BatchTasksResponse:
+      properties:
+        results:
+          description: List of task start results in the same order as input parameters.
+          items:
+            discriminator:
+              mapping:
+                error: '#/components/schemas/FailedTaskStart'
+                success: '#/components/schemas/SuccessfulTaskStart'
+              propertyName: status
+            oneOf:
+            - $ref: '#/components/schemas/SuccessfulTaskStart'
+            - $ref: '#/components/schemas/FailedTaskStart'
+          title: Results
+          type: array
+      required:
+      - results
+      title: BatchTasksResponse
+      type: object
     CommonErrorResponse:
       properties:
         detail:
@@ -378,46 +431,12 @@ components:
       - detail
       title: CommonErrorResponse
       type: object
-    VoiceCleanPresetsV1:
-      properties:
-        splitter:
-          allOf:
-          - $ref: '#/components/schemas/SplitterType'
-          default: auto
-          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
-        dereverb_enabled:
-          default: false
-          description: '
-
-            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
-
-
-            Disabling dereverb preserves the natural echo of the recording for authenticity.
-
-            Only for {''vocals'', ''voice''} stems.'
-          title: Dereverb Enabled
-          type: boolean
-        encoder_format:
-          anyOf:
-          - $ref: '#/components/schemas/EncoderFormat'
-          - type: 'null'
-          default: null
-          description: Format for output audio. If None - convert to source file format.
-        stem:
-          const: voice
-          description: Stem to extract. Only 'voice' stem is supported.
-          example: voice
-          title: Stem
-          type: string
-        noise_cancelling_level:
-          allOf:
-          - $ref: '#/components/schemas/FilteringLevel'
-          default: 0
-          description: Level of noise cancelling to apply.
-      required:
-      - stem
-      title: VoiceCleanPresetsV1
-      type: object
+    TaskStartErrorCodes:
+      enum:
+      - idempotency_key_used
+      - internal_error
+      title: TaskStartErrorCodes
+      type: string
     StemSeparatorSplitterPresetsV1:
       properties:
         splitter:
@@ -485,100 +504,81 @@ components:
       - stem
       title: StemSeparatorSplitterPresetsV1
       type: object
-    TaskStartErrorCodes:
-      enum:
-      - idempotency_key_used
-      - internal_error
-      title: TaskStartErrorCodes
-      type: string
-    SplitterType:
-      enum:
-      - andromeda
-      - perseus
-      - orion
-      - phoenix
-      - lyra
-      - lynx
-      title: SplitterType
-      type: string
-    EncoderFormat:
-      enum:
-      - mp3
-      - wav
-      - flac
-      - aac
-      - ogg
-      title: EncoderFormat
-      type: string
-    FilteringLevel:
-      enum:
-      - 0
-      - 1
-      - 2
-      title: FilteringLevel
-      type: integer
-    FailedTaskStart:
+    SuccessfulTaskStart:
       properties:
         status:
-          const: error
-          default: error
+          const: success
+          default: success
           title: Status
           type: string
-        error:
-          description: Error message describing why the task failed to start.
-          example: Idempotency key has already been used.
-          title: Error
+        task_id:
+          description: ID of the created split task.
+          example: e1fc1d8f-502e-4de0-bf3b-b30543d11c77
+          title: Task Id
           type: string
-        code:
-          anyOf:
-          - $ref: '#/components/schemas/TaskStartErrorCodes'
-          - $ref: '#/components/schemas/LicenseErrorCodes'
-          description: Error code.
-          example: idempotency_key_used
-          title: Code
         source_id:
           description: Source file ID.
           example: a1b2c3d4-5e6f-7g8h-9i0j-k1l2m3n4o5p6
           title: Source Id
           type: string
       required:
-      - error
-      - code
+      - task_id
       - source_id
-      title: FailedTaskStart
+      title: SuccessfulTaskStart
       type: object
-    DemuserSplitParameters:
+    VoiceCleanPresetsV1:
       properties:
-        source_id:
-          description: ID of the source file to be processed.
-          example: 2fe8f214-1771-4900-9e7e-570f823bd359
-          format: uuid4
-          title: Source Id
-          type: string
-        presets:
-          $ref: '#/components/schemas/DemuserSplitterPresetsV1'
-        idempotency_key:
-          anyOf:
-          - format: uuid4
-            type: string
-          - type: 'null'
-          default: null
+        splitter:
+          allOf:
+          - $ref: '#/components/schemas/SplitterType'
+          default: auto
+          description: Splitter model to use. 'auto' selects the latest available model for the selected stems.
+        dereverb_enabled:
+          default: false
           description: '
 
-            Unique uuid4 key to ensure idempotent requests.
+            Enabling dereverb removes echo from the audio for clarity, which may slightly alter the voice.
 
 
-            Prevents duplicate task execution with the same parameters.
+            Disabling dereverb preserves the natural echo of the recording for authenticity.
 
-
-            Can be reused until the task starts. Once processing begins, reusing this key will return an error.
-
-            '
-          title: Idempotency Key
+            Only for {''vocals'', ''voice''} stems.'
+          title: Dereverb Enabled
+          type: boolean
+        encoder_format:
+          anyOf:
+          - $ref: '#/components/schemas/EncoderFormat'
+          - type: 'null'
+          default: null
+          description: Format for output audio. If None - convert to source file format.
+        stem:
+          const: voice
+          description: Stem to extract. Only 'voice' stem is supported.
+          example: voice
+          title: Stem
+          type: string
+        noise_cancelling_level:
+          allOf:
+          - $ref: '#/components/schemas/FilteringLevel'
+          default: 0
+          description: Level of noise cancelling to apply.
       required:
-      - source_id
-      - presets
-      title: DemuserSplitParameters
+      - stem
+      title: VoiceCleanPresetsV1
+      type: object
+    BatchStemSeparatorSplitParameters:
+      properties:
+        items:
+          description: List of split parameters to process.
+          items:
+            $ref: '#/components/schemas/StemSeparatorSplitParameters'
+          maxItems: 100
+          minItems: 1
+          title: Items
+          type: array
+      required:
+      - items
+      title: BatchStemSeparatorSplitParameters
       type: object
   securitySchemes:
     ApiKeyHeaderAuth:
