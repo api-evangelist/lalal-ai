@@ -356,7 +356,7 @@ tags:
   - Voice Changer
   - Music
   - Machine Learning
-  - DSP
+  - Digital Signal Processing
 tags_raw:
   - AI
   - Artificial Intelligence
@@ -369,8 +369,8 @@ tags_raw:
   - Voice Changer
   - Music
   - Machine Learning
-  - DSP
   - Machine-Learning
+  - Digital Signal Processing
 maintainers:
   - FN: Kin Lane
     email: info@apievangelist.com
@@ -382,3 +382,5 @@ x-enrichment:
   status: enriched
   artifacts_added: 20
   pass: local-v1
+x-tags-removed:
+- DSP
