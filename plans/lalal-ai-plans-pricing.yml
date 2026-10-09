@@ -89,3 +89,66 @@ plans:
     type: custom
     description: Contact support@lalal.ai for volume API pricing, dedicated support, and SLA terms.
     contact: support@lalal.ai
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - negotiated
+  - subscription
+  units: []
+  plans:
+  - name: Starter
+    access: free
+    model: free
+    model_how: derived
+    units: []
+    periods: []
+  - name: Lite (Monthly)
+    access: other
+    model: subscription
+    model_how: stated
+    units: []
+    periods: []
+  - name: Lite (Annual)
+    access: other
+    model: subscription
+    model_how: stated
+    units: []
+    periods: []
+  - name: Pro (Monthly)
+    access: other
+    model: subscription
+    model_how: stated
+    units: []
+    periods: []
+  - name: Pro (Annual)
+    access: other
+    model: subscription
+    model_how: stated
+    units: []
+    periods: []
+  - name: Top-Up — Master
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Top-Up — Premium
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Top-Up — Enterprise
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Custom Enterprise
+    access: negotiated
+    model: negotiated
+    model_how: stated
+    units: []
+    periods: []
