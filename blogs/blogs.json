@@ -2,6 +2,27 @@
   "repo": "lalal-ai",
   "feeds": [
     {
+      "source": "https://www.lalal.ai/blog/meet-lalal-ai-api-v1/",
+      "feed_url": "https://www.lalal.ai/blog/rss/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    },
+    {
+      "source": "https://www.lalal.ai/blog/",
+      "feed_url": "https://www.lalal.ai/blog/rss/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    },
+    {
+      "source": "https://www.lalal.ai/blog/rss/",
+      "feed_url": "https://www.lalal.ai/blog/rss/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
       "source": "https://www.lalal.ai/api/v1/openapi.json",
       "feed_url": "https://www.lalal.ai/api/v1/openapi.json",
       "title": "",
@@ -14,17 +35,10 @@
       "title": "",
       "saved": 0,
       "method": "none"
-    },
-    {
-      "source": "https://www.lalal.ai/blog/rss/",
-      "feed_url": "https://www.lalal.ai/blog/rss/",
-      "title": "",
-      "saved": 0,
-      "method": "feed"
     }
   ],
-  "post_count": 27,
-  "fetched": "2026-10-03T12:30:02Z",
+  "post_count": 29,
+  "fetched": "2026-10-10T13:15:00Z",
   "feed_nature": "vendor-blog",
   "feed_nature_basis": "path_blog",
   "feed_nature_note": "Whether these posts are the vendor publishing or its support community, decided on the URL path grammar of the saved posts -- not the hostname, which carries both on Khoros, and not author diversity, which flags large vendor blogs as forums. 'undetermined' means undetermined."
