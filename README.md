@@ -1,4 +1,4 @@
-# LALAL.AI (lalal-ai)
+# LALAL.AI
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,96 +66,187 @@
 
 LALAL.AI is an AI-powered audio separation and voice technology platform operated by OmniSale GmbH. It uses proprietary neural networks (Andromeda, Perseus, Orion, Phoenix, Lyra, Lynx) to isolate vocals, instruments, drums, bass, guitars, piano, synth, strings, and wind from mixed audio, clean voice recordings, and clone or convert voices with consent. The company ships a web app, native desktop, iOS and Android apps, a VST plug-in for DAWs, and a production REST API (v1) for embedding stem separation and voice cloning into third-party SaaS, media, and post-production pipelines.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/lalal-ai/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/lalal-ai/refs/heads/main/apis.yml)
+**Areas:** Artificial Intelligence · Audio · Audio Processing · Stem Separation · Vocal Removal · Voice Cleaning · Voice Cloning · Voice Changer · Music · Machine Learning · Digital Signal Processing
 
-## Scope
+## LALAL.AI on APIs.io
 
-- **Position:** Producing
+Everything profiled for LALAL.AI is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/lalal-ai/](https://apis.io/providers/lalal-ai/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (4)
 
-- AI
-- Artificial Intelligence
-- Audio
-- Audio Processing
-- Stem Separation
-- Vocal Removal
-- Voice Cleaning
-- Voice Cloning
-- Voice Changer
-- Music
-- Machine Learning
-- DSP
+- [LALAL.AI Batch Stem Separation API](https://apis.io/apis/lalal-ai/lalal-ai-batch-stem-separation-api/) — The Batch Stem Separation API from LALAL.AI — 3 operation(s) for batch stem separation.
+- [LALAL.AI Common API](https://apis.io/apis/lalal-ai/lalal-ai-common-api/) — The Common API from LALAL.AI — 6 operation(s) for common.
+- [LALAL.AI Stem Separation API](https://apis.io/apis/lalal-ai/lalal-ai-stem-separation-api/) — The Stem Separation API from LALAL.AI — 4 operation(s) for stem separation.
+- [LALAL.AI Voice Change API](https://apis.io/apis/lalal-ai/lalal-ai-voice-change-api/) — The Voice Change API from LALAL.AI — 2 operation(s) for voice change.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-05-25T00:00:00.000Z
-- **Modified:** 2026-05-25
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### MCP servers (1)
 
-### LALAL.AI API
+Model Context Protocol servers that expose the API to agents.
 
-LALAL.AI API v1 is a production-grade audio separation, voice cleaning, and voice cloning API powered by proprietary neural networks (Andromeda, Perseus, Orion, Phoenix, Lyra, Lynx). It exposes upload, split, multi-stem, demuser, voice-clean, change-voice, voice-pack listing, task polling, and limits endpoints with both single-task and batch variants. Authentication is via the X-License-Key header. Supported stems include vocals, drums, bass, piano, electric guitar, acoustic guitar, synthesizer, strings, and wind, with output in MP3, WAV, FLAC, AAC, or OGG.
+- [lalal-ai](https://apis.io/servers/lalal-ai/lalal-ai/)
 
-- **Human URL:** [https://www.lalal.ai/api/](https://www.lalal.ai/api/)
-- **Base URL:** `https://www.lalal.ai`
+#### Agentic access (1)
 
-#### Tags
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- AI
-- Audio
-- Stem Separation
-- Voice Cloning
-- Music
-- Vocal Removal
-- Machine Learning
+- [Lalal Ai Agentic Access](https://apis.io/agentic-access/lalal-ai/lalal-ai-agentic-access/)
 
-#### Properties
+#### JSON Schema (3)
 
+The data models the API reads and writes.
+
+- [LALAL.AI Split Task Result](https://apis.io/schemas/lalal-ai/lalal-ai-split-task/)
+- [LALAL.AI Upload Response](https://apis.io/schemas/lalal-ai/lalal-ai-upload/)
+- [LALAL.AI Voice Pack](https://apis.io/schemas/lalal-ai/lalal-ai-voice-pack/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Lalal Ai Context](https://apis.io/jsonld/lalal-ai/lalal-ai-context/)
+
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [Lalal Ai Vocabulary](https://apis.io/vocabularies/lalal-ai/lalal-ai-vocabulary/)
+
+#### Examples (5)
+
+Example requests and responses.
+
+- [Lalal Ai Change Voice Example](https://apis.io/examples/lalal-ai/lalal-ai-change-voice-example/)
+- [Lalal Ai Check Example](https://apis.io/examples/lalal-ai/lalal-ai-check-example/)
+- [Lalal Ai Multistem Example](https://apis.io/examples/lalal-ai/lalal-ai-multistem-example/)
+- [Lalal Ai Split Stem Separator Example](https://apis.io/examples/lalal-ai/lalal-ai-split-stem-separator-example/)
+- [Lalal Ai Upload Example](https://apis.io/examples/lalal-ai/lalal-ai-upload-example/)
+
+#### Collections (9)
+
+Postman and Open Collection request collections.
+
+- [LALAL.AI API](https://apis.io/collections/lalal-ai/open-lalal-ai-api/)
+- [LALAL.AI Batch Stem Separation API](https://apis.io/collections/lalal-ai/open-lalal-ai-batch-stem-separation-api/)
+- [LALAL.AI Batch Stem Separation Common API](https://apis.io/collections/lalal-ai/open-lalal-ai-common-api/)
+- [LALAL.AI Batch Stem Separation API](https://apis.io/collections/lalal-ai/open-lalal-ai-stem-separation-api/)
+- [LALAL.AI Batch Stem Separation Voice Change API](https://apis.io/collections/lalal-ai/open-lalal-ai-voice-change-api/)
+- [LALAL.AI Batch Stem Separation API](https://apis.io/collections/lalal-ai/postman-lalal-ai-batch-stem-separation-api/)
+- [LALAL.AI Batch Stem Separation Common API](https://apis.io/collections/lalal-ai/postman-lalal-ai-common-api/)
+- [LALAL.AI Batch Stem Separation API](https://apis.io/collections/lalal-ai/postman-lalal-ai-stem-separation-api/)
+- [LALAL.AI Batch Stem Separation Voice Change API](https://apis.io/collections/lalal-ai/postman-lalal-ai-voice-change-api/)
+
+#### Overlays (4)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Lalal Ai Batch Stem Separation Api Overlay](https://apis.io/overlays/lalal-ai/lalal-ai-batch-stem-separation-api-overlay/)
+- [Lalal Ai Common Api Overlay](https://apis.io/overlays/lalal-ai/lalal-ai-common-api-overlay/)
+- [Lalal Ai Stem Separation Api Overlay](https://apis.io/overlays/lalal-ai/lalal-ai-stem-separation-api-overlay/)
+- [Lalal Ai Voice Change Api Overlay](https://apis.io/overlays/lalal-ai/lalal-ai-voice-change-api-overlay/)
+
+#### Governance rules (2)
+
+Spectral rulesets for the provider's contracts.
+
+- [LALAL.AI — jsonschema rules](https://apis.io/rules/lalal-ai/lalal-ai-jsonschema-spectral-rules/)
+- [LALAL.AI API Rules](https://apis.io/rules/lalal-ai/lalal-ai-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Lalal Ai Authentication](https://apis.io/security/lalal-ai/lalal-ai-authentication/)
+- [Lalal Ai Domain Security](https://apis.io/security/lalal-ai/lalal-ai-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Lalal Ai Plans Pricing](https://apis.io/plans/lalal-ai/lalal-ai-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Lalal Ai Rate Limits](https://apis.io/rate-limits/lalal-ai/lalal-ai-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Lalal Ai Finops](https://apis.io/finops/lalal-ai/lalal-ai-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.lalal.ai/)
 - [Documentation](https://www.lalal.ai/api/)
-- [Documentation](https://www.lalal.ai/api/v1/docs/)
-- [Open A P I Source](https://www.lalal.ai/api/v1/openapi.json)
-- [Blog](https://www.lalal.ai/blog/meet-lalal-ai-api-v1/)
-- [GitHub Repository](https://github.com/OmniSaleGmbH/lalalai)
-- [OpenAPI](openapi/lalal-ai-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/lalal-ai-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/lalal-ai-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [JSON Schema](json-schema/lalal-ai-split-task-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/lalal-ai-upload-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/lalal-ai-voice-pack-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON-LD](json-ld/lalal-ai-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
-- [Example](examples/lalal-ai-upload-example.json)
-- [Example](examples/lalal-ai-split-stem-separator-example.json)
-- [Example](examples/lalal-ai-check-example.json)
-- [Example](examples/lalal-ai-multistem-example.json)
-- [Example](examples/lalal-ai-change-voice-example.json)
-- [Spectral Rules](rules/lalal-ai-rules.yml) — [Spectral](https://docs.stoplight.io/docs/spectral)
-- [Vocabulary](vocabulary/lalal-ai-vocabulary.yml)
-
-## Common Properties
-
-- [Portal](https://www.lalal.ai)
-- [Documentation](https://www.lalal.ai/api/)
-- [Documentation](https://www.lalal.ai/api/v1/docs/)
-- [Getting Started](https://www.lalal.ai/api/help/)
+- [Getting started](https://www.lalal.ai/api/)
+- [API reference](https://www.lalal.ai/api/v1/docs/)
 - [Pricing](https://www.lalal.ai/pricing/)
-- [Blog](https://www.lalal.ai/blog/)
+- [Support](https://www.lalal.ai/help/)
 - [Changelog](https://www.lalal.ai/changelog/)
-- [Support](https://www.lalal.ai/support/)
-- [Terms of Service](https://www.lalal.ai/terms-of-service/)
-- [Privacy Policy](https://www.lalal.ai/privacy-policy/)
-- [GitHub Organization](https://github.com/OmniSaleGmbH)
-- [GitHub Repository](https://github.com/OmniSaleGmbH/lalalai)
-- [Contact Us](mailto:support@lalal.ai)
-- [SDK](https://github.com/OmniSaleGmbH/lalalai/tree/main/api-v1/python)
-- [Plans](plans/lalal-ai-plans-pricing.yml)
-- [Rate Limits](rate-limits/lalal-ai-rate-limits.yml)
-- [Fin Ops](finops/lalal-ai-finops.yml)
-- [Features](undefined)
+- [Blog](https://www.lalal.ai/blog/)
+- [Terms of service](https://www.lalal.ai/terms-of-service/)
+- [Privacy policy](https://www.lalal.ai/privacy-policy/)
+- [GitHub](https://github.com/OmniSaleGmbH)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** info@apievangelist.com
-**URL:** https://apievangelist.com
+**Kin Score 60.1** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 64.3 |
+| Contract quality | 64.8 |
+| Contract governance | 31.8 |
+| Operational transparency | 26.3 |
+| Developer ergonomics | 74.4 |
+| Access clarity | 63.2 |
+
+**Agent readiness 38.5** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | verified |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 21.9** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/lalal-ai/](https://apis.io/providers/lalal-ai/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for LALAL.AI: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/lalal-ai/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
